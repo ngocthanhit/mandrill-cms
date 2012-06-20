@@ -30,7 +30,7 @@
                         <a class="brand" href="">Mandrill CMS</a>
                         <div class="nav-collapse">
                             <ul class="nav">
-                                <li class="active"><a href="">Dashboard</a></li>
+                                <li class="active">#linkTo(text='Dashboard', route="home")#</li>
                                 <li><a href="">Pages</a></li>
                                 <li><a href="">Posts</a></li>
                                 <li><a href="">Files</a></li>
