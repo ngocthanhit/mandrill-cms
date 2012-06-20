@@ -24,17 +24,8 @@
     // disable populating updatedAt on create
     set(setUpdatedAtOnCreate=false);
 
-    // maintenance exceptions IP list
-    // or passed along in the URL as except=127.0.0.1
-    set(ipExceptions="127.0.0.1");
-
     // hide this by default
-    set(showDebugInformation=false);
-
-    // error notification settings
-    set(sendEmailOnError=false);
-    set(errorEmailAddress="sergey@contactchimp.com");
-    set(errorEmailSubject="Unexpected failure at #cgi.SERVER_NAME#");
+    set(showDebugInformation=true);
 
 
     /*
