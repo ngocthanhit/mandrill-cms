@@ -34,6 +34,17 @@
 
     // base URL for absolute paths
     set(baseURL="http://#cgi.SERVER_NAME#");
+    
+    // ACL settings
+    set(visitorsAccountId=1);
+    set(visitorUserId=1);
+    set(adminsAccountId=2);
+    set(accessLevelVisitor=0);
+    set(accessLevelMember=1);
+    set(accessLevelManager=2);
+    set(accessLevelAdmin=3);
+    // append id to access developer-only features
+    set(developersUserId="3");
 
 
 </cfscript>
