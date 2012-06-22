@@ -78,7 +78,8 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `accountid`, `firstname`, `lastname`, `email`, `password`, `accesslevel`, `timezoneid`, `isactive`, `isactivated`, `createdat`) VALUES
 (1, 1, 'Visitor', '', 'visitor@contactchimp.com', '69FAC46B632CAAAFC6308C9B891595879ABF033FBD573C527F7BD83903F2DEC9', 0, 27, 1, 1, NOW()),
 (2, 2, 'David', 'Crowther', 'david.crowther@nervecentral.com', 'DE959C2094CA4665AE85869DF3C8234353C8C7E2BA80ABA34F7287E899400473', 3, 27, 1, 1, NOW()),
-(3, 2, 'Alex', 'Khodachenko', 'a.khodachenko@ziost.com', 'D030894C3D7B785D794B7301D1738DC1A8E0AD8A417F7FAED61642DC72E19A33', 3, 37, 1, 1, NOW());
+(3, 2, 'Alex', 'Khodachenko', 'a.khodachenko@ziost.com', 'D030894C3D7B785D794B7301D1738DC1A8E0AD8A417F7FAED61642DC72E19A33', 3, 37, 1, 1, NOW()),
+(4, 2, 'John', 'Doe', 'visitor@mandrillcms.com', '07F4FC614C678F54630DCE4B1E58FC1A6D251A6D93A03FEB431BB2D628FE750C', 3, 37, 1, 1, NOW());
 
 
 -- ---------------------- GEO DATA ----------------------

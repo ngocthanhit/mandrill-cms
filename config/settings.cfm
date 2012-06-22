@@ -35,6 +35,15 @@
     // base URL for absolute paths
     set(baseURL="http://#cgi.SERVER_NAME#");
     
+    // marketing/sales website URL
+    set(metaWebsiteURL="http://dev.mandrillcms.com");
+    
+    // encryption key / hashing salt
+    set(encryptionKey="xaWSn5ZNdw7Qc1rQ6KBJIQ==");
+    set(encryptionAlgorithm="BLOWFISH");
+    set(encryptionEncoding="Base64");
+    set(hashingKey="c0nt@ctch1mp");
+    
     // ACL settings
     set(visitorsAccountId=1);
     set(visitorUserId=1);
@@ -45,6 +54,44 @@
     set(accessLevelAdmin=3);
     // append id to access developer-only features
     set(developersUserId="3");
+    
+    // common defaults
+    set(defaultTimeZone=27);
+
+    // autologin
+    set(autologinCookie="mandrillcms_rememberme");
+    set(autologinPeriod=30); // in days
+
+    // pre-defined view/layout settings
+    set(viewDateFormats=[
+        {"format" : "dd mmm yyyy", "label" : "31 Dec 2011 at 06:23 PM"},
+        {"format" : "mm/dd/yyyy", "label" : "12/31/2011 at 06:23 PM"},
+        {"format" : "dd/mm/yyyy", "label" : "31/12/2011 at 06:23 PM"}
+    ]);
+    set(viewTimeFormats=[
+        {"format" : "hh:mm tt", "label" : "06:23 PM"}
+    ]);
+
+    // paging sizes
+    set(showBySize="10,20,50");
+
+    // scheduler links protection key
+    set(schedulerAuthKey="2089575f2608b8");
+
+    // API webhooks protection key
+    set(apiWebhookAuthKey="2089575f2608b9");
+
+    // keep log events before archiving
+    set(keepEventsPeriod=30); // days
+
+    // keep data history before archiving
+    set(keepChangesPeriod=30); // days
+
+    // keep anonymous searches before deleting
+    set(keepSearchPeriod=6); // hours
+
+    // date format for non-customizable values
+    set(defaultDateFormat="dd mmm yyyy");
 
 
 </cfscript>
