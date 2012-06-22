@@ -13,7 +13,7 @@
 	<cfoutput query="pages">
 	<tr>
 		<td>#linkto(text=title,action="addeditpage",key=pageid)#</td>
-		<td>#fname# #lname#</td>		
+		<td>#firstname# #lastname#</td>		
 		<td>#STATUS#</td>
 		<td>#DateFormat(createdAt,"mm/dd/yyyy")#</td>		
 	</tr>	

@@ -24,9 +24,9 @@
 			<cfset Newpages= model("page").findByKey(params.key) >
 			<cfset title = "Edit Page" >
 			<cfset formAction = "SubmitEditPage" >
-			<cfset createdBy = model("user").findbykey(key=Newpages.userid,select="userid,uname") >
+			<cfset createdBy = model("user").findbykey(key=Newpages.userid,select="id,firstname, lastname") >
 			<cfif Newpages.updatedby neq "">
-				<cfset updatedBy = model("user").findbykey(key=Newpages.updatedby,select="userid,uname") >	
+				<cfset updatedBy = model("user").findbykey(key=Newpages.updatedby,select="id,firstname, lastname") >	
 			</cfif>
 			<cfset Status = model("status").findbykey(key=Newpages.statusid,select="statusid,status") >	
 		<cfelse>
@@ -135,9 +135,9 @@
 			<!--- page updation failed --->
 			<cfset title = "Edit Page" >
 			<cfset formAction = "SubmitEditPage" >	
-			<cfset createdBy = model("user").findbykey(key=Newpages.userid,select="userid,uname") >
+			<cfset createdBy = model("user").findbykey(key=Newpages.userid,select="id,firstname, lastname") >
 			<cfif Newpages.updatedby neq "">
-				<cfset updatedBy = model("user").findbykey(key=Newpages.updatedby,select="userid,uname") >			
+				<cfset updatedBy = model("user").findbykey(key=Newpages.updatedby,select="id,firstname, lastname") >			
 			</cfif>		
 			<cfset Status = model("status").findbykey(key=Newpages.statusid,select="statusid,status") >	
 			<cfset renderPage(template="addEditPage")>

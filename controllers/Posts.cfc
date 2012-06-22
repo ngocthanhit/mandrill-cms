@@ -16,9 +16,9 @@
 			<cfset newPostCatergory = model("postcategorymapping").findAll(where="postid=" & params.key,select="categoryid") >
 			<cfset title = "Edit post">
 			<cfset formAction = "SubmitEditPost"> 	
-			<cfset createdBy = model("user").findbykey(key=newPost.userid,select="userid,uname") >
+			<cfset createdBy = model("user").findbykey(key=newPost.userid,select="id,firstname, lastname") >
 			<cfif newPost.updatedby neq "">
-				<cfset updatedBy = model("user").findbykey(key=newPost.updatedby,select="userid,uname") >	
+				<cfset updatedBy = model("user").findbykey(key=newPost.updatedby,select="id,firstname, lastname") >	
 			</cfif>
 			<cfset Status = model("status").findbykey(key=newPost.statusid,select="statusid,status") >			
 		<cfelse>
@@ -93,9 +93,9 @@
 		<cfelse>
 			<cfset title = "Edit post">
 			<cfset formAction = "SubmitEditPost"> 	
-			<cfset createdBy = model("user").findbykey(key=newPost.userid,select="userid,uname") >
+			<cfset createdBy = model("user").findbykey(key=newPost.userid,select="id,firstname, lastname") >
 			<cfif newPost.updatedby neq "">
-				<cfset updatedBy = model("user").findbykey(key=newPost.updatedby,select="userid,uname") >	
+				<cfset updatedBy = model("user").findbykey(key=newPost.updatedby,select="id,firstname, lastname") >	
 			</cfif>
 			<cfset Status = model("status").findbykey(key=newPost.statusid,select="statusid,status") >
 			<cfset renderPage(template="addeditpost")>

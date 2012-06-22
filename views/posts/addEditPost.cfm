@@ -43,9 +43,9 @@
 			<br />
 			<br />
 			
-			Created by: #linkto(text=createdBy.uname,controller="users",action="profile",key=createdBy.userid)# on #DateFormat(newPost.createdAt,"dd/mm/yyyy")# <br />
+			Created by: #linkto(text=createdBy.firstname & " " & createdBy.lastname,controller="users",action="profile",key=createdBy.id)# on #DateFormat(newPost.createdAt,"dd/mm/yyyy")# <br />
 			<cfif IsDefined("updatedBy") >
-			Last updated by: #linkto(text=updatedBy.uname,controller="users",action="profile",key=updatedBy.userid)# on #DateFormat(newPost.updatedat,"dd/mm/yyyy")#<br />
+			Last updated by: #linkto(text=updatedBy.firstname & " " & updatedBy.lastname ,controller="users",action="profile",key=updatedBy.id)# on #DateFormat(newPost.updatedat,"dd/mm/yyyy")#<br />
 			</cfif>
 			Status: #Status.status#<br />
 			<br />

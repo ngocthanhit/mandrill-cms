@@ -13,7 +13,7 @@
 	<cfoutput query="allPosts">
 	<tr>
 		<td>#linkTo(text=title,action="addeditpost",key=postid)#</td>
-		<td>#fname# #lname#</td>		
+		<td>#firstname# #lastname#</td>		
 		<td>#STATUS#</td>
 		<td>#DateFormat(createdAt,"mm/dd/yyyy")#</td>		
 	</tr>	
