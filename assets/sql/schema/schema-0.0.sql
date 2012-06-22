@@ -514,3 +514,127 @@ CREATE TABLE `archivedchanges` (
 
 COMMIT;
 SET FOREIGN_KEY_CHECKS=1;
+
+/*
+SQLyog Enterprise v4.07
+Host - 5.1.48-community : Database - mandrillcms
+*********************************************************************
+Server version : 5.1.48-community
+*/
+
+
+create database if not exists `mandrillcms`;
+
+USE `mandrillcms`;
+
+/*Table structure for table `categories` */
+
+drop table if exists `categories`;
+
+CREATE TABLE `categories` (
+  `categoryid` int(11) NOT NULL AUTO_INCREMENT,
+  `category` varchar(255) NOT NULL,
+  `createdby` int(11) DEFAULT NULL,
+  `createdAt` datetime DEFAULT NULL,
+  `updatedby` int(11) DEFAULT NULL,
+  `updatedAt` datetime DEFAULT NULL,
+  `deletedAt` datetime DEFAULT NULL,
+  PRIMARY KEY (`categoryid`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+
+/*Table structure for table `pages` */
+
+drop table if exists `pages`;
+
+CREATE TABLE `pages` (
+  `pageid` int(11) NOT NULL AUTO_INCREMENT,
+  `userid` int(11) DEFAULT NULL,
+  `title` varchar(255) NOT NULL,
+  `permalink` varchar(250) DEFAULT NULL,
+  `navigationtitle` varchar(250) DEFAULT NULL,
+  `content` text,
+  `description` text,
+  `parentid` int(11) DEFAULT '0',
+  `templateid` int(11) DEFAULT NULL,
+  `publishedby` int(11) DEFAULT NULL,
+  `isprotected` bit(1) DEFAULT NULL,
+  `issubpageprotected` bit(1) DEFAULT NULL,
+  `password` varchar(250) DEFAULT NULL,
+  `publisheddate` datetime DEFAULT NULL,
+  `createdAt` datetime DEFAULT NULL,
+  `updatedAt` datetime DEFAULT NULL,
+  `deletedAt` datetime DEFAULT NULL,
+  `statusid` int(11) DEFAULT NULL,
+  `showinnavigation` bit(1) DEFAULT b'1',
+  `showinfooternavigation` bit(1) DEFAULT b'0',
+  `updatedby` int(11) DEFAULT NULL,
+  PRIMARY KEY (`pageid`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+
+/*Table structure for table `postcategorymappings` */
+
+drop table if exists `postcategorymappings`;
+
+CREATE TABLE `postcategorymappings` (
+  `mappingid` int(11) NOT NULL AUTO_INCREMENT,
+  `categoryid` int(11) DEFAULT NULL,
+  `postid` int(11) DEFAULT NULL,
+  PRIMARY KEY (`mappingid`)
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=latin1;
+
+/*Table structure for table `posts` */
+
+drop table if exists `posts`;
+
+CREATE TABLE `posts` (
+  `postid` int(11) NOT NULL AUTO_INCREMENT,
+  `userid` int(11) DEFAULT NULL,
+  `templateid` int(11) DEFAULT NULL,
+  `title` varchar(255) NOT NULL,
+  `permalink` varchar(250) DEFAULT NULL,
+  `content` text,
+  `description` text,
+  `publishedby` int(11) DEFAULT NULL,
+  `publisheddate` datetime DEFAULT NULL,
+  `statusid` int(11) DEFAULT NULL,
+  `createdAt` datetime DEFAULT NULL,
+  `updatedby` int(11) DEFAULT NULL,
+  `updatedAt` datetime DEFAULT NULL,
+  `deletedAt` datetime DEFAULT NULL,
+  PRIMARY KEY (`postid`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+
+/*Table structure for table `statuses` */
+
+drop table if exists `statuses`;
+
+CREATE TABLE `statuses` (
+  `statusid` int(11) NOT NULL AUTO_INCREMENT,
+  `status` varchar(100) DEFAULT NULL,
+  `deletedAt` datetime DEFAULT NULL,
+  PRIMARY KEY (`statusid`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+
+/*Table structure for table `templates` */
+
+drop table if exists `templates`;
+
+CREATE TABLE `templates` (
+  `templateid` int(11) NOT NULL AUTO_INCREMENT,
+  `userid` int(11) DEFAULT NULL,
+  `templateName` varchar(255) DEFAULT NULL,
+  `deletedAt` datetime DEFAULT NULL,
+  PRIMARY KEY (`templateid`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+/*Table structure for table `user_roles` */
+
+drop table if exists `user_roles`;
+
+CREATE TABLE `user_roles` (
+  `roleid` int(11) NOT NULL AUTO_INCREMENT,
+  `role` varchar(100) DEFAULT NULL,
+  `deletedAt` datetime DEFAULT NULL,
+  PRIMARY KEY (`roleid`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
