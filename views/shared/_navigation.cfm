@@ -11,8 +11,8 @@
             <div class="nav-collapse">
             	<ul class="nav">
                 	<li class="active">#linkTo(text='Dashboard', route="home")#</li>
-                    <li><a href="">Pages</a></li>
-                    <li><a href="">Posts</a></li>
+                    <li>#linkTo(text='Pages', controller='Pages')#</li>
+                    <li>#linkTo(text='Posts', controller='Posts')#</li>
                     <li><a href="">Files</a></li>
                     <li><a href="">Marketing</a></li>
                     <li><a href="">Users</a></li>
