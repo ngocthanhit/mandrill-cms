@@ -3837,6 +3837,13 @@ input[type="submit"].btn.btn-mini {
   margin-left: 10px;
 }
 
+.navbar .user { 
+	float: right; 
+	font-size: 12px; 
+	margin-top: 10px; 
+	color: #bbbbbb;
+}
+
 .navbar .btn-navbar {
   display: none;
   float: right;

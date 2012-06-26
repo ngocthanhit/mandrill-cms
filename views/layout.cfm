@@ -37,12 +37,17 @@
 			                    <li><a href="">Marketing</a></li>
 			                    <li><a href="">Users</a></li>
 			                    <li><a href="">Settings</a></li>
-								<li><a href="">Logout</a></li>
-			                </ul>			        	
+								<li>#linkTo(text='Logout', controller='members', action='logout')#</li>
+			                </ul>		
+							
+							<p class="user">Logged in as #getUserAttr("firstName")# #getUserAttr("lastName")#</p>
+												        	
 						</div>
 			    	</div>
 				</div>
 			</div>
+			
+			<h2>#view.pageTitle#<cfif view.pageTitleAppend NEQ ""> #view.pageTitleAppend#</cfif></h2>
 
             #includeContent()#
 
