@@ -39,8 +39,8 @@ CREATE TABLE `accounts` (
 --
 
 INSERT INTO `accounts` (`id`, `name`, `code`, `createdat`) VALUES
-(1, 'Visitors', '99536BF6-99D4-492E-BF2113DDAD7E6E51', NOW()),
-(2, 'Administrators', '3DADA579-39E7-4465-BB86D37F2A7ADC3E', NOW());
+(1, 'Visitors', 'visitors', NOW()),
+(2, 'Administrators', 'administrators', NOW());
 
 
 -- ---------------------- USERS ----------------------
@@ -76,11 +76,10 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `accountid`, `firstname`, `lastname`, `email`, `password`, `accesslevel`, `timezoneid`, `isactive`, `isactivated`, `createdat`) VALUES
-(1, 1, 'Visitor', '', 'visitor@contactchimp.com', 'E589BCAC47F724CED4C481E8F5D203E0DF3790ED8953FB4DE8255EF2DC5E71AC', 0, 27, 1, 1, NOW()),
-(2, 2, 'David', 'Crowther', 'david.crowther@nervecentral.com', 'B1D4C0B7487557925C0FF6BA094FD4F1A080549E1EB8F9103EB9E54CAB726D23', 6, 27, 1, 1, NOW()),
-(3, 2, 'Sergey', 'Galashyn', 's.galashyn@ziost.com', '0C4A9412B48F162C320C98D403B5B214B2A50B6E60163307E89BF497A234A1FB', 6, 37, 1, 1, NOW()),
-(4, 2, 'Alex', 'Khodachenko', 'a.khodachenko@ziost.com', 'F20F9776C6053B7DB44C563836D2C8DFABA895DB6727A3C3C6D2B1CF6FEF137D', 6, 37, 1, 1, NOW()),
-(5, 2, 'Maimun', 'Smith', 'maimun.smith@gmail.com', '0D48AD0F7E3A538DC84D5432906C52923E081051EBE1E938A97953FD65DD54D6', 6, 37, 1, 1, NOW());
+(1, 1, 'Visitor', '', 'visitor@contactchimp.com', '69FAC46B632CAAAFC6308C9B891595879ABF033FBD573C527F7BD83903F2DEC9', 0, 27, 1, 1, NOW()),
+(2, 2, 'David', 'Crowther', 'david.crowther@nervecentral.com', 'DE959C2094CA4665AE85869DF3C8234353C8C7E2BA80ABA34F7287E899400473', 3, 27, 1, 1, NOW()),
+(3, 2, 'Alex', 'Khodachenko', 'a.khodachenko@ziost.com', 'D030894C3D7B785D794B7301D1738DC1A8E0AD8A417F7FAED61642DC72E19A33', 3, 37, 1, 1, NOW()),
+(4, 2, 'John', 'Doe', 'visitor@mandrillcms.com', '07F4FC614C678F54630DCE4B1E58FC1A6D251A6D93A03FEB431BB2D628FE750C', 3, 37, 1, 1, NOW());
 
 
 -- ---------------------- GEO DATA ----------------------
@@ -516,6 +515,9 @@ CREATE TABLE `archivedchanges` (
 COMMIT;
 SET FOREIGN_KEY_CHECKS=1;
 
+
+/*------- Script by Maimun Smith -------------------- */
+
 /*
 SQLyog Enterprise v4.07
 Host - 5.1.48-community : Database - mandrillcms
@@ -534,14 +536,14 @@ drop table if exists `categories`;
 
 CREATE TABLE `categories` (
   `categoryid` int(11) NOT NULL AUTO_INCREMENT,
-  `category` varchar(255) NOT NULL,
+  `category` varchar(255) CHARACTER SET latin1 NOT NULL,
   `createdby` int(11) DEFAULT NULL,
   `createdAt` datetime DEFAULT NULL,
   `updatedby` int(11) DEFAULT NULL,
   `updatedAt` datetime DEFAULT NULL,
   `deletedAt` datetime DEFAULT NULL,
   PRIMARY KEY (`categoryid`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `pages` */
 
@@ -550,17 +552,17 @@ drop table if exists `pages`;
 CREATE TABLE `pages` (
   `pageid` int(11) NOT NULL AUTO_INCREMENT,
   `userid` int(11) DEFAULT NULL,
-  `title` varchar(255) NOT NULL,
-  `permalink` varchar(250) DEFAULT NULL,
-  `navigationtitle` varchar(250) DEFAULT NULL,
-  `content` text,
-  `description` text,
+  `title` varchar(255) CHARACTER SET latin1 NOT NULL,
+  `permalink` varchar(250) CHARACTER SET latin1 DEFAULT NULL,
+  `navigationtitle` varchar(250) CHARACTER SET latin1 DEFAULT NULL,
+  `content` text CHARACTER SET latin1,
+  `description` text CHARACTER SET latin1,
   `parentid` int(11) DEFAULT '0',
   `templateid` int(11) DEFAULT NULL,
   `publishedby` int(11) DEFAULT NULL,
   `isprotected` bit(1) DEFAULT NULL,
   `issubpageprotected` bit(1) DEFAULT NULL,
-  `password` varchar(250) DEFAULT NULL,
+  `password` varchar(250) CHARACTER SET latin1 DEFAULT NULL,
   `publisheddate` datetime DEFAULT NULL,
   `createdAt` datetime DEFAULT NULL,
   `updatedAt` datetime DEFAULT NULL,
@@ -570,7 +572,7 @@ CREATE TABLE `pages` (
   `showinfooternavigation` bit(1) DEFAULT b'0',
   `updatedby` int(11) DEFAULT NULL,
   PRIMARY KEY (`pageid`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `postcategorymappings` */
 
@@ -581,7 +583,7 @@ CREATE TABLE `postcategorymappings` (
   `categoryid` int(11) DEFAULT NULL,
   `postid` int(11) DEFAULT NULL,
   PRIMARY KEY (`mappingid`)
-) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=67 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `posts` */
 
@@ -591,10 +593,10 @@ CREATE TABLE `posts` (
   `postid` int(11) NOT NULL AUTO_INCREMENT,
   `userid` int(11) DEFAULT NULL,
   `templateid` int(11) DEFAULT NULL,
-  `title` varchar(255) NOT NULL,
-  `permalink` varchar(250) DEFAULT NULL,
-  `content` text,
-  `description` text,
+  `title` varchar(255) CHARACTER SET latin1 NOT NULL,
+  `permalink` varchar(250) CHARACTER SET latin1 DEFAULT NULL,
+  `content` text CHARACTER SET latin1,
+  `description` text CHARACTER SET latin1,
   `publishedby` int(11) DEFAULT NULL,
   `publisheddate` datetime DEFAULT NULL,
   `statusid` int(11) DEFAULT NULL,
@@ -603,7 +605,7 @@ CREATE TABLE `posts` (
   `updatedAt` datetime DEFAULT NULL,
   `deletedAt` datetime DEFAULT NULL,
   PRIMARY KEY (`postid`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `statuses` */
 
@@ -611,10 +613,10 @@ drop table if exists `statuses`;
 
 CREATE TABLE `statuses` (
   `statusid` int(11) NOT NULL AUTO_INCREMENT,
-  `status` varchar(100) DEFAULT NULL,
+  `status` varchar(100) CHARACTER SET latin1 DEFAULT NULL,
   `deletedAt` datetime DEFAULT NULL,
   PRIMARY KEY (`statusid`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `templates` */
 
@@ -623,10 +625,10 @@ drop table if exists `templates`;
 CREATE TABLE `templates` (
   `templateid` int(11) NOT NULL AUTO_INCREMENT,
   `userid` int(11) DEFAULT NULL,
-  `templateName` varchar(255) DEFAULT NULL,
+  `templateName` varchar(255) CHARACTER SET latin1 DEFAULT NULL,
   `deletedAt` datetime DEFAULT NULL,
   PRIMARY KEY (`templateid`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Table structure for table `user_roles` */
 
@@ -634,8 +636,7 @@ drop table if exists `user_roles`;
 
 CREATE TABLE `user_roles` (
   `roleid` int(11) NOT NULL AUTO_INCREMENT,
-  `role` varchar(100) DEFAULT NULL,
+  `role` varchar(100) CHARACTER SET latin1 DEFAULT NULL,
   `deletedAt` datetime DEFAULT NULL,
   PRIMARY KEY (`roleid`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

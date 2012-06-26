@@ -1,7 +1,12 @@
+component extends="components.models.User" {
 
-<cfcomponent output="false" extends="model">
-	<cffunction name="init">
-		<cfset belongsTo(name="category",foreignkey="categoryid")>
-		<cfset belongsTo(name="post",foreignkey="postid")>
-	</cffunction>
-</cfcomponent>
+
+    public void function init() hint="Define the validation rules and model relationships" {
+
+		belongsTo(name="category",foreignkey="categoryid") ;
+		belongsTo(name="post",foreignkey="postid") ;
+
+    }
+	
+}
+

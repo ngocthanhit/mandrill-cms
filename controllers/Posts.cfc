@@ -1,106 +1,130 @@
-<cfcomponent extends="controller">
+component extends="Controller" hint="Controller for crum posts section" {
 
-	<cfset getTemplates= model("template").findALL() >
-	<cfset ALlCatagories = model("category").findALL() >
-	
-	
-	<!--- listing of all posts --->
-	<cffunction name="index" access="public" >
-		<cfset allPosts = model("post").findAll(include="user,status") >
-	</cffunction>
-	
-	
-	<cffunction name="addeditpost" access="public" >
-		<cfif StructKeyExists(params,"key") >
-			<cfset newPost = model("post").findByKey(params.key) >
-			<cfset newPostCatergory = model("postcategorymapping").findAll(where="postid=" & params.key,select="categoryid") >
-			<cfset title = "Edit post">
-			<cfset formAction = "SubmitEditPost"> 	
-			<cfset createdBy = model("user").findbykey(key=newPost.userid,select="id,firstname, lastname") >
-			<cfif newPost.updatedby neq "">
-				<cfset updatedBy = model("user").findbykey(key=newPost.updatedby,select="id,firstname, lastname") >	
-			</cfif>
-			<cfset Status = model("status").findbykey(key=newPost.statusid,select="statusid,status") >			
-		<cfelse>
-			<cfset newPost = model("post").new() >
-			<cfset title = "Posts">
-			<cfset formAction = "SubmitAddNewPost" > 
-		</cfif>	
-	</cffunction>
-	
-	
-	<cffunction name="SubmitAddNewPost">
-	
-		<cfset params.newPost.userid = getLoggedinUserID() >
-		<cfset params.newPost.updatedby = getLoggedinUserID() >
-		
-		<cfset params.newPost.statusid = 1 >
-		
-		<cfif params.submit EQ "Save as Draft">
-			<cfset params.newPost.statusid = 2 >
-		<cfelseif params.submit EQ "Save & Publish">
-			<cfset params.newPost.publisheddate = Now() >
-			<cfset params.newPost.publishedby = getLoggedinUserID() >			
-		</cfif>
-		
-		<cfset newPost = model("post").new(params.newPost)>
-			
-		<cfif newPost.save()> 
-			<cfif IsDefined("params.categoryID") >
-				<cfset newPostId = newPost.postid >
-				<cfloop list="#params.categoryID#" index="categoryid">
-					<cfset newCategory = model("postcategorymapping").new(categoryid=categoryid, postid=newPostId)>
-					<cfset newCategory.save() >
-				</cfloop>
-			</cfif>
-		
-			<cfset flashInsert(success="The post was created successfully.")>
-			<cfset redirectTo(controller=params.controller)>
-		<cfelse>
-			<cfset title = "Posts" >
-			<cfset formAction = "SubmitAddNewPost" >			
-			<cfset renderPage(template="addeditpost")>
-		</cfif>
-
-	</cffunction>	
-	
-	<cffunction name="SubmitEditPost">
-		
-		<cfset params.newPost.updatedby = getLoggedinUserID() >
-		<cfset params.newPost.statusid = 1 >
-		
-		<cfif params.submit EQ "Save as Draft">
-			<cfset params.newPost.statusid = 2 >
-		<cfelseif params.submit EQ "Save & Publish">
-			<cfset params.newPost.publisheddate = Now() >
-			<cfset params.newPost.publishedby = getLoggedinUserID() >			
-		</cfif>
-		
-		<cfset newPost = model("post").findByKey(params.newPost.postid)>
-			
-		<cfif newPost.update(params.newPost)> 
-			<cfset newPostId = params.newPost.postid >
-			<cfset mapCAtagoriesdel = model("postcategorymapping").deleteAll(where="postid=" & newPostId)>
-			<cfif IsDefined("params.categoryID") >
-				<cfloop list="#params.categoryID#" index="categoryid">
-					<cfset newCategory = model("postcategorymapping").new(categoryid=categoryid, postid=newPostId)>
-					<cfset newCategory.save() >
-				</cfloop>
-			</cfif>
-		
-			<cfset flashInsert(success="The post was created successfully.")>
-			<cfset redirectTo(controller=params.controller)>
-		<cfelse>
-			<cfset title = "Edit post">
-			<cfset formAction = "SubmitEditPost"> 	
-			<cfset createdBy = model("user").findbykey(key=newPost.userid,select="id,firstname, lastname") >
-			<cfif newPost.updatedby neq "">
-				<cfset updatedBy = model("user").findbykey(key=newPost.updatedby,select="id,firstname, lastname") >	
-			</cfif>
-			<cfset Status = model("status").findbykey(key=newPost.statusid,select="statusid,status") >
-			<cfset renderPage(template="addeditpost")>
-		</cfif>
-		
-	</cffunction>
-	
-</cfcomponent>
+    
+    
+    // public any function init() hint="Initialize the controller" {
+      // filters(through="memberOnly", except="login,logout,password,forbidden,signup");
+        getTemplates= model("template").findALL() ;
+        ALlCatagories = model("category").findALL() ;
+    //}
+        
+    
+    
+    public any function index() hint="listing of all posts" {
+        allPosts = model("post").findAll(include="user,status") ;
+    }
+    
+    
+    public any function addeditpost() hint="listing of all posts" {
+    
+        if (StructKeyExists(params,"key"))
+            {
+                newPost = model("post").findByKey(params.key) ;
+                newPostCatergory = model("postcategorymapping").findAll(where="postid=" & params.key,select="categoryid") ;
+                title = "Edit post" ;
+                formAction = "SubmitEditPost" ;
+                createdBy = model("user").findbykey(key=newPost.userid,select="id,firstname, lastname") ;
+                if (newPost.updatedby neq "")
+                    {
+                        updatedBy = model("user").findbykey(key=newPost.updatedby,select="id,firstname, lastname") ;
+                    }
+                Status = model("status").findbykey(key=newPost.statusid,select="statusid,status") ;
+            }
+        else
+            {
+                newPost = model("post").new() ;
+                title = "Posts" ; 
+                formAction = "SubmitAddNewPost" ;
+            }
+    }
+    
+    
+    public any function SubmitAddNewPost() hint="listing of all posts" {
+    
+        params.newPost.userid = getLoggedinUserID() ;
+        params.newPost.updatedby = getLoggedinUserID() ;
+        params.newPost.statusid = 1 ;
+        
+        if (IsDefined("params.draft"))
+            {
+                params.newPost.statusid = 2 ;
+            }
+        else if (IsDefined("params.publish"))
+            {
+                params.newPost.publisheddate = Now() ;
+                params.newPost.publishedby = getLoggedinUserID() ;
+            }
+        params.newPost.title =  xmlFormat(params.newPost.title);
+        newPost = model("post").new(params.newPost) ;
+            
+        if(newPost.save())
+            {
+                if (IsDefined("params.categoryID"))
+                    {
+                        var newPostId = newPost.postid ;
+                        for (i = 1; i lte ListLen(params.categoryID); i = i + 1)  
+                          {
+                            var newCategory = model("postcategorymapping").new(categoryid=categoryid[i], postid=newPostId) ;
+                            newCategory.save() ;
+                         }    
+                    }
+                flashInsert(success="The post was created successfully.") ;
+                redirectTo(controller=params.controller) ;
+            }
+        else
+            {
+                title = "Posts" ;
+                formAction = "SubmitAddNewPost"  ;
+                renderPage(template="addeditpost") ;
+            }
+    }    
+    
+    
+    public any function SubmitEditPost() hint="listing of all posts" {
+    
+        params.newPost.updatedby = getLoggedinUserID() ;
+        params.newPost.statusid = 1 ;
+        
+        if (IsDefined("params.draft"))
+            {
+                params.newPost.statusid = 2 ;
+            }
+        else if (IsDefined("params.publish"))
+            {
+                params.newPost.publisheddate = Now() ;
+                params.newPost.publishedby = getLoggedinUserID() ;
+            }
+        params.newPost.title =  xmlFormat(params.newPost.title);
+        newPost = model("post").findByKey(params.newPost.postid) ;
+            
+        if (newPost.update(params.newPost))
+            {
+                var newPostId = params.newPost.postid  ;
+                mapCAtagoriesdel = model("postcategorymapping").deleteAll(where="postid=" & newPostId) ;
+                if (IsDefined("params.categoryID"))
+                    {
+                    
+                        for (i = 1; i lte ListLen(params.categoryID); i = i + 1)  
+                          {
+                            var newCategory = model("postcategorymapping").new(categoryid=categoryid, postid=newPostId) ;
+                            newCategory.save()  ;
+                         }    
+                    }        
+                flashInsert(success="The post was created successfully.") ;
+                redirectTo(controller=params.controller) ;
+            }
+        else
+            {
+                title = "Edit post" ;
+                formAction = "SubmitEditPost" ;
+                createdBy = model("user").findbykey(key=newPost.userid,select="id,firstname, lastname") ;
+                if(newPost.updatedby neq "")
+                    {
+                        updatedBy = model("user").findbykey(key=newPost.updatedby,select="id,firstname, lastname") ;
+                    }
+                Status = model("status").findbykey(key=newPost.statusid,select="statusid,status") ;
+                renderPage(template="addeditpost") ;
+            }
+    }
+    
+}

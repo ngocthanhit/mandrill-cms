@@ -1,6 +1,5 @@
-
-<cfcomponent output="false" extends="model">
-	<cffunction name="init">
-		<cfset hasMany(name='postcategorymapping', modelname="postcategorymapping", foreignkey="categoryid")>
-	</cffunction>
-</cfcomponent>
+component extends="components.models.User" {
+     public void function init() hint="Define the validation rules and model relationships" {
+         hasMany(name='postcategorymapping', modelname="postcategorymapping", foreignkey="categoryid") ;
+     }
+}

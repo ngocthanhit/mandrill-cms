@@ -1,31 +1,34 @@
 <cfoutput>
 <!--- heading of the page --->
-<h1>#title#</h1>
+<h2>#title#</h2>
 <!--- show error msg if validation properly work --->
 #errorMessagesFor("newPost")#
 
 <!--- add / edit form page [start]--->
 #startFormTag(name="createNewPostForm",method="post",action=formAction,autocomplete="off")#
-<div style="float:left; background-color:##CCCCCC;border-radius:10px;padding:10px">
-
+<div class="span7">
+	<div class="container-fluid" >
  	#textArea(label="Main content<br />", objectName="newPost", property="content",rows="10", cols="50")# <br />
     #textField(label="Page Title<br />", objectName="newPost", property="title",size="64")# <br />
 	#textArea(label="Description<br />", objectName="newPost", property="description",rows="5", cols="50")# <br />
-    #submitTag(name="submit",value="Save as Draft")# &nbsp; #submitTag(name="submit",value="Save & Publish")# <br />
+    #submitTag(name="draft",value="Save as Draft",class="btn")# &nbsp; #submitTag(name="publish",value="Save & Publish",class="btn btn-primary")# <br />
 	<cfif NOT StructKeyExists(newPost,"postid") >
-	#linkto(text="Or publish at a future date »",onClick="return toggleDiv('PublishedFutureDateDiv');")#
-	<div id="PublishedFutureDateDiv" style="display:none;">
+	#linkto(text="Or publish at a future date ",onClick="return toggleDiv('PublishedFutureDateDiv');")#
+	<div id="PublishedFutureDateDiv">
 		<br />
 		Publish on date <br />
-		#dateTimeSelect(objectName="newPost", property="publisheddate",separator=" at ",timeorder="hour,minute")# (24 hour format)<br />
-		#submitTag(name="submit",value="Save & Publish on Date")#
+		#dateTimeSelect(objectName="newPost", property="publisheddate",separator=" at ",timeorder="hour,minute",class="span1")# (24 hour format)<br />
+		#submitTag(name="publishDate",value="Save & Publish on Date",class="btn btn-primary")#
 	</div>
+		<script type="text/javascript">
+			toggleDiv('PublishedFutureDateDiv');
+		</script>
 	<cfelse>
 		#hiddenField(objectName="newPost", property="postid")#
-	</cfif>
+	</cfif><br />
 </div>
-<div style="float:left;">&nbsp;<br /></div>
-<div style="float:left; background-color:##CCCCCC;border-radius:10px;padding:10px">
+</div>
+<div class="span4">
 		#select(label="Template<br />", objectName="newPost", property="templateid", options=getTemplates)# <br /><br /><br />
 		<strong>Categories</strong>&nbsp;&nbsp;&nbsp;#linkTo(text="Add category")#<br>
 		<cfloop query="ALlCatagories">
@@ -35,7 +38,7 @@
 					<cfset check = "true">
 				 </cfif>
 			</cfif>
-			#checkBoxTag(name="categoryID", label=category,labelPlacement="after", value=categoryid ,checked=check)# <br>
+			#checkBoxTag(name="categoryID", label="",labelPlacement="after", value=categoryid ,checked=check)# #category#<br>
 		</cfloop>
 		
 		 <cfif StructKeyExists(newPost,"postid") >
