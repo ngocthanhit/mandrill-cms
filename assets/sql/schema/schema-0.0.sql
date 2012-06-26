@@ -39,8 +39,8 @@ CREATE TABLE `accounts` (
 --
 
 INSERT INTO `accounts` (`id`, `name`, `code`, `createdat`) VALUES
-(1, 'Visitors', 'visitors', NOW()),
-(2, 'Administrators', 'administrators', NOW());
+(1, 'Visitors', '99536BF6-99D4-492E-BF2113DDAD7E6E51', NOW()),
+(2, 'Administrators', '3DADA579-39E7-4465-BB86D37F2A7ADC3E', NOW());
 
 
 -- ---------------------- USERS ----------------------
@@ -76,10 +76,11 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `accountid`, `firstname`, `lastname`, `email`, `password`, `accesslevel`, `timezoneid`, `isactive`, `isactivated`, `createdat`) VALUES
-(1, 1, 'Visitor', '', 'visitor@contactchimp.com', '69FAC46B632CAAAFC6308C9B891595879ABF033FBD573C527F7BD83903F2DEC9', 0, 27, 1, 1, NOW()),
-(2, 2, 'David', 'Crowther', 'david.crowther@nervecentral.com', 'DE959C2094CA4665AE85869DF3C8234353C8C7E2BA80ABA34F7287E899400473', 3, 27, 1, 1, NOW()),
-(3, 2, 'Alex', 'Khodachenko', 'a.khodachenko@ziost.com', 'D030894C3D7B785D794B7301D1738DC1A8E0AD8A417F7FAED61642DC72E19A33', 3, 37, 1, 1, NOW()),
-(4, 2, 'John', 'Doe', 'visitor@mandrillcms.com', '07F4FC614C678F54630DCE4B1E58FC1A6D251A6D93A03FEB431BB2D628FE750C', 3, 37, 1, 1, NOW());
+(1, 1, 'Visitor', '', 'visitor@contactchimp.com', 'E589BCAC47F724CED4C481E8F5D203E0DF3790ED8953FB4DE8255EF2DC5E71AC', 0, 27, 1, 1, NOW()),
+(2, 2, 'David', 'Crowther', 'david.crowther@nervecentral.com', 'B1D4C0B7487557925C0FF6BA094FD4F1A080549E1EB8F9103EB9E54CAB726D23', 6, 27, 1, 1, NOW()),
+(3, 2, 'Sergey', 'Galashyn', 's.galashyn@ziost.com', '0C4A9412B48F162C320C98D403B5B214B2A50B6E60163307E89BF497A234A1FB', 6, 37, 1, 1, NOW()),
+(4, 2, 'Alex', 'Khodachenko', 'a.khodachenko@ziost.com', 'F20F9776C6053B7DB44C563836D2C8DFABA895DB6727A3C3C6D2B1CF6FEF137D', 6, 37, 1, 1, NOW()),
+(5, 2, 'Maimun', 'Smith', 'maimun.smith@gmail.com', '0D48AD0F7E3A538DC84D5432906C52923E081051EBE1E938A97953FD65DD54D6', 6, 37, 1, 1, NOW());
 
 
 -- ---------------------- GEO DATA ----------------------

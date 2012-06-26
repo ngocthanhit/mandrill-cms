@@ -39,21 +39,24 @@
     set(metaWebsiteURL="http://dev.mandrillcms.com");
     
     // encryption key / hashing salt
-    set(encryptionKey="xaWSn5ZNdw7Qc1rQ6KBJIQ==");
+    set(encryptionKey="64zJGKzA5-SGTlN>A-1r0nzM");
     set(encryptionAlgorithm="BLOWFISH");
     set(encryptionEncoding="Base64");
-    set(hashingKey="c0nt@ctch1mp");
+    set(hashingKey="&0Dsxs2kB.fO");
     
     // ACL settings
     set(visitorsAccountId=1);
     set(visitorUserId=1);
     set(adminsAccountId=2);
-    set(accessLevelVisitor=0);
-    set(accessLevelMember=1);
-    set(accessLevelManager=2);
-    set(accessLevelAdmin=3);
+    set(accessLevelVisitor=0);    
+    set(accessLevelGuest=1);
+    set(accessLevelAuthor=2);
+    set(accessLevelEditor=3);
+    set(accessLevelDeveloper=4);
+    set(accessLevelAccountOwner=5);
+    set(accessLevelAdmin=6);    
     // append id to access developer-only features
-    set(developersUserId="3");
+    set(developersUserId="3,4,5");
     
     // common defaults
     set(defaultTimeZone=27);

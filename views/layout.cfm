@@ -19,9 +19,30 @@
 
         <div class="container">
 
-			<cfif isLoggedIn()>#includePartial("/shared/navigation")#</cfif>
-			
-			<h2>#view.pageTitle#</h2>
+			<div class="navbar">
+				<div class="navbar-inner">
+			    	<div class="container">
+			        	<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+			            	<span class="icon-bar"></span>
+			                <span class="icon-bar"></span>
+			                <span class="icon-bar"></span>
+			            </a>
+			            <a class="brand" href="">Mandrill CMS</a>
+			            <div class="nav-collapse">
+			            	<ul class="nav">
+			                	<li class="active">#linkTo(text='Dashboard', route="home")#</li>
+			                    <li>#linkTo(text='Pages', controller='Pages')#</li>
+			                    <li>#linkTo(text='Posts', controller='Posts')#</li>
+			                    <li><a href="">Files</a></li>
+			                    <li><a href="">Marketing</a></li>
+			                    <li><a href="">Users</a></li>
+			                    <li><a href="">Settings</a></li>
+								<li><a href="">Logout</a></li>
+			                </ul>			        	
+						</div>
+			    	</div>
+				</div>
+			</div>
 
             #includeContent()#
 
