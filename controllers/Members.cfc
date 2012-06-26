@@ -163,6 +163,23 @@ component extends="Controller" hint="Controller for registered members section" 
         redirectTo(action="login");
 
     }
+	
+	
+	
+	
+	/*
+     * Registration routines
+     */
+
+
+
+    public any function forbidden() hint="Warning for unauthorized access event" {
+
+        var local = {};
+
+        _view(pageTitle = "Forbidden");
+
+    }
 
 
 }

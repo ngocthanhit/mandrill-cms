@@ -18,7 +18,8 @@
     <body>
 
         <div class="container">
-
+        	
+			<cfif isLoggedIn()>
 			<div class="navbar">
 				<div class="navbar-inner">
 			    	<div class="container">
@@ -46,6 +47,7 @@
 			    	</div>
 				</div>
 			</div>
+			</cfif>
 			
 			<h2>#view.pageTitle#<cfif view.pageTitleAppend NEQ ""> #view.pageTitleAppend#</cfif></h2>
 
