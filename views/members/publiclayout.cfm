@@ -13,15 +13,18 @@
         <!--[if lt IE 9]>
             <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
         <![endif]-->
-
+		#javaScriptIncludeTag("jquery")#
     </head>
 <body>
 
-        <div class="container">
+	<div class="container">
 
 			#includeContent()#
-
-		</div>
+		
+	</div>
+		
+	#javaScriptIncludeTag("bootstrap")#
+		
 </body>
 </html>
 </cfoutput>

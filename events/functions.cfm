@@ -84,6 +84,26 @@
     boolean function isLoggedIn(string key) hint="Check if current user is logged in" {
         return (getUserAttr("id") GT get("visitorUserId"));
     }
+    
+    
+    boolean function isAccountOwner() hint="Check if current user is account manager" {
+        return (getUserAttr("accessLevel") GTE get("accessLevelAccountOwner"));
+    }
+
+
+    boolean function isAdmin() hint="Check if current user is admin" {
+        return (getUserAttr("accessLevel") EQ get("accessLevelAdmin"));
+    }
+
+
+    boolean function isDeveloper() hint="Check if current user is developer" {
+        return (ListFind(get("developersUserId"), getUserAttr("id")));
+    }
+
+
+    any function ShortUUID() hint="Get short version of UUID" {
+        return ListFirst(CreateUUID(), "-");
+    }
 	
 
 </cfscript>

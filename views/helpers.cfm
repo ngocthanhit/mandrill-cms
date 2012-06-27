@@ -1,4 +1,45 @@
 <cfscript>
+	
+	/*
+     * @timestamp Time stamp to format
+     */
+    string function formatDateTime(required any timestamp) hint="Format time stamp as date+time string according to current user prefs" {
+
+        if (NOT isDate(arguments.timestamp)) {
+            return ("");
+        }
+
+        local.timestamp = DateAdd("n", request.user.getTimeOffset()*60, arguments.timestamp);
+
+        return DateFormat(local.timestamp, getUserAttr("dateformat")) & " at " & TimeFormat(local.timestamp, getUserAttr("timeformat"));
+
+    }
+
+
+    /*
+     * @timestamp Time stamp to format
+     */
+    string function formatDateTimeCompact(required any timestamp) hint="Format time stamp as date+time string in EU format for compact output" {
+
+        if (NOT isDate(arguments.timestamp)) {
+            return ("");
+        }
+
+        local.timestamp = DateAdd("n", request.user.getTimeOffset()*60, arguments.timestamp);
+
+        return DateFormat(local.timestamp, "dd.mm.yyyy") & " " & TimeFormat(local.timestamp, "HH:mm");
+
+    }
+
+
+    /*
+     * @timestamp Time stamp to format
+     */
+    string function formatDate(required any timestamp) hint="Format time stamp as date string according to current user prefs" {
+
+        return isDate(arguments.timestamp) ? DateFormat(arguments.timestamp, getUserAttr("dateformat")) : "";
+
+    }
 
 
 	/*
@@ -18,7 +59,7 @@
         for (local.key in flash()) {
 
             // render current flash message with corresponding styling
-            local.output &= "<"&"div class=""message #LCase(local.key)#"">";
+            local.output &= "<"&"div class=""alert #LCase(local.key)#"">";
             local.output &= "<"&"p>" & flash(local.key) & "<"&"/p>";
 
             // render sub-warnings, if any
@@ -40,6 +81,63 @@
         }
 
         return local.output;
+
+    }
+    
+    
+    /*
+     * @accesslevel Numeric representation of access level
+     */
+    string function getAccessLevelText(required numeric accesslevel) hint="Get text name for user accesslevel" {
+
+        switch (arguments.accesslevel) {
+            case 0:
+                return "Visitor";
+            case 1:
+                return "Guest";
+            case 2:
+                return "Author";
+            case 3:
+                return "Editor";
+            case 4:
+                return "Developer";
+            case 5:
+                return "Account Owner";
+            case 6:
+                return "Administrator";
+        }
+
+    }
+    
+    
+    /*
+     * @handle The handle given to the query that the pagination links should be displayed for
+     * @controller Controller to use in linkTo
+     */
+    string function paginationLinksFull(string handle = "", string controller = "") hint="Get paging bar with Next/Prev links" {
+
+        var links = "";
+
+        var paging = StructKeyExists(arguments, "pagination") ? arguments.pagination : pagination();
+
+        if (paging.totalRecords EQ 0) {
+            return links;
+        }
+
+        links = "Page #paging.currentPage# of #paging.totalPages# (total #paging.totalRecords# records)&nbsp;&nbsp;&nbsp;";
+
+        links &= "<ul>" & "<li>" & linkTo(text="&laquo;", params="page=#iif(paging.currentPage EQ 1, 1, paging.currentPage-1)#", controller=arguments.controller) & "</li>";
+
+        if (arguments.handle NEQ "") {
+            links &= paginationLinks(linkToCurrentPage=true, classForCurrent="active", showSinglePage=true, handle=arguments.handle, controller=arguments.controller, prependToPage="<li>", prependOnFirst="true", appendToPage="</li>", appendOnLast="true");
+        }
+        else {
+            links &= paginationLinks(linkToCurrentPage=true, classForCurrent="active", showSinglePage=true, controller=arguments.controller, prependToPage="<li>", prependOnFirst="true", appendToPage="</li>", appendOnLast="true");
+        }
+
+        links &= "<li>" & linkTo(text="&raquo;", params="page=#iif(paging.currentPage EQ paging.totalPages, paging.totalPages, paging.currentPage+1)#", controller=arguments.controller) & "</li>" & "</ul>";
+
+        return links;
 
     }
 

@@ -13,51 +13,63 @@
         <!--[if lt IE 9]>
             <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
         <![endif]-->
-
+		#javaScriptIncludeTag("jquery,mandrillcms")#
     </head>
-    <body>
+<body>
 
         <div class="container">
         	
-			<cfif isLoggedIn()>
-			<div class="navbar">
-				<div class="navbar-inner">
-			    	<div class="container">
-			        	<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-			            	<span class="icon-bar"></span>
-			                <span class="icon-bar"></span>
-			                <span class="icon-bar"></span>
-			            </a>
-			            <a class="brand" href="">Mandrill CMS</a>
-			            <div class="nav-collapse">
-			            	<ul class="nav">
-			                	<li class="active">#linkTo(text='Dashboard', route="home")#</li>
-			                    <li>#linkTo(text='Pages', controller='Pages')#</li>
-			                    <li>#linkTo(text='Posts', controller='Posts')#</li>
-			                    <li><a href="">Files</a></li>
-			                    <li><a href="">Marketing</a></li>
-			                    <li><a href="">Users</a></li>
-			                    <li><a href="">Settings</a></li>
-								<li>#linkTo(text='Logout', controller='members', action='logout')#</li>
-			                </ul>		
-							
-							<p class="user">Logged in as #getUserAttr("firstName")# #getUserAttr("lastName")#</p>
-												        	
-						</div>
-			    	</div>
-				</div>
-			</div>
-			</cfif>
-			
-			<h2>#view.pageTitle#<cfif view.pageTitleAppend NEQ ""> #view.pageTitleAppend#</cfif></h2>
+			<cfif isLoggedIn()>#includePartial("/shared/navigation")#</cfif>
 
-            #includeContent()#
+	        <cfif view.renderCustomLayout>
+	
+	            #includeContent()#
+	
+	        <cfelse>
+	
+	            <div class="block">
+	
+	                <div class="block_head">
+	                    <div class="bheadl"></div>
+	                    <div class="bheadr"></div>
+	                    <h2>#view.pageTitle#<cfif view.pageTitleAppend NEQ ""> #view.pageTitleAppend#</cfif></h2>
+	                    <ul>
+	                        <cfif view.renderShowBy>
+	                        <li class="active">
+	                            Show by:
+	                            <cfloop list="#get('showBySize')#" index="p">
+	                            #linkTo(text=p, params="pagesize=#p#", class=iif(params.pagesize EQ p, De('active'), De('')), key=view.showByKey, controller=view.showByController)#
+	                            </cfloop>
+	                        </li>
+	                        </cfif>
+	                        <cfloop array="#view.headLinks#" index="hlink">
+	                        <li>#hlink#</li>
+	                        </cfloop>
+	                    </ul>
+	                </div>
+	
+	                <div class="block_content">
+	
+	                    <cfif view.renderFlash>#flashRender()#</cfif>
+	
+	                    #includeContent()#
+	
+	                </div>
+	
+	                <div class="bendl"></div>
+	                <div class="bendr"></div>
+	
+	            </div>
+	
+	        </cfif>
 
             <hr>
             <footer>
                 <p>&copy; 2012 NerveCentral Limited</p>
             </footer>
         </div>
-
-    </body>
+		
+	#javaScriptIncludeTag("bootstrap")#
+	
+</body>
 </html></cfoutput>
