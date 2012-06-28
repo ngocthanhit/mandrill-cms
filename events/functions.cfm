@@ -100,10 +100,21 @@
         return (ListFind(get("developersUserId"), getUserAttr("id")));
     }
 
+    boolean function isAuthor() hint="Check if current user is author" { //maimun
+        return (getUserAttr("accessLevel") EQ get("accessLevelAuthor"));
+    }
 
+    boolean function isEditor() hint="Check if current user is editor" { //maimun
+        return (getUserAttr("accessLevel") EQ get("accessLevelEditor"));
+    }
+
+    boolean function isGuest() hint="Check if current user is guest" { //maimun
+        return (getUserAttr("accessLevel") EQ get("accessLevelGuest"));
+    }
+    
     any function ShortUUID() hint="Get short version of UUID" {
         return ListFirst(CreateUUID(), "-");
     }
-	
+    
 
 </cfscript>
