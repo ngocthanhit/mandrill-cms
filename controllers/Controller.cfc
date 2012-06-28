@@ -56,6 +56,20 @@ component extends="Wheels" {
 
     }
     
+    private any functrion restrictedAccessPosts() hint="restrict guest to access pages" {
+        if (isGuest()) {
+        flashInsert(success="access denied.") ;
+        redirectTo(controller="posts");
+        }
+    }
+    
+    
+    private any functrion restrictedAccessPages() hint="restrict guest to access pages" {
+        if(isAuthor() or isGuest())
+        flashInsert(success="access denied.") ;
+        redirectTo(controller="pages");
+        }
+    }
     
      /*
      * HELPERS
