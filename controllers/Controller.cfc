@@ -68,7 +68,7 @@ component extends="Wheels" {
     
     private any function restrictedAccessPages() hint="restrict guest to access pages" {
 
-        if(isAuthor() or isGuest())
+        if(isAuthor() or isGuest()){
         flashInsert(success="access denied.") ;
         redirectTo(controller="pages");
         }
@@ -184,6 +184,5 @@ component extends="Wheels" {
         }
 
     }
-
 
 }
