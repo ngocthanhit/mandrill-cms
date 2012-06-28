@@ -3,15 +3,24 @@ component extends="Controller" hint="Controller for crum posts section" {
     
     
     // public any function init() hint="Initialize the controller" {
-      // filters(through="memberOnly", except="login,logout,password,forbidden,signup");
         getTemplates= model("template").findALL() ;
         ALlCatagories = model("category").findALL() ;
+        filters(through="restrictedAccessPosts", except="index");
     //}
         
     
     
     public any function index() hint="listing of all posts" {
-        allPosts = model("post").findAll(include="user,status") ;
+        _view(pageTitle = "Posts", renderShowBy = true, stickyAttributes = "pagesize,sort,order");
+
+        initListParams(20, "createdAt");
+
+            allPosts = model("post").findAll(
+                include="user,status",
+                page = params.page,
+                perPage = params.pagesize,
+                order = "#params.order# #params.sort#"
+                );
     }
     
     
@@ -20,6 +29,11 @@ component extends="Controller" hint="Controller for crum posts section" {
         if (StructKeyExists(params,"key"))
             {
                 newPost = model("post").findByKey(params.key) ;
+                if(isAuthor() && (newPost.userid NEQ getUserAttr("id")))
+                {
+                    flashInsert(success="access denied.") ;
+                    redirectTo(controller="posts");
+                }
                 newPostCatergory = model("postcategorymapping").findAll(where="postid=" & params.key,select="categoryid") ;
                 title = "Edit post" ;
                 formAction = "SubmitEditPost" ;
@@ -81,7 +95,11 @@ component extends="Controller" hint="Controller for crum posts section" {
     
     
     public any function SubmitEditPost() hint="listing of all posts" {
-    
+        if(isAuthor() && (params.newPost.postid NEQ getUserAttr("id")))
+            {
+                flashInsert(success="access denied.") ;
+                redirectTo(controller="posts");
+            }
         params.newPost.updatedby = getLoggedinUserID() ;
         params.newPost.statusid = 1 ;
         
