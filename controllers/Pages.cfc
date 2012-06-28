@@ -1,10 +1,10 @@
 component extends="Controller" hint="Controller for crum pages section" {
 
-    // public any function init() hint="Initialize the controller" {
+    public any function init() hint="Initialize the controller" {
        getPages = model("page").findALL(); //This gets all pages to fill in drop down to bind this page as sub page to another parent page, if any.
        getTemplates= model("template").findALL(); // page layouts/ templates
        filters(through="restrictedAccessPages");
-    //}
+    }
 
     public any function index() hint="Intercept direct access to /pages/" {
 
