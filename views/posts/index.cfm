@@ -1,25 +1,45 @@
+<cfoutput>
 <!---  Link to add new post --->
-<div class="span7"><h2>Posts</h2></div> <cfoutput>#linkTo(text="+ Add Post",action="addeditpost",class="btn btn-primary")#</cfoutput>
+#flash("success")#
+#linkTo(text="+ Add Post",action="addeditpost",class="btn btn-primary")#
 <br /><br />
 
 <!---  Listing of all "posts" --->
 <table class="table table-striped table-bordered">
-	<thead class="hero-unit">
-		<tr>
-			<th>Post</th>
-			<th>Author</th>        
-			<th>Status </th>                
-			<th>Date</th>                        
-		</tr>
-	</thead>
-	<tbody>
-    <cfoutput query="allPosts">
-		<tr>
-			<td>#linkTo(text=HtmlEditFormat(title),action="addeditpost",key=postid)#</td>
-			<td>#HtmlEditFormat(firstname)# #HtmlEditFormat(lastname)#</td>        
-			<td>#STATUS#</td>
-			<td>#DateFormat(createdAt,"mm/dd/yyyy")#</td>        
-		</tr>    
-    </cfoutput>
-	</tbody>
+    <thead class="hero-unit">
+        <tr>
+            <th <cfif params.order EQ "title">class="headersort#params.sort#"</cfif>>#linkTo(text="Post", params="order=title&sort=#params.sort#")# </th>
+            <th <cfif params.order EQ "firstname">class="headersort#params.sort#"</cfif>>#linkTo(text="Author", params="order=firstname&sort=#params.sort#")# </th>
+            <th <cfif params.order EQ "STATUS">class="headersort#params.sort#"</cfif>>#linkTo(text="Status", params="order=STATUS&sort=#params.sort#")# </th>
+            <th <cfif params.order EQ "createdAt">class="headersort#params.sort#"</cfif>>#linkTo(text="Date", params="order=createdAt&sort=#params.sort#")# </th>
+        </tr>
+    </thead>
+    <tbody>
+    <cfloop query="allPosts">
+        <tr>
+           <td>
+                <cfif isGuest() OR isAuthor()>
+                    <cfif isAuthor() && (userid EQ getUserAttr("id"))>
+                        #linkTo(text=HtmlEditFormat(title),action="addeditpost",key=postid)#
+                    <cfelse>
+                        HtmlEditFormat(title)
+                    </cfif>
+                <cfelse>
+                    #linkTo(text=HtmlEditFormat(title),action="addeditpost",key=postid)#
+                </cfif>
+           </td>
+           <td>#HtmlEditFormat(firstname)# #HtmlEditFormat(lastname)#</td>
+           <td>#STATUS#</td>
+           <td>#DateFormat(createdAt,"mm/dd/yyyy")#</td>
+        </tr>
+    </cfloop>
+    </tbody>
 </table>
+
+<div class="pagination right">
+    #paginationLinksFull()#
+</div>
+</cfoutput>
+<div style="clear:both;"></div>
+<div class="bendl"></div>
+<div class="bendr"></div>
