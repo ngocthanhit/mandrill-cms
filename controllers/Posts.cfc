@@ -2,11 +2,11 @@ component extends="Controller" hint="Controller for crum posts section" {
 
     
     
-    // public any function init() hint="Initialize the controller" {
+    public any function init() hint="Initialize the controller" {
         getTemplates= model("template").findALL() ;
         ALlCatagories = model("category").findALL() ;
         filters(through="restrictedAccessPosts", except="index");
-    //}
+    }
         
     
     
