@@ -12,7 +12,7 @@
     set(URLRewriting="On");
 
     // assets grouped for easier CDN implementation
-    set(imagePath="assets/images");
+    set(imagePath="assets/img");
     set(javascriptPath="assets/javascripts");
     set(stylesheetPath="assets/stylesheets");
     set(filePath="assets/files");
@@ -34,6 +34,10 @@
 
     // base URL for absolute paths
     set(baseURL="http://#cgi.SERVER_NAME#");
+    
+    // application emails
+    set(defaultEmail="mandrillbot@mandrillcms.com");
+    set(supportEmail="hello@mandrillcms.com");
     
     // marketing/sales website URL
     set(metaWebsiteURL="http://dev.mandrillcms.com");
@@ -79,10 +83,10 @@
     set(showBySize="10,20,50");
 
     // scheduler links protection key
-    set(schedulerAuthKey="2089575f2608b8");
+    set(schedulerAuthKey="8740fj37d705k2");
 
     // API webhooks protection key
-    set(apiWebhookAuthKey="2089575f2608b9");
+    set(apiWebhookAuthKey="8740fj37d705k3");
 
     // keep log events before archiving
     set(keepEventsPeriod=30); // days

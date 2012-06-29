@@ -1,7 +1,7 @@
 component extends="Controller" hint="Controller for registered members section" {
 
 	public any function init() hint="Initialize the controller" {
-        filters(through="memberOnly", except="login,logout,password,forbidden,signup");
+        filters(through="memberOnly", except="login,logout,password,forbidden,signup,dashboard");
     }
 
     public any function index() hint="Intercept direct access to /members/" {
@@ -166,10 +166,212 @@ component extends="Controller" hint="Controller for registered members section" 
 	
 	
 	
+	public any function password() hint="Password reset form and processing" {
+
+        var local = {};
+
+        _view(pageTitle = "Reset Password");
+
+        // display email form by default
+        params.phase = "email";
+
+
+        // if form is submitted -- validate email and send confirmation link
+
+        if (StructKeyExists(params, "email")) {
+
+            try {
+
+                // check if user exists and active
+
+                local.user = model("user").findOneByEmail(Trim(params.email));
+
+                if (NOT isObject(local.user) OR local.user.id EQ get("visitorUserId")) {
+                    throw(type="failed");
+                }
+
+                // create and send confirmation link
+
+                local.maildata = {
+                    firstname : local.user.firstname,
+                    email : local.user.email,
+                    link : linkTo(route="passwordConfirm", stamp=crypt(local.user.id & "-ma1l", true), onlyPath=false)
+                }
+
+                sendEmail(
+                    from = get("defaultEmail"),
+                    replyto = get("supportEmail"),
+                    to = local.user.email,
+                    subject = getSetting("ResetPasswordEmailSubject"),
+                    template = "/emails/resetpassword",
+                    detectMultipart = false,
+                    type = "html",
+                    layout = "/shared/emailgeneric",
+                    maildata = local.maildata
+                );
+
+                _event("I", "Sent confirmation link to #local.user.email# (user #local.user.id#)");
+
+                flashInsert(success="Please check you mailbox for further instructions");
+
+            }
+            catch (any local.e) {
+
+                if (local.e.type EQ "failed") {
+                    _event("W", "Caught failed attempt to restore password by invalid email #params.email#");
+                    flashInsert(warning="Email was not found, please re-check and try again");
+                }
+                else {
+                    _event("E", "Caught unexpected failure, email was #params.email#", "", "#local.e.Message# ~ #local.e.Detail#");
+                    flashInsert(error="Unexpected failure happened, please try again later");
+                }
+
+            }
+
+            redirectTo(action="password");
+
+        }
+
+
+        // if link is clicked -- validate hash and propose to enter new password
+
+        if (StructKeyExists(params, "stamp")) {
+
+            try {
+                local.userid = ListFirst(crypt(params.stamp, false), "-");
+            }
+            catch (any local.ex) {
+                flashInsert(warning="Link is incorrect, please re-check your email");
+                local.userid = 0;
+            }
+
+            if (local.userid) {
+
+                local.user = model("user").findByKey(local.userid);
+
+                if (NOT isObject(local.user) OR local.user.id EQ get("visitorUserId")) {
+                    flashInsert(warning="Link is incorrect, please re-check your email");
+                }
+                else {
+                    // switch to two-password form display
+                    params.phase = "passwords";
+                }
+
+            }
+
+        }
+
+
+        // if passwords form submitted -- update account
+
+        if (StructKeyExists(params, "stamp") AND StructKeyExists(params, "password1") AND StructKeyExists(params, "password2")) {
+
+            try {
+                local.userid = ListFirst(crypt(params.stamp, false), "-");
+            }
+            catch (any local.ex) {
+                flashInsert(warning="Link is incorrect, please re-check your email");
+                local.userid = 0;
+            }
+
+            if (local.userid) {
+
+                local.user = model("user").findByKey(local.userid);
+
+                if (NOT isObject(local.user) OR local.user.id EQ get("visitorUserId")) {
+                    flashInsert(warning="Link is incorrect, please re-check your email");
+                }
+                else if (params.password1 EQ "" OR params.password2 EQ "") {
+                    flashInsert(warning="Please enter both passwords");
+                }
+                else if (params.password1 NEQ params.password2) {
+                    flashInsert(warning="Password doesn't match the confirmation");
+                }
+                else {
+
+                    // copy collected attrs into the user model
+                    local.user.setProperties({
+                        password : params.password1,
+                        passwordConfirmation : params.password2
+                    });
+
+                    if (local.user.update()) {
+                        _event("I", "Successfully set new password", "Profiles", "", local.user.accountid, local.user.id);
+                        flashInsert(success="Password updated successfully");
+                        redirectTo(action="login");
+                    }
+                    else {
+                        flashInsert(error="Unexpected failure happened, please try again later");
+                    }
+
+                }
+
+            }
+
+        }
+
+
+        renderPage(layout="publiclayout");
+
+    }
 	
+	
+		
 	/*
      * Registration routines
      */
+
+
+
+	public any function signup() hint="Member registration pre- and post-processing steps" {
+
+        var local = {};
+
+        _view(pageTitle = "Registration");
+
+
+        if (StructKeyExists(params, "accountname")) {
+
+            // TODO: validation and adding data
+
+            try {
+
+                params.account = {name : params.accountname, status : "active"};
+
+                params.user = {
+                    "accesslevel" : get("accessLevelAccountOwner"),
+                    "timezoneid" : get("defaultTimeZone"),
+                    "dateformat" : get("viewDateFormats")[1].format,
+                    "timeformat" : get("viewTimeFormats")[1].format,
+                    "isactive" : 1
+                };
+
+                // pre-validation actions for password
+                if (StructKeyExists(params, "password1") AND params.password1 NEQ "") {
+                    params.user["password"] = params.password1;
+                }
+                if (StructKeyExists(params, "password2") AND StructKeyExists(params.user, "password")) {
+                    params.user["passwordConfirmation"] = params.password2;
+                }
+
+                WriteDump(params);
+                abort;
+
+            }
+            catch (any local.e) {
+
+                _event("E", "Caught unexpected signup failure", "", "#local.e.Message# ~ #local.e.Detail#");
+                flashInsert(error="Unexpected failure happened, please try again later");
+
+            }
+
+        }
+
+
+        renderPage(layout="publiclayout");
+
+
+    }
 
 
 

@@ -38,7 +38,7 @@
         _view(headLink = linkTo(text="Add team member", action="memberAdd"));
 
         initListParams(20, "email");
-
+		writeDump(var=params);abort;
         users = model("users").findAll(
             where = "accountid = #getAccountAttr('id')#",
             page = params.page,

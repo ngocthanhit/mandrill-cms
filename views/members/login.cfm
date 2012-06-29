@@ -22,12 +22,12 @@
 		                #submitTag(class="btn btn-primary", value="Login")#
 		                #checkBoxTag(label=" Remember me on this computer", name="rememberme", class="checkbox", id="rememberme", labelPlacement="after")#
 		            </p>
-					<!---
+					
 		            <p>
 		                #linkTo(text="Forgot password?", controller="members", action="password")#
 		                | #linkTo(text="Don't have an account? Register!", controller="members", action="signup")#
 		            </p>
-					--->
+					
 		        #endFormTag()#
 		
 		</div>

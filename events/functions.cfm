@@ -95,7 +95,6 @@
         return (getUserAttr("accessLevel") EQ get("accessLevelAdmin"));
     }
 
-
     boolean function isDeveloper() hint="Check if current user is developer" {
         return (ListFind(get("developersUserId"), getUserAttr("id")));
     }
@@ -114,6 +113,36 @@
     
     any function ShortUUID() hint="Get short version of UUID" {
         return ListFirst(CreateUUID(), "-");
+    }
+    
+    
+    void function saveStickyAttributes() hint="Save the sticky attributes for current page" {
+
+        lock scope="session" type="exclusive" timeout="15" {
+
+            index = 1;
+            total = ListLen(request.view.stickyAttributes);
+
+            page = request.wheels.params.controller & "." & request.wheels.params.action;
+
+            while (index <= total) {
+
+                if (NOT StructKeyExists(session.stickyAttributes, page)) {
+                    session.stickyAttributes[page] = {};
+                }
+
+                key = ListGetAt(request.view.stickyAttributes, index);
+
+                if (StructKeyExists(request.wheels.params, key)) {
+                    session.stickyAttributes[page][key] = request.wheels.params[key];
+                }
+
+                index++;
+
+            }
+
+        }
+
     }
     
 
