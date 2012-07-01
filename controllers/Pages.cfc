@@ -1,12 +1,15 @@
 component extends="Controller" hint="Controller for crum pages section" {
 
+    getPages = model("page").findALL(); //This gets all pages to fill in drop down to bind this page as sub page to another parent page, if any.
+    getTemplates= model("template").findALL(); // page layouts/ templates
     public any function init() hint="Initialize the controller" {
-       getPages = model("page").findALL(); //This gets all pages to fill in drop down to bind this page as sub page to another parent page, if any.
-       getTemplates= model("template").findALL(); // page layouts/ templates
+    filters(through="memberOnly");
        filters(through="restrictedAccessPages");
     }
 
     public any function index() hint="Intercept direct access to /pages/" {
+
+     var local = {};
 
          _view(pageTitle = "Pages", renderShowBy = true, stickyAttributes = "pagesize,sort,order");
 
@@ -18,6 +21,7 @@ component extends="Controller" hint="Controller for crum pages section" {
                 perPage = params.pagesize,
                 order = "#params.order# #params.sort#"
                 ); //Get all pages in "pages" structure variable INNER JOIN "users" and  "statuses" table
+
     }
 
     public any function addeditpage() hint="Add/Edit Page to get new page details and show/ update information for existing pages" {
@@ -52,13 +56,14 @@ component extends="Controller" hint="Controller for crum pages section" {
 
         var redirect = true ;
         var getPageData = model("page").findBykey(params.key) ;
+
         var tocheckPass = "";
         if (getPageData.isprotected EQ 1)
             {
                 redirect = false ;
                 tocheckPass = getPageData.password ;
             }
-         else if (getPageData.parentid NEQ 0)
+         else if (getPageData.parentid NEQ 0 AND getPageData.parentid NEQ "")
              {
                 var getParentPageData = model("page").findBykey(getPageData.parentid) ;
                 tocheckPass = getParentPageData.password ;
@@ -92,8 +97,8 @@ component extends="Controller" hint="Controller for crum pages section" {
 
     public any function SubmitaddNewPage() hint="Add new page - form submission is done here" {
 
-        params.Newpages.userid = getLoggedinUserID() ;
-        params.Newpages.updatedby = getLoggedinUserID() ;
+        params.Newpages.userid = getUserAttr("id") ;
+        params.Newpages.updatedby = getUserAttr("id") ;
         params.Newpages.statusid = 1 ;
         if (IsDefined("params.draft"))
             {
@@ -102,7 +107,7 @@ component extends="Controller" hint="Controller for crum pages section" {
         else if (IsDefined("params.publish"))
             {
                 params.Newpages.publisheddate = Now() ;
-                params.Newpages.publishedby = getLoggedinUserID() ;
+                params.Newpages.publishedby = getUserAttr("id") ;
             }
         params.Newpages.title = xmlFormat(params.Newpages.title) ;
         params.Newpages.navigationtitle = xmlFormat(params.Newpages.navigationtitle);
@@ -127,7 +132,7 @@ component extends="Controller" hint="Controller for crum pages section" {
 
 
         params.Newpages.statusid = 1 ;
-        params.Newpages.updatedby = getLoggedinUserID() ;
+        params.Newpages.updatedby = getUserAttr("id") ;
         if (IsDefined("params.draft"))
             {
                 params.Newpages.statusid = 2 ;
@@ -135,7 +140,7 @@ component extends="Controller" hint="Controller for crum pages section" {
         else if (IsDefined("params.publish"))
             {
                 params.Newpages.publisheddate = Now() ;
-                params.Newpages.publishedby = getLoggedinUserID() ;
+                params.Newpages.publishedby = getUserAttr("id") ;
             }
         params.Newpages.title = xmlFormat(params.Newpages.title) ;
         params.Newpages.navigationtitle = xmlFormat(params.Newpages.navigationtitle);

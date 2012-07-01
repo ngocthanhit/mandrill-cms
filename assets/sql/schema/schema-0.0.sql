@@ -640,3 +640,15 @@ CREATE TABLE `user_roles` (
   `deletedAt` datetime DEFAULT NULL,
   PRIMARY KEY (`roleid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/* Insert default categories */
+INSERT INTO categories (category,createdBy,createdAt) values('Fact',5,now());
+INSERT INTO categories (category,createdBy,createdAt) values('Figures',5,now());
+INSERT INTO categories (category,createdBy,createdAt) values('Bits',5,now());
+INSERT INTO categories (category,createdBy,createdAt) values('Bobs',5,now());
+INSERT INTO categories (category,createdBy,createdAt) values('Yin',5,now());
+INSERT INTO categories (category,createdBy,createdAt) values('Yang',5,now());
+
+/* Insert default Statuses */
+INSERT INTO statuses (status) values('Publish');
+INSERT INTO statuses (status) values('Draft');
