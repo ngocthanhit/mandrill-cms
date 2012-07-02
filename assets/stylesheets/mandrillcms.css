@@ -66,4 +66,25 @@ table tr td.actions {
     height: 16px;
 }
 
+.page-header {
+    height: 40px;
+    line-height: 40px;
+}
+
+.page-header h2 {
+    float: left;
+}
+
+.content {
+    background-color: #ffffff;
+}
+
+.floated {
+    float: left;
+    padding-right: 10px;
+}
+
+.clear {
+    clear: both;
+}
 

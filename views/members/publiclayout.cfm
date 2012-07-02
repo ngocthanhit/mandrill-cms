@@ -19,7 +19,11 @@
 
 	<div class="container">
 
+        <div class="wrapper">
+
 			#includeContent()#
+
+        </div>
 		
 	</div>
 		

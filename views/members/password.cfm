@@ -1,18 +1,11 @@
 <cfoutput>
-<div class="block small center login">
-
-    <div class="block_head">
-        <div class="bheadl"></div>
-        <div class="bheadr"></div>
-
-        <h2>#view.pageTitle#</h2>
-        <ul>
-            <li>#linkTo(text="Back to the website", href=get("metaWebsiteURL"))#</li>
-        </ul>
+<div class="small center login">
+    <div class="page-header">           
+        <h2>#view.pageTitle#</h2>   
+        #linkTo(text="Back to the website", href=get("metaWebsiteURL"), class="btn")#
     </div>
 
-
-    <div class="block_content">
+    <div class="well">
 
         #flashRender()#
 
@@ -28,7 +21,7 @@
                 #passwordFieldTag(label="Re-type New Password:", name="password2", class="text", prepend="<br/>")#
             </p>
             <p>
-                #submitTag(class="submit", value="Confirm")#
+                #submitTag(class="submit", value="Confirm", class="btn btn-primary btn-large")#
             </p>
             <p>
                 #linkTo(text="&larr; Back to login form", action="login")#
@@ -43,7 +36,7 @@
                 #textFieldTag(label="Email Address:", name="email", class="text", prepend="<br/>")#
             </p>
             <p>
-                #submitTag(class="submit", value="Continue")#
+                #submitTag(class="submit", value="Continue", class="btn btn-primary btn-large")#
             </p>
             <p>
                 #linkTo(text="Return to login form.", action="login")#
@@ -52,9 +45,5 @@
         #endFormTag()#
 
     </div>
-
-    <div class="bendl"></div>
-    <div class="bendr"></div>
-
 </div>
 </cfoutput>

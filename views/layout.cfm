@@ -28,11 +28,9 @@
 	
 	        <cfelse>
 	
-	            <div class="block">
+	            <div>
 	
-	                <div class="block_head">
-	                    <div class="bheadl"></div>
-	                    <div class="bheadr"></div>
+	                <div>
 	                    <h2>#view.pageTitle#<cfif view.pageTitleAppend NEQ ""> #view.pageTitleAppend#</cfif></h2>
 	                    <ul>
 	                        <cfif view.renderShowBy>
@@ -49,16 +47,13 @@
 	                    </ul>
 	                </div>
 	
-	                <div class="block_content">
+	                <div class="well content">
 	
 	                    <cfif view.renderFlash>#flashRender()#</cfif>
 	
 	                    #includeContent()#
 	
 	                </div>
-	
-	                <div class="bendl"></div>
-	                <div class="bendr"></div>
 	
 	            </div>
 	

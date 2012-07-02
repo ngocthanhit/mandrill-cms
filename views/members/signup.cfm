@@ -1,18 +1,11 @@
 <cfoutput>
-<div class="block small center login">
-
-    <div class="block_head">
-        <div class="bheadl"></div>
-        <div class="bheadr"></div>
-
-        <h2>#view.pageTitle#</h2>
-        <ul>
-            <li>#linkTo(text="Back to the website", href=get("metaWebsiteURL"))#</li>
-        </ul>
+<div class="small center login">
+    <div class="page-header">           
+        <h2>#view.pageTitle#</h2>   
+        #linkTo(text="Back to the website", href=get("metaWebsiteURL"), class="btn")#
     </div>
 
-
-    <div class="block_content">
+    <div class="well">
 
         #flashRender()#
 
@@ -36,7 +29,7 @@
                 #passwordFieldTag(label="Confirm Password:", name="password2", autocomplete="off", class="text", prepend="<br/>")#
             </p>
             <p>
-                #submitTag(class="submit", value="Continue")#
+                #submitTag(class="submit", value="Continue", class="btn btn-primary btn-large")#
             </p>
             <p>
                 #linkTo(text="Already have an account? Please log in here.", controller="members", action="login")#
@@ -44,12 +37,7 @@
         #endFormTag()#
 
     </div>
-
-    <div class="bendl"></div>
-    <div class="bendr"></div>
-
 </div>
-
 <script type="text/javascript">
 $(document).ready( function(){
     $("input[name=accountname]").focus();

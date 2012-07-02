@@ -1,13 +1,11 @@
 <cfoutput>
-<div class="block">
+<div>
 
-    <div class="block_head">
-        <div class="bheadl"></div>
-        <div class="bheadr"></div>
+    <div class="page-header">           
         <h2>System Log Filters</h2>
     </div>
 
-    <div class="block_content">
+    <div class="well content">
 
         #flashRender()#
 
@@ -22,7 +20,7 @@
         <div class="floated">
             <input type="text" name="datefrom" value="#DateFormat(params.datefrom, get('defaultDateFormat'))#" class="text date_picker" />
         </div>
-        <div class="floated" style="width:30px;">
+        <div class="floated" style="width:15px;">
             <label style="width:20px; text-align:right;">to</label>
         </div>
         <div class="floated">
@@ -63,8 +61,8 @@
 
         <div class="floated" style="width:75px;">&nbsp;</div>
         <div class="floated">
-            #submitTag(class="submit small", name="apply", value="Apply")#
-            #submitTag(class="submit small", name="reset", value="Reset")#
+            #submitTag(class="submit small", name="apply", value="Apply", class="btn btn-primary btn-large")#
+            #submitTag(class="submit small", name="reset", value="Reset", class="btn btn-large")#
         </div>
 
         <div class="clear" style="padding:4px;"></div>

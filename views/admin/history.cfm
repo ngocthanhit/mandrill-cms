@@ -1,13 +1,11 @@
 <cfoutput>
-<div class="block">
+<div>
 
-    <div class="block_head">
-        <div class="bheadl"></div>
-        <div class="bheadr"></div>
+    <div class="page-header">           
         <h2>Data History Filters</h2>
     </div>
 
-    <div class="block_content">
+    <div class="well content">
 
         #flashRender()#
 
@@ -62,8 +60,8 @@
 
         <div class="floated" style="width:75px;">&nbsp;</div>
         <div class="floated">
-            #submitTag(class="submit small", name="apply", value="Apply")#
-            #submitTag(class="submit small", name="reset", value="Reset")#
+            #submitTag(class="submit small", name="apply", value="Apply", class="btn btn-primary btn-large")#
+            #submitTag(class="submit small", name="reset", value="Reset", class="btn btn-large")#
         </div>
 
         <div class="clear" style="padding:4px;"></div>

@@ -25,7 +25,7 @@
     </cfif>
 
     <p>
-        #submitTag(class="submit mid", value=view.buttonLabel)#
+        #submitTag(class="btn btn-primary btn-large", value=view.buttonLabel)#
     </p>
 
 </fieldset>
