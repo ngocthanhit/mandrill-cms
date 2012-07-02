@@ -59,4 +59,11 @@ table tr td.actions {
     white-space: nowrap;
 }
 
+.toggling {
+    background: url(../img/ajax-loader.gif) no-repeat scroll right center transparent;
+    display: block;
+    width: 16px;
+    height: 16px;
+}
+
 

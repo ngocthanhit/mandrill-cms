@@ -55,6 +55,15 @@ component extends="Wheels" {
         }
 
     }
+
+
+    private any function ajaxOnly() hint="Restrict action only to AJAX requests" {
+
+        if (NOT isAjax()) {
+            redirectTo(controller="contacts");
+        }
+
+    }
     
     private any function restrictedAccessPosts() hint="restrict guest to access pages" {
 
@@ -122,6 +131,44 @@ component extends="Wheels" {
 
         }
 
+
+    }
+
+
+    private any function getModelByKey(
+        required string name,
+        boolean verifyaccount = true,
+        string securitytoken = ""
+    ) hint="Check if params.key is valid and try to get the model" {
+
+        var obj = "";
+
+        param name="params.key" default="";
+
+        if (isValid("integer", params.key)) {
+            if (StructKeyExists(arguments, "include")) {
+                obj = model(arguments.name).findByKey(key=params.key, include=arguments.include);
+            }
+            else {
+                obj = model(arguments.name).findByKey(params.key);
+            }
+        }
+
+        if (NOT isObject(obj)) {
+            return ("Object ###params.key# not found");
+        }
+
+        // check if object belongs to current account
+        if (arguments.verifyaccount AND obj.accountid NEQ getAccountAttr('id')) {
+            return ("Object #arguments.name# ###obj.id# does not belong to current account");
+        }
+
+        // check if user has permission to access this object
+        if (arguments.securitytoken NEQ "" AND NOT granted(arguments.securitytoken) AND obj.createdBy NEQ getUserAttr("id")) {
+            return ("User does not have permission to access object #arguments.name# ###obj.id#");
+        }
+
+        return obj;
 
     }
     

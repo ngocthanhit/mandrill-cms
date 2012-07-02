@@ -17,7 +17,14 @@
     include "includes/AdminAccounts.cfm";
 
 
-    
+    /*
+     * DATA HISTORY
+     */
+
+
+    include "includes/AdminHistory.cfm";
+
+
     /*
      * OTHER ACTIONS
      */

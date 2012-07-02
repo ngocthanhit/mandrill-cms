@@ -21,8 +21,7 @@
 							<b class="caret"></b>
 						</a>
 						<ul class="dropdown-menu">
-							<li><a href="">Personal Profile</a></li></li>
-							
+							<li>#linkTo(text="Personal Profile", controller="members", action="profile")#</li>	
 							<cfif isAccountOwner()>
 							<li class="divider"></li>
 			                <li class="nav-header">YOUR ACCOUNT</li>
@@ -32,8 +31,8 @@
 							<li class="divider"></li>
 			                <li class="nav-header">ADMINISTRATOR</li>
 			                <li>#linkTo(text="Accounts &amp; Users", controller="admin", action="accounts")#</li>
-			                <li><a href="">System Log</a></li>
-			                <li><a href="">Data History</a></li>
+			                <li>#linkTo(text="System Log", controller="admin", action="syslog")#</li>
+			                <li>#linkTo(text="Data History", controller="admin", action="history")#</li>
 			                </cfif>
 			                <!---
 			                <cfif isDeveloper()>

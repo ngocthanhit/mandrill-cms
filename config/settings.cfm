@@ -11,6 +11,14 @@
     // full rewriting enabled
     set(URLRewriting="On");
 
+    // form helper defaults
+    set(functionName="textField", labelPlacement="before");
+    set(functionName="passwordField", labelPlacement="before");
+    set(functionName="passwordFieldTag", labelPlacement="before");
+    set(functionName="textarea", labelPlacement="before");
+    set(functionName="select", labelPlacement="before");
+    set(functionName="selectTag", labelPlacement="before");
+
     // assets grouped for easier CDN implementation
     set(imagePath="assets/img");
     set(javascriptPath="assets/javascripts");

@@ -1,7 +1,7 @@
 component extends="Controller" hint="Controller for registered members section" {
 
 	public any function init() hint="Initialize the controller" {
-        filters(through="memberOnly", except="login,logout,password,forbidden,signup,dashboard");
+        filters(through="memberOnly", except="login,logout,password,forbidden,signup");
     }
 
     public any function index() hint="Intercept direct access to /members/" {
@@ -26,6 +26,58 @@ component extends="Controller" hint="Controller for registered members section" 
         var local = {};
 
         _view(pageTitle = "Dashboard");
+
+    }
+
+
+    public any function profile() hint="Current user profile" {
+
+        var local = {};
+
+        _view(pageTitle = "Personal Profile", buttonLabel = "Save Profile", renderFlash = false);
+
+        // alias for _user partial re-use
+        user = request.user;
+
+        // pull available time zones
+        timezones = model("timezone").findAll();
+
+    }
+
+
+    public any function profileUpdate() hint="Save current user profile" {
+
+        var local = {};
+
+        _view(pageTitle = "Personal Profile", buttonLabel = "Save Profile", renderFlash = false);
+        _view(headLink = linkTo(text="Personal Settings", action="settings"));
+
+        // alias for _user partial re-use
+        user = request.user;
+
+        param name="params.user" default={};
+
+        // pre-validation actions for password
+        if (StructKeyExists(params, "password1") AND params.password1 NEQ "") {
+            params.user["password"] = params.password1;
+        }
+        if (StructKeyExists(params, "password2") AND StructKeyExists(params.user, "password")) {
+            params.user["passwordConfirmation"] = params.password2;
+        }
+
+        // copy collected attrs into the user model
+        user.setProperties(params.user);
+
+        if (user.update()) {
+            _event("I", "Updated personal profile information", "Profiles");
+            flashInsert(success="Profile saved successfully");
+            redirectTo(action="profile")
+        }
+        else {
+            timezones = model("timezone").findAll();
+            flashInsert(warning="There are some problems with your submission:");
+            renderPage(action="profile");
+        }
 
     }
     

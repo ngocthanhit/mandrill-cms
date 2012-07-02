@@ -2,6 +2,27 @@
 (function($){
 
     /*
+     * Apply required asterisk by CSS class
+     */
+    $.fn.requiredInput = function(options){
+
+        var self = this,
+            settings = {
+                'requiredText': '<span class="required">*</span>'
+            };
+
+        if (options) { 
+            $.extend(settings, options);
+        }
+        
+        return self.each(function() {
+            var el = $(this);
+            el.parent().children('label').append( settings.requiredText );
+        });
+        
+    },
+
+    /*
      * Bind quick toggle events for boolean fields
      */
     $.fn.bindToggleLinks = function(options){

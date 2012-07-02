@@ -83,6 +83,41 @@
         return local.output;
 
     }
+
+
+    /*
+     * @type Short type code
+     */
+    string function getLogTypeText(required string type) hint="Get full name of system log event type" {
+
+        switch (arguments.type) {
+            case "I":
+                return "Information";
+            case "W":
+                return "Warning";
+            case "E":
+                return "Error";
+        }
+
+    }
+
+
+
+    /*
+     * @type Short type code
+     */
+    string function getLogTypeColor(required string type) hint="Get color of system log event type" {
+
+        switch (arguments.type) {
+            case "I":
+                return "666666";
+            case "W":
+                return "ff7e00";
+            case "E":
+                return "ff000f";
+        }
+
+    }
     
     
     /*
@@ -138,6 +173,43 @@
         links &= "<li>" & linkTo(text="&raquo;", params="page=#iif(paging.currentPage EQ paging.totalPages, paging.totalPages, paging.currentPage+1)#", controller=arguments.controller) & "</li>" & "</ul>";
 
         return links;
+
+    }
+
+
+    /*
+     * @route Route name to use for building links
+     * @key Params key value
+     */
+    string function paginationLinksRouted(required string route, required string key) hint="Get paging bar with Next/Prev links" {
+
+        var links = "";
+        var paging = pagination();
+
+        if (paging.totalRecords EQ 0) {
+            return links;
+        }
+
+        links = "Page #paging.currentPage# of #paging.totalPages# (total #paging.totalRecords# records)&nbsp;&nbsp;&nbsp;";
+
+        links &= "<ul>" & "<li>" & linkTo(text="&laquo;", params="page=#iif(paging.currentPage EQ 1, 1, paging.currentPage-1)#", route=arguments.route, key=arguments.key) & "</li>";
+
+        links &= paginationLinks(linkToCurrentPage=true, classForCurrent="active", showSinglePage=true, route=arguments.route, key=arguments.key, prependToPage="<li>", prependOnFirst="true", appendToPage="</li>", appendOnLast="true");
+
+        links &= "<li>" &  linkTo(text="&raquo;", params="page=#iif(paging.currentPage EQ paging.totalPages, paging.totalPages, paging.currentPage+1)#", route=arguments.route, key=arguments.key) & "</li>" & "</ul>";
+
+        return links;
+
+    }
+
+
+    /*
+     * @text Text to wrap
+     * @prepend Prepend output with this text, typically <br/>
+     */
+    string function noteText(required string text, string prepend = "") hint="Get text wrapped into notes block" {
+
+        return arguments.prepend & "<"&"span class=""note"">" & arguments.text & "<"&"/span>";
 
     }
 

@@ -144,6 +144,22 @@
         }
 
     }
+
+
+    /*
+     * @src String to encrypt/decrypt
+     * @enc Action is Encrypt
+     */
+    string function crypt(required string src, required boolean enc) hint="Encrypt/Decrypt given string" {
+
+        if (arguments.enc) {
+            return Encrypt(arguments.src, get("encryptionKey"), get("encryptionAlgorithm"), get("encryptionEncoding"));
+        }
+        else {
+            return Decrypt(arguments.src, get("encryptionKey"), get("encryptionAlgorithm"), get("encryptionEncoding"));
+        }
+
+    }
     
 
 </cfscript>
