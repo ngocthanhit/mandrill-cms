@@ -51,7 +51,7 @@
     set(metaWebsiteURL="http://dev.mandrillcms.com");
     
     // encryption key / hashing salt
-    set(encryptionKey="64zJGKzA5-SGTlN>A-1r0nzM");
+    set(encryptionKey="be5466cfc52eK0ab45TR21e6");
     set(encryptionAlgorithm="BLOWFISH");
     set(encryptionEncoding="Base64");
     set(hashingKey="&0Dsxs2kB.fO");
