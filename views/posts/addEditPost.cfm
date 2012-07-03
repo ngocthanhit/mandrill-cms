@@ -6,9 +6,9 @@
 
 <!--- add / edit form page [start]--->
 #startFormTag(name="createNewPostForm",method="post",action=formAction,autocomplete="off")#
-<div class="span7">
+<div class="span8">
     <div class="container-fluid" >
-     #textArea(label="Main content<br />", objectName="newPost", property="content",rows="10", cols="50")# <br />
+     #textArea(label="Main content<br />", objectName="newPost", property="content",class="markItUp")# <br />
     #textField(label="Page Title<br />", objectName="newPost", property="title",size="64")# <br />
     #textArea(label="Description<br />", objectName="newPost", property="description",rows="5", cols="50")# <br />
     #submitTag(name="draft",value="Save as Draft",class="btn SubmitButton")# &nbsp; #submitTag(name="publish",value="Save & Publish",class="btn btn-primary SubmitButton")# <br />
@@ -28,7 +28,7 @@
     </cfif><br />
 </div>
 </div>
-<div class="span4">
+<div class="span3">
         #select(label="Template<br />", objectName="newPost", property="templateid", options=getTemplates)# <br /><br /><br />
         <strong>Categories</strong>&nbsp;&nbsp;&nbsp;#linkTo(text="Add category")#<br>
         <cfloop query="ALlCatagories">

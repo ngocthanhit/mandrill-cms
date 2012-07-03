@@ -10,10 +10,10 @@
 			<a class="brand" href="">Mandrill CMS</a>
 			<div class="nav-collapse">
 				<ul class="nav">
-					<li class="active">#linkTo(text='Dashboard', route="home")#</li>
-				 	<li>#linkTo(text='Pages', controller='Pages')#</li>
-				 	<li>#linkTo(text='Posts', controller='Posts')#</li>
-					<li><a href="">Files</a></li>
+					<li <cfif params.controller eq "Members">class="active"</cfif>>#linkTo(text='Dashboard', route="home")#</li>
+				 	<li <cfif params.controller eq "Pages">class="active"</cfif>>#linkTo(text='Pages', controller='Pages')#</li>
+				 	<li <cfif params.controller eq "Posts">class="active"</cfif>>#linkTo(text='Posts', controller='Posts')#</li>
+					<li <cfif params.controller eq "Files">class="active"</cfif>>#linkTo(text='Files', controller='Files')#</li>
 					<li><a href="">Marketing</a></li>
 				    <li class="dropdown">
 				    	<a href="##" class="dropdown-toggle" data-toggle="dropdown">

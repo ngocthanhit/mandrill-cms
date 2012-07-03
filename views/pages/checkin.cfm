@@ -1,6 +1,4 @@
 <cfoutput>
-<!--- alert or msg --->
-#flash("success")#
 <br />
 <!--- password check form to provide page access to valid users --->
     #startFormTag(method="post",action="checkinconfirm",key=params.key)#

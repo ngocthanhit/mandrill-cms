@@ -77,7 +77,7 @@ component extends="Controller" hint="Controller for crum pages section" {
             {
                 if (IsDefined("Params.password"))
                     {
-                        if (Compare(tocheckPass, Params.password) eq 0)
+                        if (Compare(tocheckPass, Hash(Params.password & get("hashingKey"), "SHA-256")) eq 0)
                             {
                                 redirectTo(action="addEditPage",key=params.key,params="checkin=#hash(params.key)#") ;
                             }

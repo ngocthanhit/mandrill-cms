@@ -11,7 +11,7 @@ component extends="components.models.User" {
         validate(method="checkCategory") ;
 
     }
-    
+
      public void function checkCategory() hint="Define the validation rules and model relationships" {
          if (not IsDefined("form.categoryID"))
             {

@@ -1,6 +1,5 @@
 <!---  Link to add new page --->
 <cfoutput>
-#flash("success")#
 #linkTo(text="+ Add Page",action="addeditpage",class="btn btn-primary")#
 <br /><br />
 

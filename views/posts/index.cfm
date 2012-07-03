@@ -1,6 +1,5 @@
 <cfoutput>
 <!---  Link to add new post --->
-#flash("success")#
 #linkTo(text="+ Add Post",action="addeditpost",class="btn btn-primary")#
 <br /><br />
 

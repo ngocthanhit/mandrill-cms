@@ -6,9 +6,9 @@
 
 <!--- add / edit form page [start]--->
 #startFormTag(name="createNewPageForm",method="post",action=formAction,autocomplete="off")#
-<div class="span7">
+<div class="span8">
     <div class="container-fluid" >
-    #textArea(label="Main content<br />", objectName="Newpages", property="content",rows="10", cols="50")# <br />
+    #textArea(label="Main content<br />", objectName="Newpages", property="content",class="markItUp")# <br />
     #textField(label="Page Title<br />", objectName="Newpages", property="title",size="64")# <br />
     #textArea(label="Description<br />", objectName="Newpages", property="description",rows="5", cols="50")# <br />
     #textField(label="Navigation title (optional)<br />", objectName="Newpages", property="navigationtitle",size="64")# <br />
@@ -26,7 +26,7 @@
     </cfif><br />
     </div>
 </div>
-<div class="span4">
+<div class="span3">
     #select(label="Parent page<br />", objectName="Newpages", property="parentid", options=getPages,includeBlank="true")# <br />
     #select(label="Template<br />", objectName="Newpages", property="templateid", options=getTemplates)# <br /><br /><br />
     #checkbox(label="Show page in navigation",objectName="Newpages", property="showinnavigation")#<br />

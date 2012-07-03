@@ -652,3 +652,20 @@ INSERT INTO categories (category,createdBy,createdAt) values('Yang',5,now());
 /* Insert default Statuses */
 INSERT INTO statuses (status) values('Publish');
 INSERT INTO statuses (status) values('Draft');
+
+/*Table structure for table `files` */
+create table files
+(
+id int auto_increment,		
+userid int,
+accountid int,
+title varchar(255),
+filename varchar(255),
+fileext varchar(50),
+filesize numeric,
+createdAt datetime,
+deletedAt datetime,
+updatedAt datetime,
+primary key (id)
+)
+COLLATE utf8_general_ci;

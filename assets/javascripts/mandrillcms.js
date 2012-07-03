@@ -56,7 +56,7 @@
 
 })(jQuery);
 $(document).ready(function() {
-
+$('.markItUp').markItUp(mySettings);
  $(".futureDateCont").click(function(e)
           {
             var containerID = $(this).attr('class') ;
@@ -73,3 +73,70 @@ $(document).ready(function() {
                 e.preventDefault();
         }).trigger('click');
 });
+/* ajax Upload methods  */
+var current_perc = 0;
+function updateProgressbar()
+{
+$('.progress .bar').each(function() {
+   var me = $(this);
+   var perc = me.attr("data-percentage");
+
+   var progress = setInterval(function() {
+       if (current_perc>=perc) {
+        clearInterval(progress);
+       } else {
+        if(current_perc < 90){
+             current_perc +=1;
+             me.css('width', (current_perc)+'%');
+        }
+       }
+
+       me.text((current_perc)+'%');
+
+   }, 50);
+
+  });
+}
+
+
+function ajaxFileUploadcsv(controlname)
+{
+   if($("#" +controlname).val() == "") return false;
+   if($("#title").val() == "") return false;
+        updateProgressbar();
+        $.ajaxFileUpload
+        (
+             {
+                  url:'/index.cfm/files/upload',
+                  secureuri:false,
+                  fileElementId:controlname,
+                  dataType: 'json',
+                  data:{filefield:controlname,title:$("#title").val()},
+                  success: function (data, status)
+                       {
+                            if(data == "success"){
+                                 current_perc = 100;
+                                 $('.progress .bar').css('width','100%');
+                                 $("#importfilename").val('');
+                                 $("#title").val('');
+                                  setTimeout("window.location.reload()",1000);
+                            }
+                            else if(data == "errro"){
+                                 $(".progress .bar").html('Upload Failed.').show();
+                            }
+                       },
+                  error: function (data, status, e)
+                       {
+                            $(".progress .bar").html('Upload Failed.').show();
+                       }
+             }
+        )
+   $("#UploadFiles").click(function()
+   {
+        current_perc = 0;
+        $('.progress .bar').css('width','0%');
+        $('.progress .bar').html('');                    
+   });
+
+        return false;
+}
