@@ -107,7 +107,7 @@ function ajaxFileUploadcsv(controlname)
         $.ajaxFileUpload
         (
              {
-                  url:'/index.cfm/files/upload',
+                  url:'/index.cfm/webfiles/upload',
                   secureuri:false,
                   fileElementId:controlname,
                   dataType: 'json',
