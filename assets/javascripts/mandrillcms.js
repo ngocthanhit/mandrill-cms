@@ -56,7 +56,7 @@
 
 })(jQuery);
 $(document).ready(function() {
-$('.markItUp').markItUp(mySettings);
+$('.markItUp').wysihtml5();
  $(".futureDateCont").click(function(e)
           {
             var containerID = $(this).attr('class') ;
@@ -72,6 +72,9 @@ $('.markItUp').markItUp(mySettings);
                 }
                 e.preventDefault();
         }).trigger('click');
+
+    imagePreview();
+
 });
 /* ajax Upload methods  */
 var current_perc = 0;
@@ -140,3 +143,34 @@ function ajaxFileUploadcsv(controlname)
 
         return false;
 }
+
+this.imagePreview = function(){
+    /* CONFIG */
+
+        xOffset = 10;
+        yOffset = 30;
+
+        // these 2 variable determine popup's distance from the cursor
+        // you might want to adjust to get the right result
+
+    /* END CONFIG */
+    $("a.preview").hover(function(e){
+        this.t = this.title;
+        this.title = "";
+        var c = (this.t != "") ? "<br/>" + this.t : "";
+        $("body").append("<p id='preview'><img src='"+ this.href +"' alt='Image preview' />"+ c +"</p>");
+        $("#preview")
+            .css("top",(e.pageY - xOffset) + "px")
+            .css("left",(e.pageX + yOffset) + "px")
+            .fadeIn("fast");
+    },
+    function(){
+        this.title = this.t;
+        $("#preview").remove();
+    }).click(function(e){e.preventDefault();});
+    $("a.preview").mousemove(function(e){
+        $("#preview")
+            .css("top",(e.pageY - xOffset) + "px")
+            .css("left",(e.pageX + yOffset) + "px");
+    });
+};

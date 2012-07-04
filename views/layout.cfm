@@ -11,11 +11,11 @@
         <link href="/#get('stylesheetPath')#/mandrillcms.css" rel="stylesheet">
 		<link href="/#get('stylesheetPath')#/jquery.ui.css" rel="stylesheet">        
         <link href="/#get('stylesheetPath')#/bootstrap-responsive.css" rel="stylesheet">
-         #styleSheetLinkTag("markitup/skins/markitup/style,markitup/sets/default/style")#
+        #styleSheetLinkTag("src/bootstrap-wysihtml5")#
         <!--[if lt IE 9]>
             <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
         <![endif]-->
-		#javaScriptIncludeTag("jquery,jquery.ui,layout,mandrillcms,markitup/jquery.markitup,markitup/sets/default/set,upload/ajaxfileupload")#
+		#javaScriptIncludeTag("jquery,jquery.ui,layout,mandrillcms,upload/ajaxfileupload,lib/js/wysihtml5-0.3.0,src/bootstrap-wysihtml5")#
     </head>
 <body>
 

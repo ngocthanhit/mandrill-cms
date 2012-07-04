@@ -79,7 +79,7 @@ component extends="Wheels" {
 
         if(isAuthor() or isGuest()){
         flashInsert(success="access denied.") ;
-        redirectTo(controller="pages");
+        redirectTo(controller="members");
         }
 
 	}

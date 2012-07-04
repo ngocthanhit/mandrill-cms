@@ -21,7 +21,7 @@
                     <cfif isAuthor() && (userid EQ getUserAttr("id"))>
                         #linkTo(text=HtmlEditFormat(title),action="addeditpost",key=postid)#
                     <cfelse>
-                        HtmlEditFormat(title)
+                        #HtmlEditFormat(title)#
                     </cfif>
                 <cfelse>
                     #linkTo(text=HtmlEditFormat(title),action="addeditpost",key=postid)#

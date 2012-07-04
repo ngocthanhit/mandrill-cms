@@ -13,7 +13,7 @@
 					<li <cfif params.controller eq "Members">class="active"</cfif>>#linkTo(text='Dashboard', route="home")#</li>
 				 	<li <cfif params.controller eq "Pages">class="active"</cfif>>#linkTo(text='Pages', controller='Pages')#</li>
 				 	<li <cfif params.controller eq "Posts">class="active"</cfif>>#linkTo(text='Posts', controller='Posts')#</li>
-					<li <cfif params.controller eq "Files">class="active"</cfif>>#linkTo(text='Files', controller='Webfiles')#</li>
+					<li <cfif params.controller eq "Webfiles">class="active"</cfif>>#linkTo(text='Files', controller='Webfiles')#</li>
 					<li><a href="">Marketing</a></li>
 				    <li class="dropdown">
 				    	<a href="##" class="dropdown-toggle" data-toggle="dropdown">

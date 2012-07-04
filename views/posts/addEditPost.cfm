@@ -6,9 +6,9 @@
 
 <!--- add / edit form page [start]--->
 #startFormTag(name="createNewPostForm",method="post",action=formAction,autocomplete="off")#
-<div class="span8">
+<div class="span7">
     <div class="container-fluid" >
-     #textArea(label="Main content<br />", objectName="newPost", property="content",class="markItUp")# <br />
+     #textArea(label="Main content<br />", objectName="newPost", property="content",class="markItUp",style="width:650px;height:100px")# <br />
     #textField(label="Page Title<br />", objectName="newPost", property="title",size="64")# <br />
     #textArea(label="Description<br />", objectName="newPost", property="description",rows="5", cols="50")# <br />
     #submitTag(name="draft",value="Save as Draft",class="btn SubmitButton")# &nbsp; #submitTag(name="publish",value="Save & Publish",class="btn btn-primary SubmitButton")# <br />
@@ -28,7 +28,7 @@
     </cfif><br />
 </div>
 </div>
-<div class="span3">
+<div class="span4">
         #select(label="Template<br />", objectName="newPost", property="templateid", options=getTemplates)# <br /><br /><br />
         <strong>Categories</strong>&nbsp;&nbsp;&nbsp;#linkTo(text="Add category")#<br>
         <cfloop query="ALlCatagories">
@@ -45,6 +45,7 @@
                  <br />
             <br />
             <br />
+            #hiddenfieldTag(name="userid",value="#createdBy.id#")#
             Created by: #linkto(text=createdBy.firstname & " " & createdBy.lastname,controller="users",action="profile",key=createdBy.id)# on #DateFormat(newPost.createdAt,"dd/mm/yyyy")# <br />
             <cfif IsDefined("updatedBy") >
             Last updated by: #linkto(text=updatedBy.firstname & " " & updatedBy.lastname ,controller="users",action="profile",key=updatedBy.id)# on #DateFormat(newPost.updatedat,"dd/mm/yyyy")#<br />

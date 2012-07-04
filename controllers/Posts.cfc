@@ -29,7 +29,7 @@ component extends="Controller" hint="Controller for crum posts section" {
         if (StructKeyExists(params,"key"))
             {
                 newPost = model("post").findByKey(params.key) ;
-                if(isAuthor() && (newPost.userid NEQ getUserAttr("id")))
+                if(isAuthor() && (newPost.userid NEQ getUserAttr("id")) OR isGuest())
                 {
                     flashInsert(success="access denied.") ;
                     redirectTo(controller="posts");
@@ -83,7 +83,7 @@ component extends="Controller" hint="Controller for crum posts section" {
                             newCategory.save() ;
                          }
                     }
-                flashInsert(success="The post was created successfully.") ;
+                flashInsert(success="Post created successfully.") ;
                 redirectTo(controller=params.controller) ;
             }
         else
@@ -96,7 +96,7 @@ component extends="Controller" hint="Controller for crum posts section" {
 
 
     public any function SubmitEditPost() hint="listing of all posts" {
-        if(isAuthor() && (params.newPost.postid NEQ getUserAttr("id")))
+        if(isAuthor() && (params.userid NEQ getUserAttr("id")) OR isGuest())
             {
                 flashInsert(success="access denied.") ;
                 redirectTo(controller="posts");
@@ -129,7 +129,7 @@ component extends="Controller" hint="Controller for crum posts section" {
                             newCategory.save()  ;
                          }
                     }
-                flashInsert(success="The post was created successfully.") ;
+                flashInsert(success="Post updated successfully.") ;
                 redirectTo(controller=params.controller) ;
             }
         else

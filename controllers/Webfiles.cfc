@@ -56,20 +56,30 @@ component extends="Controller" hint="Controller for crum FILES section" {
      public any function downlaodfile() hint="downalod image files"{
           var getfile = model("file").findbykey(params.key);
           var path = "assets/files/uploadfiles/#getAccountAttr("id")#";
-          if(listcontains(imageext,getfile.fileext) > 0){
+          if(listcontains(imageext,getfile.fileext) GT 0){
               path = "assets/img/uploadImages/#getAccountAttr("id")#";
           }
           sendFile(directory="#path#",file="#getfile.filename#");
    }
      public any function Deletefile() hint="downalod image files"{
           var getfile = model("file").findbykey(params.key);
+           if(isAuthor() && (getfile.userid NEQ getUserAttr("id")) OR isGuest())
+               {
+                    flashInsert(success="access denied.") ;
+                    redirectTo(action="index");
+                }
+
           var path = "#expandpath("/")#assets/files/uploadfiles/#getAccountAttr("id")#";
-          if(listcontains(imageext,getfile.fileext) > 0){
+          if(listcontains(imageext,getfile.fileext) GT 0){
               path = "#expandpath("/")#assets/img/uploadImages/#getAccountAttr("id")#";
           }
-          FileDelete("#path#/#getfile.filename#");
-          getfile.delete();
-          flashInsert(success="file deleted successfully.") ;
+            if(getfile.userid EQ getUserAttr("id")) {
+                  FileDelete("#path#/#getfile.filename#");
+                  getfile.delete();
+                  flashInsert(success="file deleted successfully.") ;
+                }else{
+                  flashInsert(success="access denied.") ;
+                }
           redirectTo(action="index");
    }
      public any function renderFileSize(

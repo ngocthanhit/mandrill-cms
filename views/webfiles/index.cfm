@@ -1,6 +1,7 @@
 <cfoutput>
      <h2>Files</h2>
-     <div class="span12">
+    <cfif NOT isGuest() >
+       <div class="span12">
           #startFormTag(action="Upload", enctype="multipart/form-data",id="UploadFiles",onsubmit="return ajaxFileUploadcsv('importfilename');",autocomplete="off")#
                <div class="span1">Upload File:</div>
                <div class="span3">#fileFieldTag(name="importfilename",id="importfilename",class="input-file")#</div>
@@ -16,6 +17,7 @@
      </div>
      <div class="row-fluid"></div>
      <hr>
+</cfif>
      <div class="span5">
          <div class="container-fluid" >
           <h2>Images</h2>
@@ -28,11 +30,19 @@
                          <td valign="top">
                               <h4>#title# </h4>
                               #filename# <i>(#renderFileSize(#filesize#)#)</i><br />
-                              Preview |
+                              #linkTo(text="Preview",class="preview",href="/assets/img/#pathImage#/#filename#")# |
                               Edit |
                               #linkTo(text="Download",action="downlaodfile",key="#id#")# |
                               rename |
-                              #linkTo(text="Delete",action="Deletefile",key="#id#",confirm="Are you sure you want to delete '#filename#' file.")#
+                                 <cfif isGuest() OR isAuthor()>
+                                    <cfif isAuthor() && (userid EQ getUserAttr("id"))>
+                                       #linkTo(text="Delete",action="Deletefile",key="#id#",confirm="Are you sure you want to delete '#filename#' file.")# 
+                                    <cfelse>
+                                       Delete
+                                    </cfif>
+                                <cfelse>
+                                    #linkTo(text="Delete",action="Deletefile",key="#id#",confirm="Are you sure you want to delete '#filename#' file.")# 
+                                </cfif>
 
                          </td>
                     </tr>
@@ -56,7 +66,15 @@
                                  #filename#  <i>(#renderFileSize(#filesize#)#)</i><br />
                               #linkTo(text="Download",action="downlaodfile",key="#id#")# |
                               rename |
-                                 #linkTo(text="Delete",action="Deletefile",key="#id#",confirm="Are you sure you want to delete '#filename#' file.")#
+                              <cfif isGuest() OR isAuthor()>
+                                    <cfif isAuthor() && (userid EQ getUserAttr("id"))>
+                                       #linkTo(text="Delete",action="Deletefile",key="#id#",confirm="Are you sure you want to delete '#filename#' file.")# 
+                                    <cfelse>
+                                       Delete
+                                    </cfif>
+                                <cfelse>
+                                    #linkTo(text="Delete",action="Deletefile",key="#id#",confirm="Are you sure you want to delete '#filename#' file.")# 
+                                </cfif>
                          </td>
                     </tr>
                     <tr><td colspan="2">&nbsp;</td></tr>

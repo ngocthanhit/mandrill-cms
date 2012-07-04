@@ -116,7 +116,7 @@ component extends="Controller" hint="Controller for crum pages section" {
 
         if (Newpages.save())
             {
-                flashInsert(success="The page was created successfully.") ;
+                flashInsert(success="Page created successfully.") ;
                 redirectTo(controller=params.controller) ;
             }
         else
@@ -148,7 +148,7 @@ component extends="Controller" hint="Controller for crum pages section" {
 
         if (Newpages.update(params.Newpages))
             {
-                flashInsert(success="The page was updated successfully.") ;
+                flashInsert(success="Page updated successfully.") ;
                 redirectTo(controller=params.controller) ;
             }
         else
