@@ -16,9 +16,9 @@ component extends="Controller" hint="Controller for crum FILES section" {
             var getfiles = model("file").findall(where="accountid=#getAccountAttr("id")#");
             for (intRow = 1 ;intRow LTE getfiles.RecordCount ;intRow = (intRow + 1)){
                 if(listcontains(imageext,lcase(getfiles[ "fileext" ][ intRow ])) GT 0) {
-                    urlpath = "http://localhost#pathrelativeImage#/#getfiles[ "filename" ][ intRow ]#";
+                    urlpath = "http://#getPageContext().getRequest().getServerName()##pathrelativeImage#/#getfiles[ "filename" ][ intRow ]#";
                 }else{
-                    urlpath = "http://localhost#pathrelativefiles#/#getfiles[ "filename" ][ intRow ]#";
+                    urlpath = "http://#getPageContext().getRequest().getServerName()##pathrelativefiles#/#getfiles[ "filename" ][ intRow ]#";
                 }
                 var newlink = structnew() ;
                     newlink.name= getfiles[ "filename" ][ intRow ];
@@ -59,7 +59,7 @@ component extends="Controller" hint="Controller for crum FILES section" {
 
              if (insertfile.save())
                 {
-                  var urlPath = "http://localhost#pathrelative#/#upload.serverfile#";
+                  var urlPath = "http://#getPageContext().getRequest().getServerName()##pathrelative#/#upload.serverfile#";
                   var newlink = structnew() ;
                     newlink.name= upload.serverfile;
                     newlink.size= upload.filesize;

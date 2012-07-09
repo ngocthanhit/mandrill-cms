@@ -1,20 +1,20 @@
 <cfoutput>
-	#styleSheetLinkTag(sources="../blueimp-jQuery-File-Upload/bootstrap-image-gallery.min",head='true')#
-	#styleSheetLinkTag(sources="../blueimp-jQuery-File-Upload/jquery.fileupload-ui",head='true')#
-<!---	<!--[if lt IE 7]>#styleSheetLinkTag(sources="../blueimp-jQuery-File-Upload/bootstrap-ie6.min",head='true')#<![endif]--> --->
+	#styleSheetLinkTag(sources="blueimp-jQuery-File-Upload/bootstrap-image-gallery.min",head='true')#
+	#styleSheetLinkTag(sources="blueimp-jQuery-File-Upload/jquery.fileupload-ui",head='true')#
+<!---	<!--[if lt IE 7]>#styleSheetLinkTag(sources="blueimp-jQuery-File-Upload/bootstrap-ie6.min",head='true')#<![endif]--> --->
 	<!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
-	#javaScriptIncludeTag(sources="../blueimp-jQuery-File-Upload/jquery.ui.widget",head='true')#
-	#javaScriptIncludeTag(sources="../blueimp-jQuery-File-Upload/jquery.tmpl.min",head='true')#
-	#javaScriptIncludeTag(sources="../blueimp-jQuery-File-Upload/jquery.load-image",head='true')#
-	#javaScriptIncludeTag(sources="../blueimp-jQuery-File-Upload/jquery.canvas-to-blob",head='true')#
-
-	#javaScriptIncludeTag(sources="../blueimp-jQuery-File-Upload/jquery.iframe-transport",head='true')#
-	#javaScriptIncludeTag(sources="../blueimp-jQuery-File-Upload/jquery.fileupload",head='true')#
-	#javaScriptIncludeTag(sources="../blueimp-jQuery-File-Upload/jquery.fileupload-fp",head='true')#
-	#javaScriptIncludeTag(sources="../blueimp-jQuery-File-Upload/jquery.fileupload-ui",head='true')#
-	#javaScriptIncludeTag(sources="../blueimp-jQuery-File-Upload/locale",head='true')#
-	#javaScriptIncludeTag(sources="../blueimp-jQuery-File-Upload/main",head='true')#
-	<!--[if gte IE 8]>#javaScriptIncludeTag(sources="../blueimp-jQuery-File-Upload/jquery.xdr-transport",head='true')#<![endif]-->
+	#javaScriptIncludeTag(sources="blueimp-jQuery-File-Upload/jquery.ui.widget",head='true')#
+	#javaScriptIncludeTag(sources="blueimp-jQuery-File-Upload/jquery.tmpl.min",head='true')#
+	#javaScriptIncludeTag(sources="blueimp-jQuery-File-Upload/jquery.load-image",head='true')#
+	#javaScriptIncludeTag(sources="blueimp-jQuery-File-Upload/jquery.canvas-to-blob",head='true')#
+	#javaScriptIncludeTag(sources="blueimp-jQuery-File-Upload/bootstrap-image-gallery.min",head='false')#
+	#javaScriptIncludeTag(sources="blueimp-jQuery-File-Upload/jquery.iframe-transport",head='true')#
+	#javaScriptIncludeTag(sources="blueimp-jQuery-File-Upload/jquery.fileupload",head='true')#
+	#javaScriptIncludeTag(sources="blueimp-jQuery-File-Upload/jquery.fileupload-fp",head='true')#
+	#javaScriptIncludeTag(sources="blueimp-jQuery-File-Upload/jquery.fileupload-ui",head='true')#
+	#javaScriptIncludeTag(sources="blueimp-jQuery-File-Upload/locale",head='true')#
+	#javaScriptIncludeTag(sources="blueimp-jQuery-File-Upload/main",head='true')#
+	<!--[if gte IE 8]>#javaScriptIncludeTag(sources="blueimp-jQuery-File-Upload/jquery.xdr-transport",head='true')#<![endif]-->
 
      <h2>Files</h2>
     <!-- The file upload form used as target for the file upload widget -->
@@ -62,7 +62,6 @@
         <!-- The table listing the files available for upload/download -->
         <table role="presentation" class="table table-striped"><tbody class="files" data-toggle="modal-gallery" data-target="##modal-gallery"></tbody></table>
 #endFormTag()#
-
 	<!-- modal-gallery is the modal dialog used for the image gallery -->
 	<div id="modal-gallery" class="modal modal-gallery hide fade" data-filter=":odd">
 	    <div class="modal-header">
@@ -149,7 +148,7 @@
 	    </tr>
 	{% } %}
 	</script>
-	#javaScriptIncludeTag(sources="../blueimp-jQuery-File-Upload/bootstrap-image-gallery.min",head='false')#
+
 </cfoutput>
 <div style="clear:both;"></div>
 <div class="bendl"></div>
