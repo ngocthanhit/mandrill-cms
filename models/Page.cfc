@@ -3,8 +3,8 @@ component extends="Model" {
 
     public void function init() hint="Define the validation rules and model relationships" {
 
-        belongsTo(name="user",foreignkey="userid") ;
-        belongsTo(name="status",foreignkey="statusid") ;
+        belongsTo(name="user") ;
+        belongsTo(name="status") ;
         validatesPresenceOf("content, title, description") ;
         validatesUniquenessOf("title") ;
         validate(method="checkPasswordFields") ;

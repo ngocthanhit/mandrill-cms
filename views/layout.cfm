@@ -15,7 +15,8 @@
         <!--[if lt IE 9]>
             <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
         <![endif]-->
-		#javaScriptIncludeTag("jquery,jquery.ui,layout,mandrillcms,upload/ajaxfileupload,lib/js/wysihtml5-0.3.0,src/bootstrap-wysihtml5")#
+		#javaScriptIncludeTag("jquery,jquery.ui,layout,mandrillcms,lib/js/wysihtml5-0.3.0,src/bootstrap-wysihtml5")#
+        #javaScriptIncludeTag("bootstrap")#
     </head>
 <body>
 
@@ -66,7 +67,7 @@
             </footer>
         </div>
 		
-	#javaScriptIncludeTag("bootstrap")#
+	
 	
 </body>
 </html></cfoutput>

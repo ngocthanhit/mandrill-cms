@@ -1,6 +1,6 @@
 component extends="Controller" hint="Controller for crum posts section" {
 
-    
+
     getTemplates= model("template").findALL() ;
     ALlCatagories = model("category").findALL() ;
     public any function init() hint="Initialize the controller" {
@@ -34,7 +34,7 @@ component extends="Controller" hint="Controller for crum posts section" {
                     flashInsert(success="access denied.") ;
                     redirectTo(controller="posts");
                 }
-                newPostCatergory = model("postcategorymapping").findAll(where="postid=" & params.key,select="categoryid") ;
+                newPostCatergory = model("postscategory").findAll(where="postid=" & params.key,select="categoryid") ;
                 title = "Edit post" ;
                 formAction = "SubmitEditPost" ;
                 createdBy = model("user").findbykey(key=newPost.userid,select="id,firstname, lastname") ;
@@ -75,11 +75,11 @@ component extends="Controller" hint="Controller for crum posts section" {
             {
                 if (IsDefined("params.categoryID"))
                     {
-                        var newPostId = newPost.postid ;
+                        var newPostId = newPost.id ;
             var categoryarray = listtoarray(params.categoryID);
                 for (i = 1; i lte ArrayLen(categoryarray); i = i + 1)
                           {
-                           var newCategory = model("postcategorymapping").new(categoryid=categoryarray[i], postid=newPostId) ;
+                           var newCategory = model("postscategory").new(categoryid=categoryarray[i], postid=newPostId) ;
                             newCategory.save() ;
                          }
                     }
@@ -88,6 +88,8 @@ component extends="Controller" hint="Controller for crum posts section" {
             }
         else
             {
+                param name="params.categoryID" default="0";
+                newPostCatergory = params.categoryID;
                 title = "Posts" ;
                 formAction = "SubmitAddNewPost"  ;
                 renderPage(template="addeditpost") ;
@@ -114,26 +116,30 @@ component extends="Controller" hint="Controller for crum posts section" {
                 params.newPost.publishedby = getUserAttr("id") ;
             }
         params.newPost.title =  xmlFormat(params.newPost.title);
-        newPost = model("post").findByKey(params.newPost.postid) ;
+        newPost = model("post").findByKey(params.newPost.id) ;
 
         if (newPost.update(params.newPost))
             {
-                var newPostId = params.newPost.postid  ;
-                mapCAtagoriesdel = model("postcategorymapping").deleteAll(where="postid=" & newPostId) ;
-                if (IsDefined("params.categoryID"))
+                var newPostId = params.newPost.id  ;
+                mapCAtagoriesdel = model("postscategory").deleteAll(where="postid=" & newPostId) ;
+                 if (IsDefined("params.categoryID"))
                     {
-
-                        for (i = 1; i lte ListLen(params.categoryID); i = i + 1)
+                        var newPostId = newPost.id ;
+            var categoryarray = listtoarray(params.categoryID);
+                for (i = 1; i lte ArrayLen(categoryarray); i = i + 1)
                           {
-                            var newCategory = model("postcategorymapping").new(categoryid=categoryid, postid=newPostId) ;
-                            newCategory.save()  ;
+                           var newCategory = model("postscategory").new(categoryid=categoryarray[i], postid=newPostId) ;
+                            newCategory.save() ;
                          }
                     }
+
                 flashInsert(success="Post updated successfully.") ;
                 redirectTo(controller=params.controller) ;
             }
         else
             {
+                param name="params.categoryID" default="0";
+                newPostCatergory = params.categoryID;
                 title = "Edit post" ;
                 formAction = "SubmitEditPost" ;
                 createdBy = model("user").findbykey(key=newPost.userid,select="id,firstname, lastname") ;

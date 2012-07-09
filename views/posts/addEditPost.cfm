@@ -1,3 +1,4 @@
+
 <cfoutput>
 <!--- heading of the page --->
 <h2>#title#</h2>
@@ -12,7 +13,7 @@
     #textField(label="Page Title<br />", objectName="newPost", property="title",size="64")# <br />
     #textArea(label="Description<br />", objectName="newPost", property="description",rows="5", cols="50")# <br />
     #submitTag(name="draft",value="Save as Draft",class="btn SubmitButton")# &nbsp; #submitTag(name="publish",value="Save & Publish",class="btn btn-primary SubmitButton")# <br />
-    <cfif NOT StructKeyExists(newPost,"postid") >
+    <cfif NOT StructKeyExists(newPost,"id") >
     #linkto(text="Or publish at a future date ",class="futureDateCont")#
     <div id="futureDateCont">
         <br />
@@ -24,24 +25,33 @@
             toggleDiv('PublishedFutureDateDiv');
         </script>
     <cfelse>
-        #hiddenField(objectName="newPost", property="postid")#
+        #hiddenField(objectName="newPost", property="id")#
     </cfif><br />
 </div>
+
 </div>
 <div class="span4">
         #select(label="Template<br />", objectName="newPost", property="templateid", options=getTemplates)# <br /><br /><br />
+
         <strong>Categories</strong>&nbsp;&nbsp;&nbsp;#linkTo(text="Add category")#<br>
+        <cfif IsDefined("newPostCatergory")>
+            <cfif isdefined("newPostCatergory.recordcount") AND  newPostCatergory.recordcount gt 0 >
+               <cfset categorylist = valuelist(newPostCatergory.categoryid) >       
+            <cfelseif isdefined("newPostCatergory") >
+                <cfset categorylist =newPostCatergory >
+            </cfif>
+        <cfelse>
+           <cfset categorylist = "" >
+        </cfif>
         <cfloop query="ALlCatagories">
             <cfset check = "false">
-            <cfif IsDefined("newPostCatergory") AND newPostCatergory.recordcount gt 0 >
-                <cfif ListContainsNoCase(ValueList(newPostCatergory.categoryid),categoryid) GT 0>
-                    <cfset check = "true">
-                 </cfif>
+            <cfif ListfindNoCase(categorylist,ALlCatagories.id) GT 0>
+                <cfset check = "true">
             </cfif>
-            #checkBoxTag(name="categoryID", label="",labelPlacement="after", value=categoryid ,checked=check)# #category#<br>
+            #checkBoxTag(name="categoryID", label="",labelPlacement="after", value=id ,checked=check)# #category#<br>
         </cfloop>
 
-         <cfif StructKeyExists(newPost,"postid") >
+         <cfif StructKeyExists(newPost,"id") >
                  <br />
             <br />
             <br />

@@ -19,12 +19,12 @@
            <td>
                 <cfif isGuest() OR isAuthor()>
                     <cfif isAuthor() && (userid EQ getUserAttr("id"))>
-                        #linkTo(text=HtmlEditFormat(title),action="addeditpost",key=postid)#
+                        #linkTo(text=HtmlEditFormat(title),action="addeditpost",key=id)#
                     <cfelse>
                         #HtmlEditFormat(title)#
                     </cfif>
                 <cfelse>
-                    #linkTo(text=HtmlEditFormat(title),action="addeditpost",key=postid)#
+                    #linkTo(text=HtmlEditFormat(title),action="addeditpost",key=id)#
                 </cfif>
            </td>
            <td>#HtmlEditFormat(firstname)# #HtmlEditFormat(lastname)#</td>

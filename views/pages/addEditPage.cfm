@@ -13,7 +13,7 @@
     #textArea(label="Description<br />", objectName="Newpages", property="description",rows="5", cols="50")# <br />
     #textField(label="Navigation title (optional)<br />", objectName="Newpages", property="navigationtitle",size="64")# <br />
     #submitTag(value="Save as Draft",name="draft",class="btn SubmitButton")# &nbsp; #submitTag(value="Save & Publish",name="publish",class="btn btn-primary SubmitButton")# <br />
-    <cfif NOT StructKeyExists(Newpages,"pageid") >
+    <cfif NOT StructKeyExists(Newpages,"id") >
         #linkto(text="Or publish at a future date ",class="futureDateCont")#
         <div id="futureDateCont">
             <br />
@@ -22,7 +22,7 @@
             #submitTag(name="publishDate",value="Save & Publish on Date",class="btn btn-primary SubmitButton")#
         </div>
     <cfelse>
-        #hiddenField(objectName="Newpages", property="pageid")#
+        #hiddenField(objectName="Newpages", property="id")#
     </cfif><br />
     </div>
 </div>
@@ -34,7 +34,7 @@
     #checkBox(label="Password protect page",objectName="Newpages", property="isprotected")# <br />
     #checkBox(label="Protect sub-pages", objectName="Newpages", property="issubpageprotected")# <br />
     #passwordfield(label="Password<br />", objectName="Newpages", property="password")# <br />
-    <cfif StructKeyExists(Newpages,"pageid") >
+    <cfif StructKeyExists(Newpages,"id") >
     <br />
     <br />
     <br />

@@ -144,7 +144,7 @@ component extends="Controller" hint="Controller for crum pages section" {
             }
         params.Newpages.title = xmlFormat(params.Newpages.title) ;
         params.Newpages.navigationtitle = xmlFormat(params.Newpages.navigationtitle);
-        Newpages = model("page").findByKey(params.Newpages.pageid) ;
+        Newpages = model("page").findByKey(params.Newpages.id) ;
 
         if (Newpages.update(params.Newpages))
             {

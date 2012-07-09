@@ -4,8 +4,8 @@ component extends="components.models.User" {
     public void function init() hint="Define the validation rules and model relationships" {
 
         belongsTo(name="account");
-        hasMany(name='pageof', modelname="pages", foreignkey="userid");
-        hasMany(name='postof', modelname="posts", foreignkey="userid");
+        hasMany(name='pageof', modelname="pages");
+        hasMany(name='postof', modelname="posts");
 
         validatesPresenceOf(property="firstName", message="First Name can't be empty");
         validatesLengthOf(property="firstName", allowBlank=true, maximum=50, message="First Name can't be longer than 50 characters");

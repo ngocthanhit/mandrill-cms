@@ -3,9 +3,9 @@ component extends="Model" {
 
     public void function init() hint="Define the validation rules and model relationships" {
 
-        belongsTo(name="user",foreignkey="userid") ;
-        belongsTo(name="status",foreignkey="statusid") ;
-        hasMany(name='postcategorymapping', modelname="postcategorymapping", foreignkey="userid") ;
+        belongsTo(name="user") ;
+        belongsTo(name="status") ;
+        hasMany(name='postscategory', modelname="postscategory") ;
         validatesPresenceOf("content, title, description") ;
         validatesUniquenessOf("title") ;
         validate(method="checkCategory") ;

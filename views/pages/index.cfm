@@ -16,7 +16,7 @@
         <tbody>
      <cfloop query="pages">
             <tr>
-                <td>#linkto(text=HtmlEditFormat(title),action="addeditpage",key=pageid)#</td>
+                <td>#linkto(text=HtmlEditFormat(title),action="addeditpage",key=id)#</td>
                 <td>#HtmlEditFormat(firstname)# #HtmlEditFormat(lastname)#</td>
                 <td>#STATUS#</td>
                 <td>#DateFormat(createdAt,"mm/dd/yyyy")#</td>
