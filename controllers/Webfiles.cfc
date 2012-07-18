@@ -5,6 +5,11 @@ component extends="Controller" hint="Controller for crum FILES section" {
        filters(through="memberOnly");
     }
 
+    public any function index() hint="index default file of webfiles controller" {
+   _view(pageTitle = "Files");
+    }
+
+
     private any function fileUpload() hint="files action" {
         var path = "#expandpath("/")#assets/files/uploadfiles/#getAccountAttr("id")#";
         var pathImage = "#expandpath("/")#assets/img/uploadImages/#getAccountAttr("id")#";
@@ -24,8 +29,10 @@ component extends="Controller" hint="Controller for crum FILES section" {
                     newlink.name= getfiles[ "filename" ][ intRow ];
                     newlink.size= getfiles[ "filesize" ][ intRow ];
                     newlink.url= urlpath ;
-                    newlink.delete_url= URLfor(action="fileUpload", method="DELETE#intRow#",key=getfiles[ "id" ][ intRow ]); 
-                    newlink.delete_type= "DELETE";
+              if(NOT (isAuthor() && (getfiles[ "userid" ][ intRow ] NEQ getUserAttr("id")) OR isGuest())){
+                        newlink.delete_url= URLfor(action="fileUpload", method="DELETE#intRow#",key=getfiles[ "id" ][ intRow ]);
+                        newlink.delete_type= "DELETE";
+                    }
                     newlink.thumbnail_url= urlpath;
                     newlink.type= 'image/gif';
                     arrayappend(result,newlink);
@@ -59,12 +66,12 @@ component extends="Controller" hint="Controller for crum FILES section" {
 
              if (insertfile.save())
                 {
-                  var urlPath = "http://#getPageContext().getRequest().getServerName()##pathrelative#/#upload.serverfile#";
-                  var newlink = structnew() ;
+                    var urlPath = "http://#getPageContext().getRequest().getServerName()##pathrelative#/#upload.serverfile#";
+	                var newlink = structnew() ;
                     newlink.name= upload.serverfile;
                     newlink.size= upload.filesize;
                     newlink.url= urlPath ;
-                    newlink.delete_url= URLfor(action="fileUpload", method="DELETE",key=insertfile.id); 
+                    newlink.delete_url= URLfor(action="fileUpload", method="DELETE",key=insertfile.id);
                     newlink.delete_type= "DELETE";
                     newlink.thumbnail_url= urlpath;
                     newlink.type= 'image/gif';

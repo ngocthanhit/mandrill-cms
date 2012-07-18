@@ -433,3 +433,21 @@ ADD PRIMARY KEY `categoryid_postid` (`categoryid`, `postid`);
 
 
 ----------------------------------------------------------------------------------------------------
+
+--- create mapping page with user and account ----
+CREATE TABLE  pagesusers (
+  pageid int(10) unsigned NOT NULL,
+  userid int(10) unsigned NOT NULL,
+  accountid int(10) unsigned NOT NULL,
+  siteid int(10) unsigned NOT NULL,
+  PRIMARY KEY (`pageid`,`userid`,`accountid`,`siteid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--- create mapping post with user and account ----
+CREATE TABLE  postsusers (
+  postid int(10) unsigned NOT NULL,
+  userid int(10) unsigned NOT NULL,
+  accountid int(10) unsigned NOT NULL,
+  siteid int(10) unsigned NOT NULL,
+  PRIMARY KEY (`postid`,`userid`,`accountid`,`siteid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

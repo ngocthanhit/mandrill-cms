@@ -4,6 +4,8 @@ component extends="components.models.Maintenance" {
     public void function init() hint="Define the validation rules and model relationships" {
 
         hasMany(name="users", dependent="delete");
+        hasMany(name='pagelink', modelname="pagesuser");
+        hasMany(name='postlink', modelname="postssuser");
 
         validatesPresenceOf(property="name", message="Account Name can't be empty");
         validatesLengthOf(property="name", allowBlank=true, maximum=50, message="Account Name can't be longer than 50 characters");

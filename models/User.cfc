@@ -4,7 +4,7 @@ component extends="components.models.User" {
     public void function init() hint="Define the validation rules and model relationships" {
 
         belongsTo(name="account");
-        hasMany(name='pageof', modelname="pages");
+        hasMany(name='pagelink', modelname="pagesuser");
         hasMany(name='postof', modelname="posts");
 
         validatesPresenceOf(property="firstName", message="First Name can't be empty");

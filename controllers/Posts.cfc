@@ -1,6 +1,6 @@
 component extends="Controller" hint="Controller for crum posts section" {
 
-
+    varsiteid = 1;
     getTemplates= model("template").findALL() ;
     ALlCatagories = model("category").findALL() ;
     public any function init() hint="Initialize the controller" {
@@ -16,7 +16,9 @@ component extends="Controller" hint="Controller for crum posts section" {
         initListParams(20, "createdAt");
 
             allPosts = model("post").findAll(
-                include="user,status",
+                include="user,status,postsuser",
+                where="postsusers.accountid=#getAccountAttr("id")# AND postsusers.userid = #getUserAttr("id")# AND postsusers.siteid = #varsiteid#",
+                select="title,posts.id,firstname,lastname,posts.createdAt,status",
                 page = params.page,
                 perPage = params.pagesize,
                 order = "#params.order# #params.sort#"
@@ -28,6 +30,7 @@ component extends="Controller" hint="Controller for crum posts section" {
 
         if (StructKeyExists(params,"key"))
             {
+                checkconfirmpost(params.key);
                 newPost = model("post").findByKey(params.key) ;
                 if(isAuthor() && (newPost.userid NEQ getUserAttr("id")) OR isGuest())
                 {
@@ -83,6 +86,8 @@ component extends="Controller" hint="Controller for crum posts section" {
                             newCategory.save() ;
                          }
                     }
+                var createpostusermapping = model("postsuser").new(postid=newPostId,userid=getUserAttr("id"),accountid=getAccountAttr("id"),siteid=varsiteid);
+                createpostusermapping.save();
                 flashInsert(success="Post created successfully.") ;
                 redirectTo(controller=params.controller) ;
             }
@@ -103,6 +108,7 @@ component extends="Controller" hint="Controller for crum posts section" {
                 flashInsert(success="access denied.") ;
                 redirectTo(controller="posts");
             }
+         checkconfirmpost(params.newPost.id);
         params.newPost.updatedby = getUserAttr("id") ;
         params.newPost.statusid = 1 ;
 
@@ -152,4 +158,12 @@ component extends="Controller" hint="Controller for crum posts section" {
             }
     }
 
+     public any function checkconfirmpost(required numeric postid) {
+        var checkpostsuser   =  model("postsuser").findall(where="postid=#postid# AND accountid = #getAccountAttr("id")#");
+           if(checkpostsuser.recordcount EQ 0) {
+                flashInsert(success="You not a valid user for this post.") ;
+                redirectTo(controller=params.controller) ;
+            }
+
+    }
 }

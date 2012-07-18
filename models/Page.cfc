@@ -5,6 +5,7 @@ component extends="Model" {
 
         belongsTo(name="user") ;
         belongsTo(name="status") ;
+        hasMany(name="pagesuser") ;
         validatesPresenceOf("content, title, description") ;
         validatesUniquenessOf("title") ;
         validate(method="checkPasswordFields") ;

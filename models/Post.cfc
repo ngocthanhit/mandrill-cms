@@ -6,6 +6,7 @@ component extends="Model" {
         belongsTo(name="user") ;
         belongsTo(name="status") ;
         hasMany(name='postscategory', modelname="postscategory") ;
+        hasMany(name="postsuser") ;
         validatesPresenceOf("content, title, description") ;
         validatesUniquenessOf("title") ;
         validate(method="checkCategory") ;
