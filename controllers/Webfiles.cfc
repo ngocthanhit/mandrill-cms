@@ -18,7 +18,14 @@ component extends="Controller" hint="Controller for crum FILES section" {
         var pathrelativeImage = "/assets/img/uploadImages/#getAccountAttr("id")#";
         var result = ArrayNew();
         if (GetHttpRequestData().method EQ "GET"){
-            var getfiles = model("file").findall(where="accountid=#getAccountAttr("id")#");
+
+            if (IsDefined("params.key") AND params.key EQ "Images") {
+                 var getfiles = model("file").findall(where="accountid=#getAccountAttr("id")# AND fileext In ('png', 'jpg', 'gif')");
+            } else {
+                var getfiles = model("file").findall(where="accountid=#getAccountAttr("id")#");
+            }
+
+
             for (intRow = 1 ;intRow LTE getfiles.RecordCount ;intRow = (intRow + 1)){
                 if(listcontains(imageext,lcase(getfiles[ "fileext" ][ intRow ])) GT 0) {
                     urlpath = "http://#getPageContext().getRequest().getServerName()##pathrelativeImage#/#getfiles[ "filename" ][ intRow ]#";
@@ -43,7 +50,6 @@ component extends="Controller" hint="Controller for crum FILES section" {
             {
                 DirectoryCreate(path);
             }
-
             var upload =  FileUpload(destination="#path#",fileField="files[]",nameConflict="makeunique");
 
                if(listcontains(imageext,lcase(upload.serverfileext)) GT 0){
@@ -60,13 +66,14 @@ component extends="Controller" hint="Controller for crum FILES section" {
                  newfile.fileext = lcase(upload.serverfileext) ;
                  newfile.userid =  "#getUserAttr("id")#";
                  newfile.accountid =  "#getAccountAttr("id")#";
-                 newfile.title =  'test';
+                 newfile.title =  '';
                  newfile.filesize =  upload.filesize;
                  insertfile = model("file").new(newfile);
 
              if (insertfile.save())
                 {
-                    var urlPath = "http://#getPageContext().getRequest().getServerName()##pathrelative#/#upload.serverfile#";
+                    _event("I", "Successfully upload file", "Sessions", "Session id is #session.sessionid#, useragent is #CGI.USER_AGENT#", getAccountAttr("id"), getUserAttr("id"));
+                   var urlPath = "http://#getPageContext().getRequest().getServerName()##pathrelative#/#upload.serverfile#";
 	                var newlink = structnew() ;
                     newlink.name= upload.serverfile;
                     newlink.size= upload.filesize;
@@ -79,13 +86,14 @@ component extends="Controller" hint="Controller for crum FILES section" {
 
                 }
             else{
+                _event("E", "Something wrong with file", "Sessions", "Session id is #session.sessionid#, useragent is #CGI.USER_AGENT#", getAccountAttr("id"), getUserAttr("id"));
                 result="error";
             }
         }
         else if (GetHttpRequestData().method EQ "DELETE" OR isDefined("params.key")){
             var getfile = model("file").findbykey(params.key);
-               if(isAuthor() && (getfile.userid NEQ getUserAttr("id")) OR isGuest())
-                   {
+               if(isAuthor() && (getfile.userid NEQ getUserAttr("id")) OR isGuest()) {
+                    _event("W", "Caught attempt to access forbidden member-only page to remove file", "Sessions", "Session id is #session.sessionid#, useragent is #CGI.USER_AGENT#", getAccountAttr("id"), getUserAttr("id"));
                     flashInsert(success="access denied.") ;
                     redirectTo(action="index");
                 }
@@ -94,6 +102,7 @@ component extends="Controller" hint="Controller for crum FILES section" {
                   path = "#expandpath("/")#assets/img/uploadImages/#getAccountAttr("id")#";
               }
                 if(getfile.userid EQ getUserAttr("id")) {
+                    _event("I", "successfully removed file", "Sessions", "Session id is #session.sessionid#, useragent is #CGI.USER_AGENT#", getAccountAttr("id"), getUserAttr("id"));
                   FileDelete("#path#/#getfile.filename#");
                   getfile.delete();
                  }
@@ -103,4 +112,72 @@ component extends="Controller" hint="Controller for crum FILES section" {
     abort;
     }
 
+    private any function updateimage() hint="Update Image" {
+        var getImageSource = ImageRead(Params.newURLLink) ;
+        var getimageName = Params.OldName ;
+        var path = "#expandpath("/")#assets/img/uploadImages/#getAccountAttr("id")#";
+        var newImage = ImageNew(getImageSource) ;
+
+         if (!DirectoryExists("#path#"))
+         {
+         DirectoryCreate("#path#");
+         }
+
+        if (FileExists("#path#/#getimageName#")) {
+            getimageName = "#getUserAttr("id")##getAccountAttr("id")##dateformat(now(),"mmddyyyy")##timeformat(now(),"hhmmss")#EDIT.#lcase(listlast(getimageName,"."))#" ;
+        }  else {
+            getimageName = "#lcase(listfirst(getimageName,"."))#EDIT.#lcase(listlast(getimageName,"."))#" ;
+        }
+        ImageWrite(newImage,path & "/" & getimageName) ;
+        writeOutput("/assets/img/uploadImages/#getAccountAttr("id")#/#getimageName#");
+        abort;
+    }
+
+    private any function insertlinktoimage() hint="Insert link to image" {
+        var getimageName = Params.OldName ;
+        var path = "#expandpath("/")#assets/img/uploadImages/#getAccountAttr("id")#";
+        var newImage = "";
+        var getImageSource = "";
+        var db = false;
+        var newfile = structnew();
+
+        if(find("http",lcase(params.newURLLink)) GT 0) {
+             getImageSource = ImageRead(Params.newURLLink) ;
+             newImage = ImageNew(getImageSource) ;
+        }else if (find("EDIT",getimageName) GT 0) {
+             getImageSource = ImageRead("http://#getPageContext().getRequest().getServerName()#/assets/img/uploadImages/#getAccountAttr("id")#/#getimageName#") ;
+             getimageName = replace(getimageName,"EDIT","")
+             newImage = ImageNew(getImageSource) ;
+        }
+        if(find("http",lcase(Params.newURLLink)) GT 0) {
+            if (!DirectoryExists("#path#"))
+             {
+             DirectoryCreate("#path#");
+             }
+
+            if (FileExists("#path#/#getimageName#")) {
+                getimageName = "#getUserAttr("id")##getAccountAttr("id")##dateformat(now(),"mmddyyyy")##timeformat(now(),"hhmmss")#.#lcase(listlast(getimageName,"."))#" ;
+            }
+            ImageWrite(newImage,path & "/" & getimageName) ;
+            db = true;
+        } else if (find("EDIT",Params.OldName) GT 0) {
+            ImageWrite(newImage,path & "/" & getimageName) ;
+            FileDelete("#path#/#trim(Params.OldName)#");
+            db = true;
+        }
+        if(db) {
+             newfile.filename = getimageName ;
+             newfile.fileext = lcase(listlast(getimageName,".")) ;
+             newfile.userid =  "#getUserAttr("id")#";
+             newfile.accountid =  "#getAccountAttr("id")#";
+             newfile.title =  'test';
+             newfile.filesize =  '';
+             insertfile = model("file").new(newfile);
+                if (insertfile.save()) {
+                     _event("I", "Successfully save file", "Sessions", "Session id is #session.sessionid#, useragent is #CGI.USER_AGENT#", getAccountAttr("id"), getUserAttr("id"));
+                }
+        }
+      writeOutput("http://#getPageContext().getRequest().getServerName()#/assets/img/uploadImages/#getAccountAttr("id")#/#getimageName#");
+        abort;
+    }
 }

@@ -75,6 +75,7 @@ component extends="Controller" hint="Controller for crum pages section" {
             {
                 var createpageusermapping = model("pagesuser").new(pageid=Newpages.id,userid=getUserAttr("id"),accountid=getAccountAttr("id"),siteid=varsiteid);
                 createpageusermapping.save();
+                _event("I", "Successfully page created", "Sessions", "Session id is #session.sessionid#, useragent is #CGI.USER_AGENT#", getAccountAttr("id"), getUserAttr("id"));
                 flashInsert(success="Page created successfully.") ;
                 redirectTo(controller=params.controller) ;
             }
@@ -82,6 +83,7 @@ component extends="Controller" hint="Controller for crum pages section" {
             {
                 title = "Pages" ;
                 formAction = "SubmitaddNewPage" ;
+                _event("W", "Caught attempt to page add information not required", "Sessions", "Session id is #session.sessionid#, useragent is #CGI.USER_AGENT#", getAccountAttr("id"), getUserAttr("id"));
                 renderPage(template="addEditPage") ;
             }
     }
@@ -107,6 +109,7 @@ component extends="Controller" hint="Controller for crum pages section" {
 
         if (Newpages.update(params.Newpages))
             {
+                _event("I", "Successfully updated page", "Sessions", "Session id is #session.sessionid#, useragent is #CGI.USER_AGENT#", getAccountAttr("id"), getUserAttr("id"));
                 flashInsert(success="Page updated successfully.") ;
                 redirectTo(controller=params.controller) ;
             }
@@ -120,6 +123,7 @@ component extends="Controller" hint="Controller for crum pages section" {
                         updatedBy = model("user").findbykey(key=Newpages.updatedby,select="id,firstname, lastname") ;
                     }
                 Status = model("status").findbykey(key=Newpages.statusid,select="statusid,status") ;
+                _event("W", "Caught attempt to page edit changes not required", "Sessions", "Session id is #session.sessionid#, useragent is #CGI.USER_AGENT#", getAccountAttr("id"), getUserAttr("id"));
                 renderPage(template="addEditPage") ;
             }
     }
@@ -127,9 +131,29 @@ component extends="Controller" hint="Controller for crum pages section" {
     public any function checkconfirmpage(required numeric pageid) {
         var checkpagesuser   =  model("pagesuser").findall(where="pageid=#pageid# AND accountid = #getAccountAttr("id")#");
            if(checkpagesuser.recordcount EQ 0) {
+                _event("W", "Caught attempt to access forbidden member-only page", "Sessions", "Session id is #session.sessionid#, useragent is #CGI.USER_AGENT#", getAccountAttr("id"), getUserAttr("id"));
                 flashInsert(success="You not a valid user for this page.") ;
                 redirectTo(controller=params.controller) ;
             }
 
     }
+
+
+    public any function list() hint="list of pages" {
+
+     var local = {};
+
+        pages= model("page").findall(
+                include='user,status,pagesuser',
+                where="pagesusers.accountid=#getAccountAttr("id")# AND pagesusers.userid = #getUserAttr("id")# AND pagesusers.siteid = #varsiteid#",
+                select="title,pages.id,firstname,lastname,pages.createdAt,status"
+                ); //Get all pages in "pages" structure variable INNER JOIN "users" and  "statuses" table
+
+    }
+    public any function getpagedata() hint="get page content html" {
+         var getpageHTMl= model("page").findbykey(params.pageID);
+        writeOutput(getpageHTMl.content);
+        abort;
+    }
+
 }

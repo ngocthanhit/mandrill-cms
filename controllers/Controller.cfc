@@ -68,6 +68,7 @@ component extends="Wheels" {
     private any function restrictedAccessPosts() hint="restrict guest to access pages" {
 
         if (isGuest()) {
+        _event("W", "Caught attempt to access forbidden member-only page", "", cgi.HTTP_USER_AGENT);
         flashInsert(success="access denied.") ;
         redirectTo(controller="posts");
         }
@@ -78,6 +79,7 @@ component extends="Wheels" {
     private any function restrictedAccessPages() hint="restrict guest to access pages" {
 
         if(isAuthor() or isGuest()){
+        _event("W", "Caught attempt to access forbidden member-only page", "", cgi.HTTP_USER_AGENT);
         flashInsert(success="access denied.") ;
         redirectTo(controller="members");
         }

@@ -62,17 +62,20 @@ $(function () {
                     .appendTo('#fileupload');
             });
         }
-    } else {
-        // Load existing files:
+     }  else {
         $('#fileupload').each(function () {
-            var that = this;
-            $.getJSON(this.action, function (result) {
+             var that = this;
+             $.getJSON(this.action, function (result) {
                 if (result && result.length) {
-                    $(that).fileupload('option', 'done')
-                        .call(that, null, {result: result});
-                }
-            });
+                    $(that).fileupload('option','done').call(that, null, {result: result});
+               }
+           });
         });
+        if(typeof show != 'undefined' && show == 'Images') {
+            $('#fileupload').fileupload('option',{maxFileSize: 100000000,acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i}) ;
+        } else {
+            $('#fileupload').fileupload('option',{maxFileSize: 100000000,acceptFileTypes: /(\.|\/)(gif|jpe?g|png|pdf|doc|rtf|txt)$/i}) ;
+        }
     }
-
 });
+

@@ -100,7 +100,19 @@ $('.progress .bar').each(function() {
 
   });
 }
-
+function formatFileSize(bytes) {
+            bytes  =bytes *1;
+            if (typeof bytes !== 'number') {
+                return '';
+            }
+            if (bytes >= 1000000000) {
+                return (bytes / 1000000000).toFixed(2) + ' GB';
+            }
+            if (bytes >= 1000000) {
+                return (bytes / 1000000).toFixed(2) + ' MB';
+            }
+            return (bytes / 1000).toFixed(2) + ' KB';
+        }
 
 function ajaxFileUploadcsv(controlname)
 {
@@ -174,3 +186,35 @@ this.imagePreview = function(){
             .css("left",(e.pageX + yOffset) + "px");
     });
 };
+
+var featherEditor = new Aviary.Feather({
+    apiKey: '7376bcb63',
+    apiVersion: 2,
+    tools: 'all',
+    appendTo: '',
+    onSave: function(imageID, newURL) {
+        var img = document.getElementById(imageID);
+        img.src = newURL;
+        $.post('/index.cfm/webfiles/updateimage',{newURLLink:newURL,OldName:imagename,returnformat:'JSON'},function(data) {
+            img.src = data ;
+             $("##bootstrap-wysihtml5-insert-image-url").val(data);
+             $('##myModal').modal('hide');
+             $(".modal-backdrop").css('z-index','1040');
+        });
+    },
+    onSaveButtonClicked:function(){
+        $('##myModal').modal({
+         keyboard: false,
+         backdrop:'static'
+        });
+        $(".modal-backdrop").css('z-index','10000');
+    }
+});
+
+function launchEditor(id, src) {
+    featherEditor.launch({
+        image: id,
+        url: src
+    });
+    return false;
+}

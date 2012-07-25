@@ -1,4 +1,7 @@
 <cfoutput>
+     <script type="text/javascript">
+        var show = "Images";
+     </script>
 	#styleSheetLinkTag(sources="blueimp-jQuery-File-Upload/bootstrap-image-gallery.min",head='true')#
 	#styleSheetLinkTag(sources="blueimp-jQuery-File-Upload/jquery.fileupload-ui",head='true')#
 <!---	<!--[if lt IE 7]>#styleSheetLinkTag(sources="blueimp-jQuery-File-Upload/bootstrap-ie6.min",head='true')#<![endif]--> --->
@@ -15,9 +18,8 @@
 	#javaScriptIncludeTag(sources="blueimp-jQuery-File-Upload/locale",head='true')#
 	#javaScriptIncludeTag(sources="blueimp-jQuery-File-Upload/main",head='true')#
 	<!--[if gte IE 8]>#javaScriptIncludeTag(sources="blueimp-jQuery-File-Upload/jquery.xdr-transport",head='true')#<![endif]-->
-
     <!-- The file upload form used as target for the file upload widget -->
-#startFormTag(action="fileUpload",method="POST",enctype="multipart/form-data",id="fileupload")#
+#startFormTag(action="fileUpload",method="POST",enctype="multipart/form-data",id="fileupload",key="Images")#
         <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
         <div class="row fileupload-buttonbar">
  <cfif NOT isGuest() >
@@ -37,11 +39,11 @@
                     <i class="icon-ban-circle icon-white"></i>
                     <span>Cancel upload</span>
                 </button>
-                <button type="button" class="btn btn-danger delete">
+              <!---  <button type="button" class="btn btn-danger delete">
                     <i class="icon-trash icon-white"></i>
                     <span>Delete</span>
                 </button>
-                <input type="checkbox" class="toggle">
+                <input type="checkbox" class="toggle"> --->
             </div>
 
             <!-- The global progress information -->
@@ -139,14 +141,12 @@
 		    <td class="size"><span>{%=o.formatFileSize(file.SIZE)%}</span></td>
 		    <td colspan="2"></td>
 		{% } %}
-      		<td class="delete">
-            {% if (file.DELETE_TYPE && file.DELETE_URL) { %}
-		    <button class="btn btn-danger" data-type="{%=file.DELETE_TYPE%}" data-url="{%=file.DELETE_URL%}">
-		        <i class="icon-trash icon-white"></i>
-		        <span>{%=locale.fileupload.destroy%}</span>
+      		<td class="Add">
+               <a class="btn btn-primary AddButton" href="javascript:setval('{%=file.NAME%}','{%=file.SIZE%}','/assets/img/uploadImages/#getAccountAttr('id')#/')" >
+		        <i class="icon-plus icon-white"></i>
+		        <span >ADD</span>
+                </a>
 		    </button>
-		    <input type="checkbox" name="delete" value="1">
-            {% } %}
 		</td>
 	    </tr>
 	{% } %}
@@ -156,3 +156,5 @@
 <div style="clear:both;"></div>
 <div class="bendl"></div>
 <div class="bendr"></div>
+
+<cfabort>

@@ -1,3 +1,62 @@
+    function setpageval(pageid) {
+        $.post('/index.cfm/pages/getpagedata',{pageID:pageid,returnformat:'JSON'},function(data) {
+            $('iframe.wysihtml5-sandbox').each(function(i, el){
+                el.contentWindow.document.body.innerHTML = el.contentWindow.document.body.innerHTML + data ;
+            });
+        });
+        $("#Insert_page").dialog2("close");
+    }
+
+    function setval(filename,filesize,filepath) {
+             $("#selectedfilelist").html("<span><b>Selected file:</b></span><br /><span>" + filename + "</span>(<span>" + formatFileSize(filesize) + "</span>)<span style='display:none;'>" + filepath + "</span>");
+             $("#Insert_Image").dialog2("close");
+        }
+
+    function editimagebtn() {
+        if ($("#bootstrap-wysihtml5-insert-image-url").val() == "") {
+            if ($("#selectedfilelist").html() != "") {
+                imagename = $("#selectedfilelist span").eq(1).html();
+                var imagesize = $("#selectedfilelist span").eq(2).html();
+                var imagepath = $("#selectedfilelist span").eq(3).html();
+                 $("#image1").attr('src',imagepath + imagename);
+                return launchEditor('image1', imagepath + imagename);
+            }
+        } else {
+               imagename = $("#bootstrap-wysihtml5-insert-image-url").val();
+               imagename = imagename.substr(imagename.lastIndexOf("/")+1,imagename.length);
+                 $("#image1").attr('src',$("#bootstrap-wysihtml5-insert-image-url").val());
+                return launchEditor('image1', $("#bootstrap-wysihtml5-insert-image-url").val());
+            }
+        return false;
+   }
+    function insertimagebtn(ev) {
+        if ($("#bootstrap-wysihtml5-insert-image-url").val() == "") {
+            if ($("#selectedfilelist").html() != "") {
+                var imagename = $("#selectedfilelist span").eq(1).html() ;
+                var imagesize = $("#selectedfilelist span").eq(2).html() ;
+                var imagepath = $("#selectedfilelist span").eq(3).html() ;
+                $("#bootstrap-wysihtml5-insert-image-url").val(imagepath + imagename);
+            }
+        } else {
+            imagename = $("#bootstrap-wysihtml5-insert-image-url").val() ;
+            imagename = imagename.substr(imagename.lastIndexOf("/")+1,imagename.length);
+            $('#myModal').modal({
+             keyboard: false,
+             backdrop:'static'
+            });
+            $(".modal-backdrop").css('z-index','10000');
+            $.post('/index.cfm/webfiles/insertlinktoimage',{newURLLink:$("#bootstrap-wysihtml5-insert-image-url").val(),OldName:imagename,returnformat:'JSON'},function(data) {
+               $('iframe.wysihtml5-sandbox').each(function(i, el){
+                    el.contentWindow.document.getElementById('Imageid').setAttribute('src',data) ;
+                    el.contentWindow.document.getElementById('Imageid').removeAttribute('id') ;
+                    $(".markItUp").html(el.contentWindow.document.body.innerHTML.replace(/%0D/g,"").replace(/%0A/g,"").replace(/%09/g,""));
+                    el.contentWindow.document.body.innerHTML = $(".markItUp").html().replace(/&lt;/g,"<").replace(/&gt;/g,">");
+                    $('#myModal').modal('hide');
+                    $(".modal-backdrop").css('z-index','1040');
+                });
+            });
+        }
+    }
 !function($, wysi) {
     "use strict";
 
@@ -50,14 +109,36 @@
                                    "<h3>Insert Image</h3>" +
                                "</div>" +
                                "<div class='modal-body'>" +
-                                   "<input value='http://' class='bootstrap-wysihtml5-insert-image-url input-xlarge'>" +
+                                   "Choose between the following 2 options:<br />" +
+                                   "1. Browse images or upload new image <br /><br />" +
+                                   "&nbsp;&nbsp;&nbsp;<input value='Browse Images on Server' id='show-server-notice-link' class='btn  input-xlarge' type='button'>" +
+                                   "<br /><br />" +
+                                   "<div id='selectedfilelist'></div><br />" +
+                                   "2. Type full URL of image (including http://) <br /><br />" +
+                                   "&nbsp;&nbsp;&nbsp;<input class='bootstrap-wysihtml5-insert-image-url input-xlarge' type='text' id='bootstrap-wysihtml5-insert-image-url'>" +
+                                    "<img src='' id='image1' style='display:none;'/>" +
                                "</div>" +
                                "<div class='modal-footer'>" +
-                                   "<a href='#' class='btn' data-dismiss='modal'>Cancel</a>" +
-                                   "<a href='#' class='btn btn-primary' data-dismiss='modal'>Insert image</a>" +
+                                   "<a href='#' class='btn editimagebtn' onclick='return editimagebtn();'>Edit Image</a>" +
+                                   "<a href='#' class='btn btn-primary insertimagebtn' data-dismiss='modal' onclick='insertimagebtn(event);'>Save & Insert Image</a>" +
+                                   "<a href='#' class='btn ' data-dismiss='modal'>Cancel & close this window</a>" +
                                "</div>" +
                            "</div>" +
                            "<a class='btn' data-wysihtml5-command='insertImage' title='Insert image'><i class='icon-picture'></i></a>" +
+                       "</li>",
+        "page":       "<li>" +
+                           "<div class='bootstrap-wysihtml5-insert-page-modal modal hide fade'>" +
+                               "<div class='modal-header'>" +
+                                   "<a class='close' data-dismiss='modal'>&times;</a>" +
+                                   "<h3>Insert Page</h3>" +
+                               "</div>" +
+                               "<div class='modal-body'>" +
+                               "</div>" +
+                               "<div class='modal-footer'>" +
+                                   "<a href='#' class='btn ' data-dismiss='modal'>Cancel & close this window</a>" +
+                               "</div>" +
+                           "</div>" +
+                           "<a class='btn' data-wysihtml5-command='insertPage' id='show-server-page-link' title='Insert page'><i class='icon-plus-sign'></i></a>" +
                        "</li>",
 
         "html":
@@ -75,6 +156,7 @@
         "html": false,
         "link": true,
         "image": true,
+        "page": true,
         events: {},
         parserRules: {
             tags: {
@@ -125,7 +207,6 @@
             });
         });
     };
-
     Wysihtml5.prototype = {
 
         constructor: Wysihtml5,
@@ -177,6 +258,7 @@
                     if(key == "image") {
                         this.initInsertImage(toolbar);
                     }
+
                 }
             }
 
@@ -197,13 +279,12 @@
             });
         },
 
-        initInsertImage: function(toolbar) {
+           initInsertImage: function(toolbar) {
             var self = this;
             var insertImageModal = toolbar.find('.bootstrap-wysihtml5-insert-image-modal');
             var urlInput = insertImageModal.find('.bootstrap-wysihtml5-insert-image-url');
             var insertButton = insertImageModal.find('a.btn-primary');
             var initialValue = urlInput.val();
-
             var insertImage = function() {
                 var url = urlInput.val();
                 urlInput.val(initialValue);
@@ -291,5 +372,23 @@
     };
 
     $.fn.wysihtml5.Constructor = Wysihtml5;
-
 }(window.jQuery, window.wysihtml5);
+
+$(function() {
+    $("#show-server-notice-link").click(function(event) {
+        $('<div/>').dialog2({
+            title: "Insert Image",
+            content: "/index.cfm/webfiles/imageupload",
+            id: "Insert_Image"
+        });
+        event.preventDefault();
+    });
+     $("#show-server-page-link").click(function(event) {
+        $('<div/>').dialog2({
+            title: "Insert Page",
+            content: "/index.cfm/pages/list",
+            id: "Insert_page"
+        });
+        event.preventDefault();
+    });
+});

@@ -76,6 +76,7 @@ component extends="Controller" hint="Controller for crum posts section" {
 
         if(newPost.save())
             {
+                 _event("I", "Successfully post created", "Sessions", "Session id is #session.sessionid#, useragent is #CGI.USER_AGENT#", getAccountAttr("id"), getUserAttr("id"));
                 if (IsDefined("params.categoryID"))
                     {
                         var newPostId = newPost.id ;
@@ -97,6 +98,7 @@ component extends="Controller" hint="Controller for crum posts section" {
                 newPostCatergory = params.categoryID;
                 title = "Posts" ;
                 formAction = "SubmitAddNewPost"  ;
+                _event("W", "Caught attempt to post add information not required", "Sessions", "Session id is #session.sessionid#, useragent is #CGI.USER_AGENT#", getAccountAttr("id"), getUserAttr("id"));
                 renderPage(template="addeditpost") ;
             }
     }
@@ -105,6 +107,7 @@ component extends="Controller" hint="Controller for crum posts section" {
     public any function SubmitEditPost() hint="listing of all posts" {
         if(isAuthor() && (params.userid NEQ getUserAttr("id")) OR isGuest())
             {
+                _event("W", "Caught attempt to access forbidden member-only page", "Sessions", "Session id is #session.sessionid#, useragent is #CGI.USER_AGENT#", getAccountAttr("id"), getUserAttr("id")); 
                 flashInsert(success="access denied.") ;
                 redirectTo(controller="posts");
             }
@@ -126,7 +129,8 @@ component extends="Controller" hint="Controller for crum posts section" {
 
         if (newPost.update(params.newPost))
             {
-                var newPostId = params.newPost.id  ;
+             _event("I", "Successfully updated post", "Sessions", "Session id is #session.sessionid#, useragent is #CGI.USER_AGENT#", getAccountAttr("id"), getUserAttr("id"));
+               var newPostId = params.newPost.id  ;
                 mapCAtagoriesdel = model("postscategory").deleteAll(where="postid=" & newPostId) ;
                  if (IsDefined("params.categoryID"))
                     {
@@ -154,6 +158,7 @@ component extends="Controller" hint="Controller for crum posts section" {
                         updatedBy = model("user").findbykey(key=newPost.updatedby,select="id,firstname, lastname") ;
                     }
                 Status = model("status").findbykey(key=newPost.statusid,select="statusid,status") ;
+                _event("W", "Caught attempt to post edit changes not required", "Sessions", "Session id is #session.sessionid#, useragent is #CGI.USER_AGENT#", getAccountAttr("id"), getUserAttr("id"));
                 renderPage(template="addeditpost") ;
             }
     }
@@ -161,6 +166,7 @@ component extends="Controller" hint="Controller for crum posts section" {
      public any function checkconfirmpost(required numeric postid) {
         var checkpostsuser   =  model("postsuser").findall(where="postid=#postid# AND accountid = #getAccountAttr("id")#");
            if(checkpostsuser.recordcount EQ 0) {
+               _event("W", "Caught attempt to access forbidden member-only page", "Sessions", "Session id is #session.sessionid#, useragent is #CGI.USER_AGENT#", getAccountAttr("id"), getUserAttr("id")); 
                 flashInsert(success="You not a valid user for this post.") ;
                 redirectTo(controller=params.controller) ;
             }
