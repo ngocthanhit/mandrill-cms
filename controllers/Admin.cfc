@@ -18,6 +18,14 @@
 
 
     /*
+     * BILLING SETTINGS
+     */
+
+
+    include "includes/AdminBilling.cfm";
+
+
+    /*
      * DATA HISTORY
      */
 

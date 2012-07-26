@@ -31,6 +31,7 @@
 							<li class="divider"></li>
 			                <li class="nav-header">ADMINISTRATOR</li>
 			                <li>#linkTo(text="Accounts &amp; Users", controller="admin", action="accounts")#</li>
+			                <li>#linkTo(text="Billing Settings", controller="admin", action="billing")#</li>
 			                <li>#linkTo(text="System Log", controller="admin", action="syslog")#</li>
 			                <li>#linkTo(text="Data History", controller="admin", action="history")#</li>
 			                </cfif>
