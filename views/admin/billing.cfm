@@ -4,8 +4,7 @@
 </p>
 <ul>
     <li>#linkTo(text="Billing plans", action="plans")#</li>
-    <li>#linkTo(text="Discounts", action="discounts")#</li>
+    <!---<li>#linkTo(text="Discounts", action="discounts")#</li>--->
     <li>#linkTo(text="Billed features", action="features")#</li>
-    <li>#linkTo(text="Pricing settings", action="pricing")#</li>
 </ul>
 </cfoutput>
