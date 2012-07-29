@@ -90,6 +90,220 @@
 
 
 
+    public any function discounts() hint="Billing discounts listing" {
+
+        var local = {};
+
+        _view(pageTitle = "Discounts", renderShowBy = true, stickyAttributes = "pagesize,sort,order");
+        _view(headLink = linkTo(text="Back to billing home &uarr;", action="billing"));
+        _view(headLink = linkTo(text="Add discount", action="discountAdd"));
+
+
+        initListParams(20, "name");
+
+        // read all the discounts
+
+        discounts = model("discount").findAll(
+            page = params.page,
+            perPage = params.pagesize,
+            order = "#params.order# #params.sort#"
+        );
+
+    }
+
+
+    public any function discountAdd() hint="New discount form" {
+
+        var local = {};
+
+        _view(pageTitle = "Add Discount", buttonLabel = "Create Discount", renderFlash = false);
+        _view(headLink = linkTo(text="Back to discounts &uarr;", action="discounts"));
+
+        discount = model("discount").new({isactive = 1});
+
+    }
+
+
+    public any function discountCreate() hint="Create new discount" {
+
+        var local = {};
+
+        _view(pageTitle = "Add Discount", buttonLabel = "Create Discount", renderFlash = false);
+        _view(headLink = linkTo(text="Back to discounts &uarr;", action="discounts"));
+
+        param name="params.discount" default={};
+
+        discount = model("discount").create(params.discount);
+
+        if (NOT discount.hasErrors()) {
+            _event("I", "Created discount ###discount.id# (#discount.name#)");
+            flashInsert(success="The discount '#discount.name#' was created successfully");
+            redirectTo(action="discounts");
+        }
+        else {
+            flashInsert(warning="There are some problems with your submission:");
+            renderPage(action="discountAdd");
+        }
+
+    }
+
+
+    public any function discountEdit() hint="Existing discount form" {
+
+        var local = {};
+
+        _view(pageTitle = "Edit Discount", buttonLabel = "Save Discount", renderFlash = false);
+        _view(headLink = linkTo(text="Back to discounts &uarr;", action="discounts"));
+
+        discount = getModelByKey("discount", false);
+
+        if (NOT isObject(discount)) {
+            return _error("Discount was not found");
+        }
+
+        _view(pageTitleAppend = "&laquo;#discount.name#&raquo;");
+        discount.expirationDate = DateFormat(discount.expirationDate, get("defaultDateFormat"));
+
+    }
+
+
+    public any function discountUpdate() hint="Save existing discount" {
+
+        var local = {};
+
+        _view(pageTitle = "Edit Discount", buttonLabel = "Save Discount", renderFlash = false);
+        _view(headLink = linkTo(text="Back to discounts &uarr;", action="discounts"));
+
+        discount = getModelByKey("discount", false);
+
+        if (NOT isObject(discount)) {
+            return _error("Discount was not found");
+        }
+
+        _view(pageTitleAppend = "&laquo;#discount.name#&raquo;");
+
+        param name="params.discount" default={};
+
+        discount.setProperties(params.discount);
+
+        if (discount.save()) {
+            _event("I", "Updated discount ###discount.id# (#discount.name#)");
+            flashInsert(success="Discount '#discount.name#' was updated successfully");
+            redirectTo(action="discounts");
+        }
+        else {
+            flashInsert(warning="There are some problems with your submission:");
+            renderPage(action="discountEdit");
+        }
+
+    }
+
+
+    public any function discountApply() hint="Apply discount to multiple accounts in batch - form" {
+
+        var local = {};
+
+        _view(pageTitle = "Apply Discount");
+        _view(headLink = linkTo(text="Back to discounts &uarr;", action="discounts"));
+
+        discount = getModelByKey("discount", false);
+
+        if (NOT isObject(discount)) {
+            return _error("Discount was not found");
+        }
+
+        _view(pageTitleAppend = "&laquo;#discount.name#&raquo;");
+
+        // pull active accounts
+        // think of some filtering later
+
+        accounts = model("account").findAllWithBilling(
+            status = "active",
+            order = "name asc"
+        );
+
+    }
+
+
+    public any function discountApplyProceed() hint="Apply discount to multiple accounts in batch - proceed" {
+
+        var local = {};
+
+        _view(pageTitle = "Apply Discount");
+        _view(headLink = linkTo(text="Back to discounts &uarr;", action="discounts"));
+
+        discount = getModelByKey("discount", false);
+
+        if (NOT isObject(discount)) {
+            return _error("Discount was not found");
+        }
+
+        param name="params.accounts" default=[];
+
+        for (local.idx=1; local.idx LTE ArrayLen(params.accounts); local.idx++) {
+
+            if (NOT isNumeric(params.accounts[local.idx])) {
+                continue;
+            }
+
+            // get the plan
+            local.accountplan = model("accountplan").findOne(
+                where = "accountid=#params.accounts[local.idx]# AND isactive=1",
+                include = "plan"
+            );
+
+            // recalculate the price
+            local.price = local.accountplan.plan.price - local.accountplan.plan.price * discount.discount / 100;
+
+            // skip if discount is the same or lower than current
+            if (local.accountplan.discountid NEQ discount.id AND local.accountplan.price GT local.price) {
+
+                // clone current plan with adjusted price
+                switchAccountPlan(local.accountplan, local.accountplan.planid, discount.id, local.price);
+
+                // TODO: queue Recurly subscription update (queue API request)
+
+            }
+
+        }
+
+        flashInsert(success="Discount was applied to selected accounts");
+        redirectTo(action="discountApply", key=params.key);
+
+    }
+
+
+    public any function discountDelete() hint="Delete existing discount" {
+
+        var local = {};
+
+        _view(pageTitle = "Delete Discount");
+        _view(headLink = linkTo(text="Back to discounts &uarr;", action="discounts"));
+
+        discount = getModelByKey("discount", false);
+
+        if (NOT isObject(discount)) {
+            return _error("Discount was not found");
+        }
+        else if (discount.isUsed()) {
+            return _error("This discount is in use and cannot be deleted");
+        }
+
+        if (discount.delete()) {
+            _event("I", "Deleted discount ###discount.id# (#discount.name#)");
+            flashInsert(success="Discount '#discount.name#' was deleted successfully");
+            redirectTo(action="discounts");
+        }
+        else {
+            _event("E", "Failed to delete the discount ###discount.id# (#discount.name#)");
+            return _error("Discount deleting failed");
+        }
+
+    }
+
+
+
+
     public any function plans() hint="Billing plans listing" {
 
         var local = {};
@@ -346,6 +560,418 @@
 
         flashInsert(success="Quotas for plan '#plan.name#' were saved successfully");
         redirectTo(action="planQuotas", key=params.key);
+
+    }
+
+
+
+
+
+    public any function accountBilling() hint="List account billing options" {
+
+        var local = {};
+
+        _view(pageTitle = "Billing of Account");
+
+        account = getModelByKey("account", false);
+
+        if (NOT isObject(account)) {
+            return _error("Account was not found");
+        }
+
+        _view(pageTitleAppend = "&laquo;#account.name#&raquo;");
+        _view(headLink = linkTo(text="Back to accounts &uarr;", action="accounts"));
+
+
+        // get active plan
+        accountplan = model("accountplan").findOne(
+            where = "accountid=#account.id# AND isactive=1",
+            include = "plan,discount"
+        );
+
+        if (NOT isObject(accountplan)) {
+            return _error("Account does not have a plan set");
+        }
+
+
+        // read all active features
+        features = model("feature").findAll(
+            where = "isactive = 1"
+        );
+
+
+        // cache account quotas
+
+        quotasCacheAccount = {};
+
+        for (local.idx=1; local.idx LTE features.recordCount; local.idx++) {
+
+            quotasCacheAccount[features.id[local.idx]] = {
+                "current" : getQuotaCurrent(features.token[local.idx], account.id),
+                "quota" : getQuotaValue(features.token[local.idx], account.id)
+            };
+
+        }
+
+
+    }
+
+
+    public any function accountQuotasEdit() hint="Account quotas form" {
+
+        var local = {};
+
+
+        _view(pageTitle = "Quotas of Account");
+
+        account = getModelByKey("account", false);
+
+        if (NOT isObject(account)) {
+            return _error("Account was not found");
+        }
+
+        _view(pageTitleAppend = "&laquo;#account.name#&raquo;");
+        _view(headLink = linkTo(text="&larr; Back to account billing", action="accountBilling", key=account.id));
+        _view(headLink = linkTo(text="Back to accounts &uarr;", action="accounts"));
+
+
+        // get active plan
+        accountplan = model("accountplan").findOne(
+            where = "accountid=#account.id# AND isactive=1",
+            include = "plan"
+        );
+
+        if (NOT isObject(accountplan)) {
+            return _error("Account does not have a plan set");
+        }
+
+
+        // read all active features
+
+        features = model("feature").findAll(
+            where = "isactive = 1"
+        );
+
+
+        // cache account quotas
+
+        quotasCache = {};
+
+        for (local.idx=1; local.idx LTE features.recordCount; local.idx++) {
+
+            local.quota = getQuotaObject(features.token[local.idx], account.id);
+
+            quotasCache[features.id[local.idx]] = {
+                "id" : local.quota.id,
+                "quota" : local.quota.quota
+            };
+
+        }
+
+    }
+
+
+    public any function accountQuotasUpdate() hint="Account quotas form" {
+
+        var local = {};
+
+
+        _view(pageTitle = "Quotas of Account");
+
+        account = getModelByKey("account", false);
+
+        if (NOT isObject(account)) {
+            return _error("Account was not found");
+        }
+
+        _view(pageTitleAppend = "&laquo;#account.name#&raquo;");
+        _view(headLink = linkTo(text="&larr; Back to account billing", action="accountBilling", key=account.id));
+        _view(headLink = linkTo(text="Back to accounts &uarr;", action="accounts"));
+
+
+        // get active plan
+        accountplan = model("accountplan").findOne(
+            where = "accountid=#account.id# AND isactive=1",
+            include = "plan"
+        );
+
+        if (NOT isObject(accountplan)) {
+            return _error("Account does not have a plan set");
+        }
+
+
+        // get current account quotas
+
+        accountquotas = model("accountquota").findAll(
+            where = "accountid=#account.id# AND isactive=1",
+            include = "quota"
+        );
+
+
+        param name="params.quotas" default={};
+
+
+        // search value for each quota
+
+        for (local.idx=1; local.idx LTE accountquotas.recordCount; local.idx++) {
+
+            local.qid = accountquotas.id[local.idx];
+
+            if (StructKeyExists(params.quotas, local.qid)
+                AND isValid("integer", params.quotas[local.qid]) AND params.quotas[local.qid] GT 0
+                AND params.quotas[local.qid] NEQ accountquotas.quota[local.idx]) {
+
+                // create new quota
+
+                local.accountquota = model("accountquota").create({
+                    accountid : account.id,
+                    quotaid : accountquotas.quotaid[local.idx],
+                    accountplanid : accountquotas.accountplanid[local.idx],
+                    quota : params.quotas[local.qid],
+                    isactive : 1
+                });
+
+                if (NOT local.accountquota.hasErrors()) {
+
+                    // archive current quota
+                    model("accountquotas").updateByKey(key = local.qid, isactive = 0);
+
+                    _event("I", "Created quota ###local.accountquota.id# value (#params.quotas[local.qid]#) of account ###account.id# (#account.name#)");
+                    _event("I", "Archived quota ###local.qid# value (#accountquotas.quota[local.idx]#) of account ###account.id# (#account.name#)");
+
+                }
+                else {
+                    return _error("Failed to create new plan entry");
+                }
+
+            }
+
+        }
+
+
+        flashInsert(success="Quotas for account '#account.name#' were saved successfully");
+        redirectTo(action="accountQuotasEdit", key=params.key);
+
+
+    }
+
+
+    public any function accountQuotasHistory() hint="Account quotas history" {
+
+        var local = {};
+
+
+        _view(pageTitle = "Quotas History of Account");
+
+        account = getModelByKey("account", false);
+
+        if (NOT isObject(account)) {
+            return _error("Account was not found");
+        }
+
+        _view(pageTitleAppend = "&laquo;#account.name#&raquo;");
+        _view(headLink = linkTo(text="&larr; Back to account billing", action="accountBilling", key=account.id));
+        _view(headLink = linkTo(text="Back to accounts &uarr;", action="accounts"));
+
+
+        // find all account quotas
+
+        initListParams(20, "isactive");
+
+        if (StructKeyExists(params, "planid") AND isNumeric(params.planid)) {
+
+            accountquotas = model("accountquota").findAll(
+                where = "accountid=#account.id# AND accountplanid=#params.planid#",
+                page = params.page,
+                perPage = params.pagesize,
+                order = "isactive desc, id desc"
+            );
+
+        }
+        else {
+
+            accountquotas = model("accountquota").findAll(
+                where = "accountid=#account.id#",
+                page = params.page,
+                perPage = params.pagesize,
+                order = "isactive desc, id desc"
+            );
+
+        }
+
+
+        // cache all quotas
+
+        quotas = model("quota").findAll(
+            include = "feature,plan"
+        );
+
+        quotasCache = {};
+
+        for (local.idx=1; local.idx LTE quotas.recordCount; local.idx++) {
+            quotasCache[quotas.id[local.idx]] = {
+                featurename : quotas.name[local.idx],
+                planname : quotas.planname[local.idx],
+                planid : quotas.planid[local.idx]
+            };
+        }
+
+
+    }
+
+
+    public any function accountPlanEdit() hint="Account plan change form" {
+
+        var local = {};
+
+
+        _view(pageTitle = "Billing Plan of Account");
+
+        account = getModelByKey("account", false);
+
+        if (NOT isObject(account)) {
+            return _error("Account was not found");
+        }
+
+        _view(pageTitleAppend = "&laquo;#account.name#&raquo;");
+        _view(headLink = linkTo(text="&larr; Back to account billing", action="accountBilling", key=account.id));
+        _view(headLink = linkTo(text="Back to accounts &uarr;", action="accounts"));
+
+        // get active plan
+
+        accountplan = model("accountplan").findOne(
+            where = "accountid=#account.id# AND isactive=1",
+            include = "plan"
+        );
+
+        if (NOT isObject(accountplan)) {
+            return _error("Account does not have a plan set");
+        }
+
+        // read active plans and discounts
+
+        plans = model("plan").findAll(
+            where = "isactive=1",
+            order = "position asc"
+        );
+
+        discounts = model("discount").findAll(
+            where = "isactive=1",
+            order = "name asc"
+        );
+
+    }
+
+
+    public any function accountPlanUpdate() hint="Update current account plan" {
+
+        var local = {};
+
+
+        _view(pageTitle = "Billing Plan of Account");
+
+        account = getModelByKey("account", false);
+
+        if (NOT isObject(account)) {
+            return _error("Account was not found");
+        }
+
+        _view(pageTitleAppend = "&laquo;#account.name#&raquo;");
+        _view(headLink = linkTo(text="&larr; Back to account billing", action="accountBilling", key=account.id));
+        _view(headLink = linkTo(text="Back to accounts &uarr;", action="accounts"));
+
+
+        // get active plan
+
+        local.activeplan = model("accountplan").findOne(
+            where = "accountid=#account.id# AND isactive=1",
+            include = "plan"
+        );
+
+        if (NOT isObject(local.activeplan)) {
+            return _error("Account does not have a plan set");
+        }
+
+
+        param name="params.accountplan" default={};
+
+
+        // handle plan change
+
+        if (StructKeyExists(params.accountplan, "planid") AND params.accountplan.planid NEQ local.activeplan.planid) {
+
+            // replace plan with default discount
+
+            if (switchAccountPlan(local.activeplan, params.accountplan.planid, get("defaultDiscountId"))) {
+                flashInsert(success="New plan was activated for account '#account.name#'");
+                // TODO: queue Recurly subscription update (queue API request)
+            }
+
+        }
+
+
+        // handle discount change
+
+        if (StructKeyExists(params.accountplan, "discountid") AND params.accountplan.discountid NEQ local.activeplan.discountid) {
+
+            // get the discount
+
+            local.discount = model("discount").findByKey(params.accountplan.discountid);
+
+            if (NOT isObject(local.discount) OR NOT local.discount.isactive) {
+                return _error("Selected discount not found");
+            }
+
+            // recalculate the price
+
+            local.price = local.activeplan.plan.price - local.activeplan.plan.price * local.discount.discount / 100;
+
+            // clone current plan with adjusted price
+
+            if (switchAccountPlan(local.activeplan, local.activeplan.planid, params.accountplan.discountid, local.price)) {
+                flashInsert(success="Discount was applied to account '#account.name#'");
+                // TODO: queue Recurly subscription update (queue API request)
+            }
+
+
+        }
+
+
+        if (flashIsEmpty()) {
+            flashInsert(warning="No changes were made to account '#account.name#' billing settings");
+        }
+
+        redirectTo(action="accountPlanEdit", key=params.key);
+
+
+    }
+
+
+
+    public any function accountPlanHistory() hint="Account plans history" {
+
+        var local = {};
+
+
+        _view(pageTitle = "Plans History of Account");
+
+        account = getModelByKey("account", false);
+
+        if (NOT isObject(account)) {
+            return _error("Account was not found");
+        }
+
+        _view(pageTitleAppend = "&laquo;#account.name#&raquo;");
+        _view(headLink = linkTo(text="&larr; Back to account billing", action="accountBilling", key=account.id));
+        _view(headLink = linkTo(text="Back to accounts &uarr;", action="accounts"));
+
+        // read account plans history
+
+        accountplans = model("accountplan").findAll(
+            where = "accountid=#account.id#",
+            order = "createdat desc",
+            include = "plan,discount"
+        );
 
     }
 

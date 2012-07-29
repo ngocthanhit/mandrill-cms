@@ -91,6 +91,23 @@ component extends="Wheels" {
      */
 
 
+     private boolean function _error(required string message) hint="Render error page with given error message" {
+
+        _view(renderCustomLayout = false);
+
+        if (view.pageTitle EQ "") {
+            _view(pageTitle = "Error");
+        }
+
+        flashInsert(error=arguments.message);
+
+        renderPage(controller="members", action="error");
+
+        return false;
+
+    }
+
+
     private any function _view() hint="View variables setter decorator" {
 
         var key = "";
@@ -231,6 +248,91 @@ component extends="Wheels" {
         if (NOT StructKeyExists(params, "pagesize") OR NOT ListFind(get("showBySize"), params.pagesize)) {
             params.pagesize = arguments.pagesize;
         }
+
+    }
+
+
+
+
+    private boolean function switchAccountPlan(
+        required object activeplan,
+        required numeric planid,
+        required numeric discountid,
+        any price = ""
+    ) hint="Replace the account billing plan with history recording" {
+
+        var local = {};
+
+
+        // find the selected plan
+
+        local.plan = model("plan").findByKey(arguments.planid);
+
+        if (NOT isObject(local.plan) OR NOT local.plan.isactive) {
+            return _error("Selected plan not found");
+        }
+
+        // create new plan
+
+        local.accountplan = model("accountplan").create({
+            accountid : arguments.activeplan.accountid,
+            planid : local.plan.id,
+            price : isNumeric(arguments.price) ? arguments.price : local.plan.price,
+            discountid : arguments.discountid,
+            isactive : 1
+        });
+
+        if (NOT local.accountplan.hasErrors()) {
+            _event("I", "Created plan ###local.accountplan.id# (#arguments.activeplan.plan.name#, #DollarFormat(local.accountplan.price)#) for account ###arguments.activeplan.accountid#");
+            // archive current plan
+            arguments.activeplan.update(isactive = 0);
+        }
+        else {
+            _event("E", "Failed to create new plan entry for account ###arguments.activeplan.accountid# and plan ###local.plan.id#", "", local.accountplan.allErrors()[1].message);
+            return _error("Failed to create new plan entry");
+        }
+
+
+        // archive current account quotas
+
+        local.accountquotas = model("accountquota").findAll(
+            where = "accountid=#arguments.activeplan.accountid# AND isactive=1",
+            include = "quota"
+        );
+
+        for (local.idx=1; local.idx LTE local.accountquotas.recordCount; local.idx++) {
+
+            model("accountquotas").updateByKey(key = local.accountquotas.id[local.idx], isactive = 0);
+
+        }
+
+
+        // push new plan quotas
+
+        local.quotas = model("quota").findAll(
+            where = "planid=#local.plan.id#"
+        );
+
+        for (local.idx=1; local.idx LTE local.quotas.recordCount; local.idx++) {
+
+            local.accountquota = model("accountquota").create({
+                accountid : arguments.activeplan.accountid,
+                quotaid : local.quotas.id[local.idx],
+                accountplanid : arguments.activeplan.id,
+                quota : local.quotas.quota[local.idx],
+                isactive : 1
+            });
+
+            if (local.accountquota.hasErrors()) {
+                _event("E", "Failed to create quota for billing plan ###local.plan.id# (#local.plan.name#) and feature ###local.quotas.featureid[local.idx]#", "", local.accountquota.allErrors()[1].message);
+                return _error("Quotas saving failed: #local.accountquota.allErrors()[1].message#");
+            }
+
+        }
+
+
+        return true;
+
 
     }
 
