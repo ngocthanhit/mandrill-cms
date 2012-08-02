@@ -31,14 +31,10 @@ INSERT INTO plans (id, name, description, price, position, isactive, ispublic, c
 INSERT INTO quotas (id, featureid, planid, quota, createdat, createdby, updatedat, updatedby) VALUES
 (1, 1, 1, 999999, NOW(), 4, NULL, NULL),
 (2, 2, 1, 999999, NOW(), 4, NULL, NULL),
-(3, 3, 1, 999999, NOW(), 4, NULL, NULL),
-(4, 4, 1, 999999, NOW(), 4, NULL, NULL),
-(5, 5, 1, 999999, NOW(), 4, NULL, NULL),
-(6, 1, 2, 10, NOW(), 4, NULL, NULL),
-(7, 2, 2, 10000, NOW(), 4, NULL, NULL),
-(8, 3, 2, 50, NOW(), 4, NULL, NULL),
-(9, 4, 2, 50, NOW(), 4, NULL, NULL),
-(10, 5, 2, 1000, NOW(), 4, NULL, NULL);
+(3, 3, 1, 2, NOW(), 4, NULL, NULL),
+(4, 1, 2, 3, NOW(), 4, NULL, NULL),
+(5, 2, 2, 1, NOW(), 4, NULL, NULL),
+(6, 3, 2, 1, NOW(), 4, NULL, NULL);
 
 
 -- set up default plan for all current accounts

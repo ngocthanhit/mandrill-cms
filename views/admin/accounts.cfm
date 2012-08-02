@@ -24,6 +24,7 @@
             <td class="nowrap">#formatDateTime(accounts.updatedAt)#</td>
             <td class="actions">
                 #linkTo(text="Users", action="accountUsers", key=accounts.id)#
+                #linkTo(text="Billing", action="accountBilling", key=accounts.id)#
                 #linkTo(text="Edit", action="accountEdit", key=accounts.id)#
                 <cfif accounts.id GT get("adminsAccountId")>
                 #linkTo(text="Delete", action="accountDelete", key=accounts.id, confirm="Are you sure you want to delete account &quot;#HTMLEditFormat(accounts.name)#&quot; and ALL related data? This cannot be undone. Click OK to proceed.")#

@@ -214,4 +214,12 @@
     }
 
 
+    /*
+     * @value numeric value of Hosting quota feature
+     */
+    string function quotaHostingValue(required numeric value) hint="Get text of Hosting quota"  {
+        return YesNoFormat(arguments.value - 1);
+    }
+
+
 </cfscript>

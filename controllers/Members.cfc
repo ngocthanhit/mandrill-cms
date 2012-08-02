@@ -34,7 +34,7 @@ component extends="Controller" hint="Controller for registered members section" 
 
         var local = {};
 
-        _view(pageTitle = "Personal Profile", buttonLabel = "Save Profile", renderFlash = false);
+        _view(pageTitle = "Your Profile", buttonLabel = "Save Profile", renderFlash = false);
 
         // alias for _user partial re-use
         user = request.user;
@@ -385,10 +385,13 @@ component extends="Controller" hint="Controller for registered members section" 
         if (StructKeyExists(params, "accountname")) {
 
             // TODO: validation and adding data
+            // TODO: here Beta plan id and code are hardcoded, this will be fixed before release
 
             try {
 
-                params.account = {name : params.accountname, status : "active"};
+                params.account = {name : params.accountname, status : "locked"};
+
+                params.accountplan = {accountid : local.account.id, planid : get("defaultPlanId"), discountid : get("defaultDiscountId")};
 
                 params.user = {
                     "accesslevel" : get("accessLevelAccountOwner"),
@@ -408,6 +411,8 @@ component extends="Controller" hint="Controller for registered members section" 
 
                 WriteDump(params);
                 abort;
+
+                // TODO: buld the payment form link and relocate to it
 
             }
             catch (any local.e) {

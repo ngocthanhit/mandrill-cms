@@ -21,11 +21,12 @@
 							<b class="caret"></b>
 						</a>
 						<ul class="dropdown-menu">
-							<li>#linkTo(text="Personal Profile", controller="members", action="profile")#</li>	
+							<li>#linkTo(text="Your Profile", controller="members", action="profile")#</li>	
 							<cfif isAccountOwner()>
 							<li class="divider"></li>
 			                <li class="nav-header">YOUR ACCOUNT</li>
 			                <li>#linkTo(text="Team Members", controller="account", action="members")#</li>
+			                <li>#linkTo(text="Billing &amp; Plans", controller="account", action="billing")#</li>
 			                </cfif>
 			                <cfif isAdmin()>
 							<li class="divider"></li>

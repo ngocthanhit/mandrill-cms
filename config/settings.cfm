@@ -108,5 +108,11 @@
     // date format for non-customizable values
     set(defaultDateFormat="dd mmm yyyy");
 
+    // billing defaults
+    set(defaultPlanId=2);
+    set(defaultDiscountId=1);
+    set(defaultPremiumQuota=999999);
+    set(quotaReachedMessage="Oh dear, you have reached the limit for {FEATURE} under your current plan. Time to consider ");
+
 
 </cfscript>

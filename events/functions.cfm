@@ -160,6 +160,126 @@
         }
 
     }
+
+
+    /*
+     * @token Target feature token
+     */
+    numeric function getQuotaValue(required string token, numeric accountid = 0) hint="Get current account quota value by parent feature token" {
+
+        return getQuotaObject(arguments.token, arguments.accountid).quota;
+
+    }
+
+
+    /*
+     * @token Target feature token
+     */
+    numeric function getQuotaCurrent(required string token, numeric accountid = 0) hint="Get current account quota status by parent feature token" {
+
+        local.accountid = arguments.accountid ? arguments.accountid : getAccountAttr('id');
+
+        switch (arguments.token) {
+            case "TeamMembers":
+                return model("user").count(where = "accountid=#local.accountid#");
+            case "WebSites":
+                // TODO:
+                // return model("site").count(where = "accountid=#local.accountid#");
+                return 0;
+            case "Hosting":
+                return getQuotaValue("Hosting", local.accountid);
+            default:
+                throw(message = "Feature token #arguments.token# does not exist");
+        }
+
+    }
+
+
+    /*
+     * @token Target feature token
+     */
+    numeric function getQuotaLeft(required string token, numeric accountid = 0) hint="Get available account quota value by parent feature token" {
+
+        var local = {};
+
+        local.value = getQuotaValue(arguments.token, arguments.accountid);
+
+        local.current = getQuotaCurrent(arguments.token);
+
+        return (local.value GT local.current) ? (local.value - local.current) : 0;
+
+    }
+
+
+    /*
+     * @token Target feature token
+     */
+    any function getQuotaObject(required string token, numeric accountid = 0) hint="Get account quota object by parent feature token" {
+
+        var local = {};
+
+        local.accountid = arguments.accountid ? arguments.accountid : getAccountAttr('id');
+
+        // get model by token, restrict to existing records only
+
+        local.accountquota = model("accountquota").findQuotaByFeatureToken(arguments.token, local.accountid);
+
+        if (isObject(local.accountquota)) {
+
+            return local.accountquota;
+
+        }
+        else {
+
+            // get active plan and default quotas
+
+            local.accountplan = model("accountplan").findOne(
+                where = "accountid=#local.accountid# AND isactive=1"
+            );
+
+            local.quotas = model("quota").findAll(
+                where = "planid = #local.accountplan.planid#"
+            );
+
+            // create missing quotas, if any were added recently
+
+            for (local.idx=1; local.idx LTE local.quotas.recordCount; local.idx++) {
+
+                local.found = model("accountquota").count(
+                    where = "accountid=#local.accountplan.accountid# AND quotaid=#local.quotas.id[local.idx]# AND isactive=1"
+                );
+
+                if (NOT local.found) {
+
+                    local.added=model("accountquota").create({
+                        accountid : local.accountplan.accountid,
+                        quotaid : local.quotas.id[local.idx],
+                        accountplanid : local.accountplan.id,
+                        quota : local.quotas.quota[local.idx],
+                        isactive : 1
+                    });
+                    if(local.added.hasErrors()){
+                        writeDump(var=local.added.allErrors()); abort;
+                    }
+
+                }
+
+            }
+
+            // try again to find the quota
+
+            local.accountquota = model("accountquota").findQuotaByFeatureToken(arguments.token, local.accountid);
+
+            if (isObject(local.accountquota)) {
+                return local.accountquota;
+            }
+            else {
+                throw(message = "Quota for feature #arguments.token# does not exist");
+            }
+
+        }
+
+    }
     
 
 </cfscript>

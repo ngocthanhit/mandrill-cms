@@ -810,6 +810,7 @@
 
         for (local.idx=1; local.idx LTE quotas.recordCount; local.idx++) {
             quotasCache[quotas.id[local.idx]] = {
+                token : quotas.token[local.idx],
                 featurename : quotas.name[local.idx],
                 planname : quotas.planname[local.idx],
                 planid : quotas.planid[local.idx]

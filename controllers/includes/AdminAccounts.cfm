@@ -38,6 +38,20 @@
 
         account = model("account").new({status : "active"});
 
+        accountplan = model("accountplan").new();
+
+        // read active plans and discounts
+
+        plans = model("plan").findAll(
+            where = "isactive=1",
+            order = "position asc"
+        );
+
+        discounts = model("discount").findAll(
+            where = "isactive=1",
+            order = "name asc"
+        );
+
     }
 
 
@@ -51,12 +65,47 @@
         _view(renderFlash = false);
 
         param name="params.account" default={};
+        param name="params.accountplan.planid" default="";
+        param name="params.accountplan.discountid" default="";
+
+        // validate the plan
+
+        local.plan = model("plan").findByKey(params.accountplan.planid);
+
+        if (NOT isObject(local.plan) OR NOT local.plan.isactive) {
+            return _error("Selected plan not found");
+        }
+
+
+        // validate the discount
+
+        local.discount = model("discount").findByKey(params.accountplan.discountid);
+
+        if (NOT isObject(local.discount) OR NOT local.discount.isactive) {
+            return _error("Selected discount not found");
+        }
+        else if (local.discount.discount GT 0) {
+
+            // recalculate the price if discount is selected
+            local.plan.price = local.plan.price - local.plan.price * local.discount.discount / 100;
+
+        }
 
         // try to create the account
 
         account = model("account").create(params.account);
 
         if (NOT account.hasErrors()) {
+
+            // create the account plan
+
+            local.accountplan = model("accountplan").create({
+                accountid : account.id,
+                planid : local.plan.id,
+                discountid : local.discount.id,
+                price : local.plan.price,
+                isactive : 1
+            });
 
             _event("I", "Created account ###account.id# (#account.name#)");
 
@@ -66,6 +115,20 @@
 
         }
         else {
+
+            accountplan = model("accountplan").new();
+
+            // read active plans and discounts
+
+            plans = model("plan").findAll(
+                where = "isactive=1",
+                order = "position asc"
+            );
+
+            discounts = model("discount").findAll(
+                where = "isactive=1",
+                order = "name asc"
+            );
 
             flashInsert(warning="There are some problems with your submission:");
             renderPage(action="accountAdd");

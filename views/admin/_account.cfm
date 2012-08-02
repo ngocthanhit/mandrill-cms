@@ -24,6 +24,15 @@
     </p>
     </cfif>
 
+    <cfif account.isNew()>
+    <p>
+        #select(label="Select Billing Plan", objectName="accountplan", property="planid", options=plans, valueField="id", textField="name", includeBlank="false", prepend="<br />", class="styled")#
+    </p>
+    <p>
+        #select(label="Apply Discount", objectName="accountplan", property="discountid", options=discounts, valueField="id", textField="name", includeBlank="false", prepend="<br />", class="styled")#
+    </p>
+    </cfif>
+
     <p>
         #submitTag(class="btn btn-primary btn-large", value=view.buttonLabel)#
     </p>

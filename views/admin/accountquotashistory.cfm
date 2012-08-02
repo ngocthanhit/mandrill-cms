@@ -16,7 +16,13 @@
             <td>#accountquotas.currentRow#)</td>
             <td>#linkTo(text=HTMLEditFormat(quotasCache[accountquotas.quotaid].planname), action="accountQuotasHistory", key=account.id, params="planid=#accountquotas.accountplanid#", title="View quotas history filtered by this plan period")#</td>
             <td>#HTMLEditFormat(quotasCache[accountquotas.quotaid].featurename)#</td>
-            <td>#accountquotas.quota#</td>
+            <td>
+            <cfif quotasCache[accountquotas.quotaid].token EQ "Hosting">
+            #quotaHostingValue(accountquotas.quota)#
+            <cfelse>
+            #accountquotas.quota#
+            </cfif>
+            </td>
             <td<cfif accountquotas.isactive> style="color:green;"</cfif>>#YesNoFormat(accountquotas.isactive)#</td>
             <td class="nowrap">#formatDateTime(accountquotas.createdAt)#</td>
         </tr>
