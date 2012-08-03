@@ -1,5 +1,17 @@
-<!---
-	The environment setting can be set to "design", "development", "testing", "maintenance" or "production".
-	For example, set it to "design" or "development" when you are building your application and to "production" when it's running live.
---->
-<cfset set(environment="design")>
+<cfscript>
+
+    // add server-specific settings as needed
+    // see this for help http://cfwheels.org/docs/1-1/chapter/switching-environments
+
+    switch (cgi.SERVER_NAME) {
+        case "mandrillcms.com":
+            set(environment="production");
+            break;
+        case "dev.mandrillcms.com":
+            set(environment="testing");
+            break;
+        default:
+            set(environment="development");
+    }
+
+</cfscript>
