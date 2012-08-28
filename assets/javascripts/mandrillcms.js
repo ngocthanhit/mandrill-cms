@@ -11,15 +11,15 @@
                 'requiredText': '<span class="required">*</span>'
             };
 
-        if (options) { 
+        if (options) {
             $.extend(settings, options);
         }
-        
+
         return self.each(function() {
             var el = $(this);
             el.parent().children('label').append( settings.requiredText );
         });
-        
+
     },
 
     /*
@@ -105,13 +105,13 @@ function formatFileSize(bytes) {
             if (typeof bytes !== 'number') {
                 return '';
             }
-            if (bytes >= 1000000000) {
-                return (bytes / 1000000000).toFixed(2) + ' GB';
+            if (bytes >= 1073741824) {
+                return (bytes / 1073741824).toFixed(2) + ' GB';
             }
-            if (bytes >= 1000000) {
-                return (bytes / 1000000).toFixed(2) + ' MB';
+            if (bytes >= 1048576) {
+                return (bytes / 1048576).toFixed(2) + ' MB';
             }
-            return (bytes / 1000).toFixed(2) + ' KB';
+            return (bytes / 1024).toFixed(2) + ' KB';
         }
 
 function ajaxFileUploadcsv(controlname)
@@ -150,7 +150,7 @@ function ajaxFileUploadcsv(controlname)
    {
         current_perc = 0;
         $('.progress .bar').css('width','0%');
-        $('.progress .bar').html('');                    
+        $('.progress .bar').html('');
    });
 
         return false;
