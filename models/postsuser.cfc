@@ -8,4 +8,4 @@ component extends="Model" {
         hasMany(name='accountof', modelname="accounts");
     }
 
-
+}
