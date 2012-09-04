@@ -14,6 +14,7 @@
 				 	<li <cfif params.controller eq "Pages">class="active"</cfif>>#linkTo(text='Pages', controller='Pages')#</li>
 				 	<li <cfif params.controller eq "Posts">class="active"</cfif>>#linkTo(text='Posts', controller='Posts')#</li>
 					<li <cfif params.controller eq "Webfiles">class="active"</cfif>>#linkTo(text='Files', controller='Webfiles')#</li>
+					<li <cfif params.controller eq "Websites">class="active"</cfif>>#linkTo(text='Site Settings', controller='Websites')#</li>
 					<li><a href="">Marketing</a></li>
 				    <li class="dropdown">
 				    	<a href="##" class="dropdown-toggle" data-toggle="dropdown">
