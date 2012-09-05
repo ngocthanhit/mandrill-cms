@@ -164,7 +164,7 @@ CREATE TABLE `statuses` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `status` varchar(100) DEFAULT NULL,
   `deletedat` datetime DEFAULT NULL,
-  PRIMARY KEY (`statusid`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 INSERT INTO `statuses` (`id`, `status`) VALUES 
@@ -186,9 +186,9 @@ CREATE TABLE `categories` (
   `updatedby` int(10) unsigned DEFAULT NULL,
   `updatedat` datetime DEFAULT NULL,
   `deletedat` datetime DEFAULT NULL,
-  PRIMARY KEY (`categoryid`),
+  PRIMARY KEY (`id`),
   CONSTRAINT `fk_categories_createdby` FOREIGN KEY (`createdby`) REFERENCES `users` (`id`) ON DELETE NO ACTION,
-  CONSTRAINT `fk_categories_updatedby` FOREIGN KEY (`updatedby`) REFERENCES `users` (`id`) ON DELETE NO ACTION,
+  CONSTRAINT `fk_categories_updatedby` FOREIGN KEY (`updatedby`) REFERENCES `users` (`id`) ON DELETE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 
@@ -203,7 +203,7 @@ CREATE TABLE `templates` (
   `userid` int(10) unsigned DEFAULT NULL,
   `templateName` varchar(255) DEFAULT NULL,
   `deletedat` datetime DEFAULT NULL,
-  PRIMARY KEY (`templateid`),
+  PRIMARY KEY (`id`),
   CONSTRAINT `fk_templates_userid` FOREIGN KEY (`userid`) REFERENCES `users` (`id`) ON DELETE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
@@ -236,7 +236,7 @@ CREATE TABLE `pages` (
   `showinnavigation` bit(1) DEFAULT b'1',
   `showinfooternavigation` bit(1) DEFAULT b'0',
   `updatedby` int(10) unsigned DEFAULT NULL,
-  PRIMARY KEY (`pageid`),
+  PRIMARY KEY (`id`),
   CONSTRAINT `fk_pages_userid` FOREIGN KEY (`userid`) REFERENCES `users` (`id`) ON DELETE NO ACTION,
   CONSTRAINT `fk_pages_parentid` FOREIGN KEY (`parentid`) REFERENCES `pages` (`id`) ON DELETE NO ACTION,
   CONSTRAINT `fk_pages_templateid` FOREIGN KEY (`templateid`) REFERENCES `templates` (`id`) ON DELETE NO ACTION,
@@ -267,7 +267,7 @@ CREATE TABLE `posts` (
   `updatedby` int(10) unsigned DEFAULT NULL,
   `updatedat` datetime DEFAULT NULL,
   `deletedat` datetime DEFAULT NULL,
-  PRIMARY KEY (`postid`),
+  PRIMARY KEY (`id`),
   CONSTRAINT `fk_posts_userid` FOREIGN KEY (`userid`) REFERENCES `users` (`id`) ON DELETE CASCADE,
   CONSTRAINT `fk_posts_templateid` FOREIGN KEY (`templateid`) REFERENCES `templates` (`id`) ON DELETE NO ACTION,
   CONSTRAINT `fk_posts_publishedby` FOREIGN KEY (`publishedby`) REFERENCES `users` (`id`) ON DELETE NO ACTION,
@@ -285,7 +285,7 @@ DROP TABLE IF EXISTS `postscategories`;
 
 CREATE TABLE `postscategories` (
   `categoryid` int(10) unsigned DEFAULT NULL,
-  `postid` int(10) unsigned DEFAULT NULL,
+  `postid` int(10) unsigned DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -451,3 +451,22 @@ CREATE TABLE  postsusers (
   siteid int(10) unsigned NOT NULL,
   PRIMARY KEY (`postid`,`userid`,`accountid`,`siteid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--- create sites with user and account ----
+CREATE TABLE `mandrillcms`.`sites` (
+`id` INT( 11 ) UNSIGNED NOT NULL AUTO_INCREMENT,
+`userid` INT( 11 ) UNSIGNED NOT NULL ,
+`accountid` INT( 11 ) UNSIGNED NOT NULL ,
+`name` VARCHAR( 255 ) DEFAULT NULL ,
+`url` VARCHAR( 255 ) DEFAULT NULL ,
+`description` TEXT DEFAULT NULL ,
+`serverProtocal` VARCHAR( 10 ) DEFAULT NULL ,
+`host` VARCHAR( 255 ) DEFAULT NULL ,
+`username` VARCHAR( 255 ) DEFAULT NULL ,
+`password` VARCHAR( 255 ) DEFAULT NULL ,
+`port` VARCHAR( 10 ) DEFAULT NULL ,
+`remotepath` VARCHAR( 255 ) DEFAULT NULL ,
+`createdAt` DATETIME NULL DEFAULT NULL ,
+`deleteAt` DATETIME NULL DEFAULT NULL,
+PRIMARY KEY (`id`)
+)ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8

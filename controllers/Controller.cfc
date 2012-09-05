@@ -1,13 +1,12 @@
 component extends="Wheels" {
 
-
     /*
      * This is the parent controller file that all your controllers should extend.
      * You can add functions to this file to make them globally available in all your controllers.
      * Do not delete this file.
      */
-     
-     
+
+
      // view data alias
     view = request.view;
 
@@ -33,8 +32,8 @@ component extends="Wheels" {
         }
 
     }
-    
-    
+
+
     private any function accountOwnerOnly() hint="Require user to be account owner to access actions" {
 
         if (NOT isAccountOwner()) {
@@ -64,7 +63,7 @@ component extends="Wheels" {
         }
 
     }
-    
+
     private any function restrictedAccessPosts() hint="restrict guest to access pages" {
 
         if (isGuest()) {
@@ -73,9 +72,9 @@ component extends="Wheels" {
         redirectTo(controller="posts");
         }
 
-	}
-    
-    
+    }
+
+
     private any function restrictedAccessPages() hint="restrict guest to access pages" {
 
         if(isAuthor() or isGuest()){
@@ -84,8 +83,17 @@ component extends="Wheels" {
         redirectTo(controller="members");
         }
 
-	}
-    
+    }
+
+    private any function restrictedAccessSites() hint="restrict guest to access pages" {
+
+        if(isAuthor() or isGuest() or isEditor()){
+        _event("W", "Caught attempt to access forbidden member-only page", "", cgi.HTTP_USER_AGENT);
+        flashInsert(success="access denied.") ;
+        redirectTo(controller="members");
+        }
+
+    }
      /*
      * HELPERS
      */
@@ -190,8 +198,8 @@ component extends="Wheels" {
         return obj;
 
     }
-    
-    
+
+
     private void function initListParams(
         required numeric pagesize,
         required string order,
@@ -220,8 +228,40 @@ component extends="Wheels" {
         }
 
     }
-    
-    
+
+
+    private void function initListParams(
+        required numeric pagesize,
+        required string order,
+        string sort = "asc"
+    ) hint="Set up standard params for listing" {
+
+        // TODO: implement allowed sort columns check
+
+        param name="params.order" default=arguments.order;
+
+        if (NOT StructKeyExists(params, "sort") OR NOT ListFind("asc,desc", LCase(params.sort))) {
+            params.sort = arguments.sort;
+        }
+        else {
+            params.sort = LCase(params.sort);
+        }
+
+        params.asort = (params.sort EQ "asc") ? "desc" : "asc";
+
+        if (NOT StructKeyExists(params, "page") OR NOT isNumeric(params.page)) {
+            params.page = 1;
+        }
+
+        if (NOT StructKeyExists(params, "pagesize") OR NOT ListFind(get("showBySize"), params.pagesize)) {
+            params.pagesize = arguments.pagesize;
+        }
+
+    }
+
+
+
+
     private boolean function switchAccountPlan(
         required object activeplan,
         required numeric planid,
@@ -273,16 +313,12 @@ component extends="Wheels" {
             model("accountquotas").updateByKey(key = local.accountquotas.id[local.idx], isactive = 0);
 
         }
-
-
         // push new plan quotas
-
         local.quotas = model("quota").findAll(
             where = "planid=#local.plan.id#"
         );
 
         for (local.idx=1; local.idx LTE local.quotas.recordCount; local.idx++) {
-
             local.accountquota = model("accountquota").create({
                 accountid : arguments.activeplan.accountid,
                 quotaid : local.quotas.id[local.idx],
@@ -290,18 +326,12 @@ component extends="Wheels" {
                 quota : local.quotas.quota[local.idx],
                 isactive : 1
             });
-
             if (local.accountquota.hasErrors()) {
                 _event("E", "Failed to create quota for billing plan ###local.plan.id# (#local.plan.name#) and feature ###local.quotas.featureid[local.idx]#", "", local.accountquota.allErrors()[1].message);
                 return _error("Quotas saving failed: #local.accountquota.allErrors()[1].message#");
             }
 
         }
-
-
         return true;
-
-
     }
-
 }
