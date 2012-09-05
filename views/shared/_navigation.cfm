@@ -22,20 +22,26 @@
 						</a>
 						<ul class="dropdown-menu">
 							<li>#linkTo(text="Your Profile", controller="members", action="profile")#</li>	
+							
 							<cfif isAccountOwner()>
-							<li class="divider"></li>
-			                <li class="nav-header">YOUR ACCOUNT</li>
-			                <li>#linkTo(text="Team Members", controller="account", action="members")#</li>
-			                <li>#linkTo(text="Billing &amp; Plans", controller="account", action="billing")#</li>
+								<li class="divider"></li>
+				                <li class="nav-header">YOUR ACCOUNT</li>
+				                <li>#linkTo(text="Team Members", controller="account", action="members")#</li>
+				                <li>#linkTo(text="Billing &amp; Plans", controller="account", action="billing")#</li>
 			                </cfif>
+			                
+			                <li class="divider"></li>
+							<li class="nav-header">SITES</li>
+							<li>#linkTo(text="Templates", controller="template")#</li>
 			                <cfif isAdmin()>
-							<li class="divider"></li>
-			                <li class="nav-header">ADMINISTRATOR</li>
-			                <li>#linkTo(text="Accounts &amp; Users", controller="admin", action="accounts")#</li>
-			                <li>#linkTo(text="Billing Settings", controller="admin", action="billing")#</li>
-			                <li>#linkTo(text="System Log", controller="admin", action="syslog")#</li>
-			                <li>#linkTo(text="Data History", controller="admin", action="history")#</li>
+								<li class="divider"></li>
+				                <li class="nav-header">ADMINISTRATOR</li>
+				                <li>#linkTo(text="Accounts &amp; Users", controller="admin", action="accounts")#</li>
+				                <li>#linkTo(text="Billing Settings", controller="admin", action="billing")#</li>
+				                <li>#linkTo(text="System Log", controller="admin", action="syslog")#</li>
+				                <li>#linkTo(text="Data History", controller="admin", action="history")#</li>
 			                </cfif>
+			                
 			                <!---
 			                <cfif isDeveloper()>
 							<li class="divider"></li>
