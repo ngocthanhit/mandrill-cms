@@ -1,0 +1,119 @@
+/* Global  */
+body{ min-width:1000px !important;font-family:'Arial', Verdana, sans-serif;font-weight:400; fon t-size:100%;} 
+body,html{width:100%;height:auto!important; overflow:visible;margin:0;padding:0;} 
+body{width:100%;height:100%;background:#424242}
+.sidebar-nav{padding:9px 0}
+
+/*
+  1. Content  styles
+  2. Header styles
+  3. Navbar top styles
+  4. Footer  styles
+*/
+
+/* content styles **************************
+*******************************************/ 
+
+  /* Reassing default Bootstrap styles */
+.content{background: #b8edff;height:auto;overflow:hidden;padding:20px 20px;padding-top:80px!important;padding-bottom:80px!important; min-height:400px;  } 
+div.wrap-conteiner{ height:100%;height:auto!important;display:block!important;margin:none;} 
+.row-fluid{background:none!important;border:none!important;} 
+h1{  text-shadow: 2px 2px 1px #fff !important; color:#4c4c4c;}
+.contentarea{border:2px solid #999999; background:#fff; min-height: 200px; margin:15px 0px; padding:20px; font-size:1.1em !important; height:auto; overflow: hidden;}
+.headering{ vertical-align: middle; line-height: 100%; }
+.btn-primary{text-shadow: 1px 2px 2px #143b72 !important;}
+.headering .btn{ margin-left:8px !important; } 
+table.table td{border:none; vertical-align:middle;}
+th.wide_cell{width:55%;}
+th.wider_cell{width:62%;}
+td.prefix1{padding-left:2%;}
+td.prefix2{padding-left:4%;}
+td.prefix3{padding-left:6%;}
+.table-striped tbody tr:nth-child(odd) td,.table-striped tbody tr:nth-child(odd) th {  background-color: #ededed;}
+.table tbody tr:hover td,.table tbody tr:hover th {  background-color: #c5c5c5;}
+.file_image_wrap {padding:0 20px;}
+.file_image_wrap img{max-height: 50px;}
+div.pagination ul li.active a{  background: #ededed !important;}
+div.pagination ul li a:hover{  background: #c5c5c5 !important;}
+.span3, .span9{out line:1px solid green;}
+select.btn, input.btn{text-align:left;}
+textarea.editor_area{display:block; min-height: 300px !important;}
+#editor{min-height: 100px;} 
+.no_pad{padding:0 !important; border:none !important;}
+.no_pad textarea{margin:0 !important;}
+span.normal{font-weight: normal;}
+ul.checkbox-list {margin:4px 10px;list-style: none;}
+ul.checkbox-list  li{padding:2px 0; list-style: none;}
+.date_row{line-height:1.2em !important; outli ne:1px solid red;}
+.date_row input, .date_row img{margin:0; line-height:1.2em !important;}
+.date_row img{vertical-align:middle; margin:0 5px; }
+.date_row input.small{width: 14.364640883%;     *width: 14.311449393638298%;}
+.date_row input.mini{width: 2.801104972%; *width: 2.747913482638298%;}
+ .btn{outline:none !important;}
+ .no_bgd{background:none;}
+.content_preview{padding:60px 20px 20px 20px;}
+header.preview{padding:10px 20px;border-bottom:4px solid #a21b00;position:fixed;top:0;display:block;width:100%;background:#ddd;}
+.shadowed{background: #333333;} 
+.modal-body .btn + .btn{margin-left:5px;margin-bottom:0;} 
+.modal-body .btn-group .btn + .btn{margin-left:-1px;}
+
+
+
+
+/* Header styles **************************
+****************************************** */
+a.brand{font-size:1.1em!important;margin-left:1em!important;margin-right:5em!important;padding:5px!important; color: #343434 !important;} 
+a.brand small{font-size:.8em;}
+
+
+
+
+/* Navbar styles **************************
+*******************************************/
+  /* Styling main menu items */
+.navbar-inner{min-width:1000px!important; background-color:#fff!important;filter:none;background-image:none;background-image:url(../img/headerbgd.gif)!important;background-repeat:repeat-x;background-position:top;box-shadow:none;color:#454545!important;padding:5px 0;} 
+ul.nav{text-transform:uppercase;font-weight:700;} 
+.navbar-inner ul.nav li a{padding-top:15px;padding-bottom:15px;padding-left:0;padding-right:0;margin-right:3em;} 
+.navbar-inner ul.dropdown-menu li a{padding-top:3px;padding-left:15px;padding-bottom:3px;padding-right:15px;} 
+.navbar{background:#fff!important;} 
+.navbar-inner ul li a{color:#313131!important;} 
+ul.second-nav{font-size:.85em;} 
+.navbar-inner li.logout{background:url(../img/logout.png) no-repeat left center;padding-left:1.5em;margin-right:.5em;} 
+.navbar-inner li.settings{background:url(../img/settings.png) no-repeat left center;padding-left:1.2em;margin-right:.9em;}
+.navbar-inner b.caret{ border-top-color: #000 !important;   border-bottom-color: #000  !important;} 
+.navbar-inner li a{box-shadow:none!important;text-shadow:none!important;} 
+.navbar-inner li ul li:hover{color:#fff !important; background:#0088CC !important;} 
+.navbar-inner li ul li.nav-header:hover{color:#999999 !important; background:none !important;} 
+.navbar-inner li ul li:hover a{color:#fff !important;} 
+.navbar-inner li.active a{background:none!important;background-image:url(../img/active_nav.gif)!important;background-position:top!important;background-repeat:repeat-x!important;} 
+.navbar-inner ul.dropdown-menu li a{background:none!important;} 
+.nav-header{font-size:1.1em!important;color:gray !important;font-weight:700;}
+  /* Styling dropdown menu */
+.navbar .dropdown-menu:before{top:-7px;left:70px;} 
+.navbar .dropdown-menu:after{top:-6px;left:70px;} 
+ul.nav ul.dropdown-menu{top:40px;text-transform:none;font-weight:400!important;} 
+ul.pull-right li.dropdown .dropdown-menu:before,ul.pull-right li.dropdown .dropdown-menu:after{left:auto;right:75px;} 
+ul#sites_menu{left:-60px!important;} 
+ul#content_menu{left:-50px!important;} 
+ul#marketing_menu{left:-40px!important;} 
+ul#account_menu{left:-37px!important;} 
+ul#help_menu{left:-60px!important;} 
+
+
+  
+
+/* footer styles **************************
+*******************************************/ 
+footer p{  padding:3px 0!important;margin:0!important;} 
+footer a{color:#fff;font-weight:700;text-decoration:underline;} 
+footer a:hover{color:#fbfcff;text-decoration:none;} 
+footer{height:auto;overflow:hidden;padding:20px;color:#fbfcff;font-weight:700;background:url(../img/footer_bgd.gif) repeat-x top!important;outline:none!important;border:none!important;} 
+.mandrill_logo img{width:100%;max-width:100%;margin:3px 0;color:#f0b41d;font-size:1.3em;} 
+.mandrill_logo{text-align:right;}
+
+
+
+
+
+
+
