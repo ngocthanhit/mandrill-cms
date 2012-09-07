@@ -1,6 +1,6 @@
 component extends="Controller" hint="Controller for registered members section" {
 
-	public any function init() hint="Initialize the controller" {
+    public any function init() hint="Initialize the controller" {
         filters(through="memberOnly", except="login,logout,password,forbidden,signup");
     }
 
@@ -190,9 +190,8 @@ component extends="Controller" hint="Controller for registered members section" 
         renderPage(layout="publiclayout");
 
     }
-	
-	
-	public any function logout() hint="Process member logout" {
+
+    public any function logout() hint="Process member logout" {
 
         if (isLoggedIn()) {
 
@@ -206,7 +205,7 @@ component extends="Controller" hint="Controller for registered members section" 
 
                 session.accountid = get("visitorsAccountId");
                 session.userid = get("visitorUserId");
-
+                StructDelete(Session,"siteid");
             }
 
         }
@@ -215,10 +214,8 @@ component extends="Controller" hint="Controller for registered members section" 
         redirectTo(action="login");
 
     }
-	
-	
-	
-	public any function password() hint="Password reset form and processing" {
+
+    public any function password() hint="Password reset form and processing" {
 
         var local = {};
 
@@ -366,16 +363,15 @@ component extends="Controller" hint="Controller for registered members section" 
         renderPage(layout="publiclayout");
 
     }
-	
-	
-		
-	/*
+
+
+    /*
      * Registration routines
      */
 
 
 
-	public any function signup() hint="Member registration pre- and post-processing steps" {
+    public any function signup() hint="Member registration pre- and post-processing steps" {
 
         var local = {};
 

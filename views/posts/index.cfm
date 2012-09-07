@@ -1,3 +1,23 @@
+<script type="text/javascript">
+$(document).ready(function(){
+    $(".showCreateDuplicatePostBox").click(function(event) {
+        $('<div/>').dialog2({
+            title: "Add Duplicate",
+            content: "/index.cfm/posts/duplicatePost/" + $(this).attr('alt'),
+            id: "Insert_Duplicate"
+        });
+        event.preventDefault();
+    });
+})
+function validateCreateDuplicateForm() {
+    if($("#title").val()==""){
+        alert('Plase first enter title in title field.');
+        $("#title").focus();
+        return false;
+    }
+    return true;
+}
+</script>
 <cfoutput>
 <!---  Link to add new post --->
 #linkTo(text="+ Add Post",action="addeditpost",class="btn btn-primary")#
@@ -11,25 +31,27 @@
             <th <cfif params.order EQ "firstname">class="headersort#params.sort#"</cfif>>#linkTo(text="Author", params="order=firstname&sort=#params.asort#")# </th>
             <th <cfif params.order EQ "STATUS">class="headersort#params.sort#"</cfif>>#linkTo(text="Status", params="order=STATUS&sort=#params.asort#")# </th>
             <th <cfif params.order EQ "createdAt">class="headersort#params.sort#"</cfif>>#linkTo(text="Date", params="order=createdAt&sort=#params.asort#")# </th>
+            <th>Options</th>
         </tr>
     </thead>
     <tbody>
     <cfloop query="allPosts">
         <tr>
            <td>
-                <cfif isGuest() OR isAuthor()>
-                    <cfif isAuthor() && (userid EQ getUserAttr("id"))>
-                        #linkTo(text=HtmlEditFormat(title),action="addeditpost",key=id)#
-                    <cfelse>
-                        #HtmlEditFormat(title)#
-                    </cfif>
-                <cfelse>
-                    #linkTo(text=HtmlEditFormat(title),action="addeditpost",key=id)#
-                </cfif>
+                #HtmlEditFormat(title)#
            </td>
            <td>#HtmlEditFormat(firstname)# #HtmlEditFormat(lastname)#</td>
            <td>#STATUS#</td>
            <td>#DateFormat(createdAt,"mm/dd/yyyy")#</td>
+            <td>
+                <cfif isGuest() OR isAuthor()>
+                    <cfif isAuthor() && (userid EQ getUserAttr("id"))>
+                         #linkTo(text="Edit",action="addeditpost",key=id)# | #linkto(text="Delete",action="Deletepost",key=id,confirm="Are you sure you want to delete this post ?")#
+                    </cfif>
+                <cfelse>
+                    #linkTo(text="Edit",action="addeditpost",key=id)# | #linkto(text="Delete",action="Deletepost",key=id,confirm="Are you sure you want to delete this post ?")# | #linkto(text="Duplicate",class="showCreateDuplicatePostBox",alt=id)#
+                </cfif>
+            </td>
         </tr>
     </cfloop>
     </tbody>

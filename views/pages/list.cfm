@@ -19,8 +19,8 @@
                 <td>#STATUS#</td>
                 <td>#DateFormat(createdAt,"mm/dd/yyyy")#</td>
                 <td class="Add"> <a class="btn btn-primary AddButton" href="javascript:setpageval('#id#')" >
-		        <i class="icon-plus icon-white"></i>
-		        <span >ADD</span>
+                <i class="icon-plus icon-white"></i>
+                <span >ADD</span>
                 </a></td>
             </tr>
     </cfloop>

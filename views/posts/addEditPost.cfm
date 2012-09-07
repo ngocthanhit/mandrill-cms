@@ -1,4 +1,15 @@
-
+<script type="text/javascript">
+$(document).ready(function(){
+    $("#showAddCategorybox").click(function(event) {
+        $('<div/>').dialog2({
+            title: "Insert Category",
+            content: "/index.cfm/categ/",
+            id: "Insert_Category"
+        });
+        event.preventDefault();
+    });
+})
+</script>
 <cfoutput>
 <!--- heading of the page --->
 <h2>#title#</h2>
@@ -32,11 +43,11 @@
 </div>
 <div class="span4">
         #select(label="Template<br />", objectName="newPost", property="templateid", options=getTemplates)# <br /><br /><br />
-
-        <strong>Categories</strong>&nbsp;&nbsp;&nbsp;#linkTo(text="Add category")#<br>
+        <div class="categories">
+        <strong>Categories</strong>&nbsp;&nbsp;&nbsp;#linkTo(text="Add category",id="showAddCategorybox")#<br>
         <cfif IsDefined("newPostCatergory")>
             <cfif isdefined("newPostCatergory.recordcount") AND  newPostCatergory.recordcount gt 0 >
-               <cfset categorylist = valuelist(newPostCatergory.categoryid) >       
+               <cfset categorylist = valuelist(newPostCatergory.categoryid) >   
             <cfelseif isdefined("newPostCatergory") >
                 <cfset categorylist =newPostCatergory >
             </cfif>
@@ -50,7 +61,7 @@
             </cfif>
             #checkBoxTag(name="categoryID", label="",labelPlacement="after", value=id ,checked=check)# #category#<br>
         </cfloop>
-
+        </div>
          <cfif StructKeyExists(newPost,"id") >
                  <br />
             <br />

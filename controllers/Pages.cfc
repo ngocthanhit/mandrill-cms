@@ -1,11 +1,13 @@
 component extends="Controller" hint="Controller for crum pages section" {
 
-    getPages = model("page").findALL(); //This gets all pages to fill in drop down to bind this page as sub page to another parent page, if any.
+    varsiteid = getSiteId();
+    getPages = model("page").findALL(include="pagesuser",where="pagesusers.siteid = '#varsiteid#'"); //This gets all pages to fill in drop down to bind this page as sub page to another parent page, if any.
     getTemplates= model("template").findALL(); // page layouts/ templates
-    varsiteid = 1;
+
     public any function init() hint="Initialize the controller" {
     filters(through="memberOnly");
        filters(through="restrictedAccessPages");
+       filters(through="restictedwithSite");
     }
 
     public any function index() hint="Intercept direct access to /pages/" {
@@ -19,12 +21,11 @@ component extends="Controller" hint="Controller for crum pages section" {
         pages= model("page").findall(
                 include='user,status,pagesuser',
                 where="pagesusers.accountid=#getAccountAttr("id")# AND pagesusers.userid = #getUserAttr("id")# AND pagesusers.siteid = #varsiteid#",
-                select="title,pages.id,firstname,lastname,pages.createdAt,status",
+                select="title,pages.id,firstname,lastname,pages.createdAt,status,parentid",
                 page = params.page,
                 perPage = params.pagesize,
                 order = "#params.order# #params.sort#"
                 ); //Get all pages in "pages" structure variable INNER JOIN "users" and  "statuses" table
-
     }
 
     public any function addeditpage() hint="Add/Edit Page to get new page details and show/ update information for existing pages" {
@@ -154,6 +155,35 @@ component extends="Controller" hint="Controller for crum pages section" {
          var getpageHTMl= model("page").findbykey(params.pageID);
         writeOutput(getpageHTMl.content);
         abort;
+    }
+
+    public any function deletepage() hint="delete page and its sub-pages" {
+        page = model("page").findByKey(params.key) ;
+        page.delete() ;
+        subPages = model("page").deleteAll(where="parentid=#params.key#", instantiate=false);
+        pagesusers = model("pagesuser").deleteAll(where="pageid=#params.key#", instantiate=false);
+          _event("I", "Successfully deleted page", "Sessions", "Session id is #session.sessionid#, useragent is #CGI.USER_AGENT#", getAccountAttr("id"), getUserAttr("id"));
+        flashInsert(success="Successfully page deleted from list.") ;
+        redirectTo(controller=params.controller) ;
+    }
+
+    public any function cerateDuplicate() hint="create duplicate copy of existing pages or sub-pages" {
+         checkTitle = model("page").findAll(where="title='#params.title#'") ;
+         if(checkTitle.recordcount GT 0) {
+              _event("W", "Title already exist", "Sessions", "Session id is #session.sessionid#, useragent is #CGI.USER_AGENT#", getAccountAttr("id"), getUserAttr("id"));
+            flashInsert(success="Your enter title already exist.") ;
+            redirectTo(controller=params.controller) ;
+         }
+         GetpageData = model("page").findByKey(params.key) ;
+         GetpageData.title = params.title;
+         StructDelete(GetpageData,"id");
+         Newpages = model("page").new(GetpageData) ;
+         Newpages.save();
+        var createpageusermapping = model("pagesuser").new(pageid=Newpages.id,userid=getUserAttr("id"),accountid=getAccountAttr("id"),siteid=varsiteid);
+        createpageusermapping.save();
+        _event("I", "Successfully page created", "Sessions", "Session id is #session.sessionid#, useragent is #CGI.USER_AGENT#", getAccountAttr("id"), getUserAttr("id"));
+        flashInsert(success="Page created successfully.") ;
+        redirectTo(controller=params.controller,action="addeditpage",key=Newpages.id) ;
     }
 
 }

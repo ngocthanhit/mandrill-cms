@@ -8,7 +8,7 @@ component extends="Model" {
         hasMany(name='postscategory', modelname="postscategory") ;
         hasMany(name="postsuser") ;
         validatesPresenceOf("content, title, description") ;
-        validatesUniquenessOf("title") ;
+       // validatesUniquenessOf("title") ;
         validate(method="checkCategory") ;
 
     }
@@ -19,5 +19,5 @@ component extends="Model" {
                 adderror(property="categoryid",message="Category field is required.") ;
             }
      }
-    
+
 }

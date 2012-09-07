@@ -1,19 +1,16 @@
 component extends="Model" {
 
-
     public void function init() hint="Define the validation rules and model relationships" {
 
         belongsTo(name="user") ;
         belongsTo(name="status") ;
         hasMany(name="pagesuser") ;
         validatesPresenceOf("content, title, description") ;
-        validatesUniquenessOf("title") ;
+       // validatesUniquenessOf("title") ;
         validate(method="checkPasswordFields") ;
-
         beforeSave(methods="hashPassword");
-
     }
-    
+
      public void function checkPasswordFields() hint="this validates password field 'required', if isprotected or issubpageprotected is checked." {
              if ((this.isprotected is 1 OR this.issubpageprotected is 1) AND this.password eq "")
                 {
@@ -28,6 +25,5 @@ component extends="Model" {
         }
 
     }
-    
 }
 

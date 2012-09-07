@@ -1,12 +1,13 @@
 component extends="Controller" hint="Controller for crum posts section" {
 
-    varsiteid = 1;
+    varsiteid = getSiteId();
     getTemplates= model("template").findALL() ;
     ALlCatagories = model("category").findALL() ;
     public any function init() hint="Initialize the controller" {
         filters(through="memberOnly");
 
         filters(through="restrictedAccessPosts", except="index");
+        filters(through="restictedwithSite");
     }
 
     public any function index() hint="listing of all posts" {
@@ -50,7 +51,7 @@ component extends="Controller" hint="Controller for crum posts section" {
         else
             {
                 newPost = model("post").new() ;
-                title = "Posts" ; 
+                title = "Posts" ;
                 formAction = "SubmitAddNewPost" ;
             }
     }
@@ -171,5 +172,46 @@ component extends="Controller" hint="Controller for crum posts section" {
                 redirectTo(controller=params.controller) ;
             }
 
+    }
+
+    public any function Deletepost() hint="Delete post and its mapping" {
+        post = model("post").findByKey(params.key) ;
+        post.delete(softDelete=false) ;
+        mappings = model("postscategorie").deleteAll(where="postid=#params.key#", instantiate=false);
+        postsusers = model("postsuser").deleteAll(where="postid=#params.key#", instantiate=false);
+          _event("I", "Successfully deleted post", "Sessions", "Session id is #session.sessionid#, useragent is #CGI.USER_AGENT#", getAccountAttr("id"), getUserAttr("id"));
+        flashInsert(success="Successfully post deleted from list.") ;
+        redirectTo(controller=params.controller) ;
+    }
+
+     public any function cerateDuplicate() hint="create duplicate copy of existing pages or sub-pages" {
+         checkTitle = model("post").findAll(where="title='#params.title#'") ;
+         if(checkTitle.recordcount GT 0) {
+              _event("W", "Title already exist", "Sessions", "Session id is #session.sessionid#, useragent is #CGI.USER_AGENT#", getAccountAttr("id"), getUserAttr("id"));
+            flashInsert(success="Your enter title already exist.") ;
+            redirectTo(controller=params.controller) ;
+         }
+         GetpostData = model("post").findByKey(params.key) ;
+         var postData = structNew();
+         postdata.title =  params.title;
+         postdata.userid =  getUserAttr("id");
+         postdata.content =  GetpostData.content;
+         postdata.description =  GetpostData.description ;
+         postdata.publishedby =  GetpostData.publishedby;
+         postdata.publisheddate =  GetpostData.publisheddate;
+         postdata.statusid =  GetpostData.statusid;
+         newPost = model("post").new(postdata) ;
+         param name="form.categoryID" default="0";
+         newPost.save();
+         var getPostcategories = model("postscategorie").findALL(where="postid=#params.key#");
+         for (x = 1; x <= getPostcategories.RecordCount; x=x+1) {
+            var newCategory = model("postscategory").new(categoryid=getPostcategories.categoryid[x], postid=newPost.id) ;
+            newCategory.save() ;
+         }
+          var createpostusermapping = model("postsuser").new(postid=newPost.id,userid=getUserAttr("id"),accountid=getAccountAttr("id"),siteid=varsiteid);
+          createpostusermapping.save();
+            _event("I", "Successfully page created", "Sessions", "Session id is #session.sessionid#, useragent is #CGI.USER_AGENT#", getAccountAttr("id"), getUserAttr("id"));
+        flashInsert(success="Page created successfully.") ;
+        redirectTo(controller=params.controller,action="addeditpost",key=newPost.id) ;
     }
 }

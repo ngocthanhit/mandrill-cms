@@ -114,6 +114,18 @@
     any function ShortUUID() hint="Get short version of UUID" {
         return ListFirst(CreateUUID(), "-");
     }
+
+    boolean function issiteID() hint="get siteid" {
+        return (IsDefined("session.siteID"));
+    }
+
+    any function getsiteID() hint="get siteid" {
+        if(IsDefined("session.siteID")){
+            return (session.siteID);
+        } else {
+            return 0;
+        }
+    }
     
     
     void function saveStickyAttributes() hint="Save the sticky attributes for current page" {

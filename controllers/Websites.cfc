@@ -74,4 +74,24 @@ component extends="Controller" hint="Controller for crum pages section" {
             }
     }
 
+    public any function Deleteproject() hint="Delete site settings" {
+        project = model("site").findByKey(params.key) ;
+        project.delete();
+         _event("I", "Successfully deleted site settings", "Sessions", "Session id is #session.sessionid#, useragent is #CGI.USER_AGENT#", getAccountAttr("id"), getUserAttr("id"));
+        flashInsert(success="Successfully site settings deleted from list.") ;
+        redirectTo(controller=params.controller) ;
+    }
+
+    public any function Choose() hint="choose site options" {
+        sites = model("site").findALL(where="accountid=#getAccountAttr("id")# AND userid=#getUserAttr("id")#");
+        if(sites.recordcount EQ 0){
+             flashInsert(success="No site created,first create site.") ;
+            redirectTo(controller="websites",action="addeditproject")
+        }
+    }
+
+    public any function setChooseSite() hint="Set choose site global" {
+        Session.siteid = params.siteid ;
+        redirectTo(controller="members");
+    }
 }
