@@ -21,7 +21,7 @@
         <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
         <div class="row fileupload-buttonbar">
  <cfif NOT isGuest() >
-            <div class="span6">
+            <div class="span6" style="position:absolute;right:15px;">
                 <!-- The fileinput-button span is used to style the file input field as button -->
 
                 <span class="btn btn-success fileinput-button">
@@ -31,7 +31,7 @@
                 </span>
                 <button type="submit" class="btn btn-primary start">
                     <i class="icon-upload icon-white"></i>
-                    <span>Start upload</span>
+                    <span>Upload Added Files</span>
                 </button>
                 <button type="reset" class="btn btn-warning cancel">
                     <i class="icon-ban-circle icon-white"></i>
@@ -39,7 +39,7 @@
                 </button>
                 <button type="button" class="btn btn-danger delete">
                     <i class="icon-trash icon-white"></i>
-                    <span>Delete</span>
+                    <span>Delete Selected Files</span>
                 </button>
                 <input type="checkbox" class="toggle">
             </div>
@@ -60,7 +60,7 @@
         <div class="fileupload-loading"></div>
         <br>
         <!-- The table listing the files available for upload/download -->
-        <table role="presentation" class="table table-striped"><tbody class="files" data-toggle="modal-gallery" data-target="##modal-gallery"></tbody></table>
+        <table role="presentation" class="table table-striped"><tbody class="files" data-toggle="modal-gallery" data-target="##modal-gallery"><tr><th width="35%">&nbsp;</th><th width="15%">File name</th><th width="10%">Size</th><th colspan="2" width="15%">&nbsp;</th><th width="25%">Options</th><th>&nbsp;</th><th>&nbsp;</th></tr></tbody></table>
 #endFormTag()#
 
     <!-- modal-gallery is the modal dialog used for the image gallery -->
@@ -134,13 +134,22 @@
                 <a href="{%=file.URL%}" title="{%=file.NAME%}" rel="gallery" download="{%=file.NAME%}"><img src="{%=file.THUMBNAIL_URL%}" style="max-width:200px;"></a>
             {% } %}</td>
             <td class="name">
-                <a href="{%=file.URL%}" title="{%=file.NAME%}" rel="{%=file.THUMBNAIL_URL&&'gallery'%}" download="{%=file.NAME%}">{%=file.NAME%}</a>
+                {%=file.NAME%}
             </td>
             <td class="size"><span>{%=o.formatFileSize(file.SIZE)%}</span></td>
             <td colspan="2"></td>
         {% } %}
               <td class="delete">
             {% if (file.DELETE_TYPE && file.DELETE_URL) { %}
+            <a class="btn btn-primary start" href="{%=file.URL%}" title="{%=file.NAME%}" rel="{%=file.THUMBNAIL_URL&&'gallery'%}" download="{%=file.NAME%}">
+                <span>View</span>
+            </a>
+             |
+             <a class="btn modal-download" target="_blank" href="{%=file.URL%}">
+                <i class="icon-download"></i>
+                <span>Download</span>
+            </a>
+            |
             <button class="btn btn-danger" data-type="{%=file.DELETE_TYPE%}" data-url="{%=file.DELETE_URL%}">
                 <i class="icon-trash icon-white"></i>
                 <span>{%=locale.fileupload.destroy%}</span>

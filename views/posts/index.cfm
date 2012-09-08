@@ -27,10 +27,11 @@ function validateCreateDuplicateForm() {
 <table class="table table-striped table-bordered">
     <thead class="hero-unit">
         <tr>
-            <th <cfif params.order EQ "title">class="headersort#params.sort#"</cfif>>#linkTo(text="Post", params="order=title&sort=#params.asort#")# </th>
-            <th <cfif params.order EQ "firstname">class="headersort#params.sort#"</cfif>>#linkTo(text="Author", params="order=firstname&sort=#params.asort#")# </th>
+            <th width="50%">&nbsp;</th>
+            <!---<th <cfif params.order EQ "title">class="headersort#params.sort#"</cfif>>#linkTo(text="Post", params="order=title&sort=#params.asort#")# </th>--->
+            <!---<th <cfif params.order EQ "firstname">class="headersort#params.sort#"</cfif>>#linkTo(text="Author", params="order=firstname&sort=#params.asort#")# </th>--->
             <th <cfif params.order EQ "STATUS">class="headersort#params.sort#"</cfif>>#linkTo(text="Status", params="order=STATUS&sort=#params.asort#")# </th>
-            <th <cfif params.order EQ "createdAt">class="headersort#params.sort#"</cfif>>#linkTo(text="Date", params="order=createdAt&sort=#params.asort#")# </th>
+            <th <cfif params.order EQ "createdAt">class="headersort#params.sort#"</cfif>>#linkTo(text="Updated", params="order=createdAt&sort=#params.asort#")# </th>
             <th>Options</th>
         </tr>
     </thead>
@@ -40,9 +41,9 @@ function validateCreateDuplicateForm() {
            <td>
                 #HtmlEditFormat(title)#
            </td>
-           <td>#HtmlEditFormat(firstname)# #HtmlEditFormat(lastname)#</td>
+           <!---<td>#HtmlEditFormat(firstname)# #HtmlEditFormat(lastname)#</td>--->
            <td>#STATUS#</td>
-           <td>#DateFormat(createdAt,"mm/dd/yyyy")#</td>
+           <td><cfif updatedAt neq "">#DateFormat(updatedAt,"mm/dd/yyyy")#<cfelse>#DateFormat(createdAt,"mm/dd/yyyy")#</cfif></td>
             <td>
                 <cfif isGuest() OR isAuthor()>
                     <cfif isAuthor() && (userid EQ getUserAttr("id"))>

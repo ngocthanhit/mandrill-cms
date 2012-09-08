@@ -19,7 +19,7 @@ component extends="Controller" hint="Controller for crum posts section" {
             allPosts = model("post").findAll(
                 include="user,status,postsuser",
                 where="postsusers.accountid=#getAccountAttr("id")# AND postsusers.userid = #getUserAttr("id")# AND postsusers.siteid = #varsiteid#",
-                select="title,posts.id,firstname,lastname,posts.createdAt,status",
+                select="title,posts.id,firstname,lastname,posts.createdAt,status,posts.updatedAt",
                 page = params.page,
                 perPage = params.pagesize,
                 order = "#params.order# #params.sort#"

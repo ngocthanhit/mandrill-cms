@@ -30,7 +30,7 @@ function validateCreateDuplicateForm() {
         <cfloop query="getChilds">
              <tr>
                 <td style="padding-left:#20*count#px !important;">#HtmlEditFormat(title)#</td>
-                <td>#HtmlEditFormat(firstname)# #HtmlEditFormat(lastname)#</td>
+              <!---  <td>#HtmlEditFormat(firstname)# #HtmlEditFormat(lastname)#</td>--->
                 <td>#STATUS#</td>
                 <td>#DateFormat(createdAt,"mm/dd/yyyy")#</td>
                 <td>#linkto(text="Edit",action="addeditpage",key=id)# | #linkto(text="Delete",action="Deletepage",key=id,confirm="Are you sure you want to delete this page or its sub-pages ?")# | #linkto(text="Duplicate",class="showCreateDuplicatePageBox",alt=id)#</td>
@@ -46,10 +46,11 @@ function validateCreateDuplicateForm() {
     <table class="table table-striped table-bordered">
         <thead class="hero-unit">
             <tr>
-                 <th <cfif params.order EQ "title">class="headersort#params.sort#"</cfif>>#linkTo(text="Page", params="order=title&sort=#params.asort#")# </th>
-                 <th <cfif params.order EQ "firstname">class="headersort#params.sort#"</cfif>>#linkTo(text="Author", params="order=firstname&sort=#params.asort#")# </th>
+                <th width="50%">&nbsp;</th>
+                <!--- <th <cfif params.order EQ "title">class="headersort#params.sort#"</cfif>>#linkTo(text="Page", params="order=title&sort=#params.asort#")# </th>--->
+                 <!---<th <cfif params.order EQ "firstname">class="headersort#params.sort#"</cfif>>#linkTo(text="Author", params="order=firstname&sort=#params.asort#")# </th>--->
                  <th <cfif params.order EQ "STATUS">class="headersort#params.sort#"</cfif>>#linkTo(text="Status", params="order=STATUS&sort=#params.asort#")# </th>
-                 <th <cfif params.order EQ "createdAt">class="headersort#params.sort#"</cfif>>#linkTo(text="Date", params="order=createdAt&sort=#params.asort#")# </th>
+                 <th <cfif params.order EQ "createdAt">class="headersort#params.sort#"</cfif>>#linkTo(text="Updated", params="order=createdAt&sort=#params.asort#")# </th>
                  <th>Options</th>
             </tr>
         </thead>
@@ -61,9 +62,9 @@ function validateCreateDuplicateForm() {
          <cfloop query="getParents">
             <tr>
                 <td>#HtmlEditFormat(title)#</td>
-                <td>#HtmlEditFormat(firstname)# #HtmlEditFormat(lastname)#</td>
+               <!--- <td>#HtmlEditFormat(firstname)# #HtmlEditFormat(lastname)#</td>--->
                 <td>#STATUS#</td>
-                <td>#DateFormat(createdAt,"mm/dd/yyyy")#</td>
+                <td><cfif updatedAt neq "">#DateFormat(updatedAt,"mm/dd/yyyy")#<cfelse>#DateFormat(createdAt,"mm/dd/yyyy")#</cfif></td>
                 <td>#linkto(text="Edit",action="addeditpage",key=id)# | #linkto(text="Delete",action="Deletepage",key=id,confirm="Are you sure you want to delete this page or its sub-pages ?")# | #linkto(text="Duplicate",class="showCreateDuplicatePageBox",alt=id)#</td>
             </tr>
             #getdataParent(id,1)#

@@ -4,7 +4,14 @@
   <div class="navbar navbar-fixed-top">
     <div class="navbar-inner">
       <div class="container-fluid">
-        <a class="brand pull-left" href="/"><small>COMPANY NAME</small><br /><strong>COMPANY-WEBSITE.CO.UK</strong></a>
+             <cfif issiteid()>
+                <cfquery dbtype="query" name="getSite">
+                    SELECT * FROM SITES WHERE  id = '#getsiteid()#'
+                </cfquery>
+                 <a class="brand pull-left" href="/"><small>#getSite.name#</small><br /><strong>#getSite.URL#</strong></a>
+              <cfelse>
+              <a class="brand pull-left" href="/"><small>COMPANY NAME</small><br /><strong>COMPANY-WEBSITE.CO.UK</strong></a>
+         </cfif>
         <div class="nav-collapse">
           <ul class="nav mainnav">
             <li <cfif params.controller eq "Members">class="active"</cfif>>#linkTo(text='Dashboard', route="home")#</li>
@@ -70,14 +77,6 @@
                 </cfif>
               </ul>
             </li>
-            <cfif issiteid()>
-                <cfquery dbtype="query" name="getSite">
-                    SELECT * FROM SITES WHERE  id = '#getsiteid()#'
-                </cfquery>
-                <div class="span3">
-                #getSite.name#<br />
-                #getSite.URL#</div>
-            </cfif>
             <li class="logout">#linkTo(text='Logout', controller='members', action='logout')#</li>
           </ul>
         </div>

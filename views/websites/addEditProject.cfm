@@ -5,7 +5,7 @@
 #errorMessagesFor("NewSites")#
 
 <!--- add / edit form page [start]--->
-#startFormTag(name="createNewSiteForm",method="post",action=formAction)# <!--- ,autocomplete="off" ---->
+#startFormTag(name="createNewSiteForm",method="post",action=formAction,autocomplete="off")# <!--- ,autocomplete="off" ---->
 <div class="span3">
     <div class="container-fluid" >
     #textField(label="Name<br />", objectName="NewSites", property="name")# <br />
@@ -22,7 +22,7 @@
     #textField(label="Server protocol (FTP, SFTP)<br />", objectName="NewSites", property="serverprotocol")# <br />
     #textField(label="Server host<br />", objectName="NewSites", property="host")# <br />
     #textField(label="Server username<br />", objectName="NewSites", property="username")# <br />
-    #passwordField(label="Server password<br />", objectName="NewSites", property="password")# <br />
+    #textField(label="Server password<br />", objectName="NewSites", property="password")# <br />
     #textField(label="Server port<br />", objectName="NewSites", property="port")# <br />           
     #textField(label="Server remote path<br />", objectName="NewSites", property="remotepath")# <br />                
 </div>

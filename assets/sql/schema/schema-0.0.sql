@@ -460,7 +460,7 @@ CREATE TABLE `mandrillcms`.`sites` (
 `name` VARCHAR( 255 ) DEFAULT NULL ,
 `url` VARCHAR( 255 ) DEFAULT NULL ,
 `description` TEXT DEFAULT NULL ,
-`serverProtocal` VARCHAR( 10 ) DEFAULT NULL ,
+`serverProtocol` VARCHAR( 10 ) DEFAULT NULL ,
 `host` VARCHAR( 255 ) DEFAULT NULL ,
 `username` VARCHAR( 255 ) DEFAULT NULL ,
 `password` VARCHAR( 255 ) DEFAULT NULL ,

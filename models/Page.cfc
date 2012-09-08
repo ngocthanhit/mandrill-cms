@@ -12,7 +12,7 @@ component extends="Model" {
     }
 
      public void function checkPasswordFields() hint="this validates password field 'required', if isprotected or issubpageprotected is checked." {
-             if ((this.isprotected is 1 OR this.issubpageprotected is 1) AND this.password eq "")
+             if ((form.protected neq "") AND this.password eq "")
                 {
                     adderror(property="password",message="Password field is required, if you want to protect page or sub-pages.") ;
                 }

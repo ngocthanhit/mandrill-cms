@@ -21,7 +21,7 @@ component extends="Controller" hint="Controller for crum pages section" {
         pages= model("page").findall(
                 include='user,status,pagesuser',
                 where="pagesusers.accountid=#getAccountAttr("id")# AND pagesusers.userid = #getUserAttr("id")# AND pagesusers.siteid = #varsiteid#",
-                select="title,pages.id,firstname,lastname,pages.createdAt,status,parentid",
+                select="title,pages.id,firstname,lastname,pages.createdAt,status,parentid,pages.updatedAt",
                 page = params.page,
                 perPage = params.pagesize,
                 order = "#params.order# #params.sort#"
@@ -29,7 +29,8 @@ component extends="Controller" hint="Controller for crum pages section" {
     }
 
     public any function addeditpage() hint="Add/Edit Page to get new page details and show/ update information for existing pages" {
-
+         params.navigation="";
+         params.protected=""
         if(StructKeyExists(params,"key"))
         {
             checkconfirmpage(params.key);
@@ -42,6 +43,20 @@ component extends="Controller" hint="Controller for crum pages section" {
         updatedBy = model("user").findbykey(key=Newpages.updatedby,select="id,firstname, lastname") ;
         }
         Status = model("status").findbykey(key=Newpages.statusid,select="statusid,status");
+
+        if(Newpages.showinnavigation){
+            params.navigation = "Show in main navigation";
+        }
+          if(Newpages.showinfooternavigation){
+            params.navigation = "Show page in footer navigation";
+        }
+
+         if(Newpages.isprotected){
+            params.protected = "Password protect page";
+        }
+          if(Newpages.issubpageprotected){
+            params.protected = "Protect sub-pages";
+        } 
         }
         else
         {
@@ -58,6 +73,28 @@ component extends="Controller" hint="Controller for crum pages section" {
         params.Newpages.userid = getUserAttr("id") ;
         params.Newpages.updatedby = getUserAttr("id") ;
         params.Newpages.statusid = 1 ;
+         if(params.navigation EQ "Show in main navigation"){
+             params.Newpages.showinnavigation = true;
+        } else {
+            params.Newpages.showinnavigation = false;
+        }
+         if(params.navigation EQ "Show page in footer navigation"){
+             params.Newpages.showinfooternavigation =true;
+        } else {
+            params.Newpages.showinfooternavigation = false;
+        }
+
+         if(params.protected EQ "Password protect page"){
+             params.Newpages.isprotected = true;
+        } else {
+            params.Newpages.isprotected = false;
+        }
+         if(params.protected EQ "Protect sub-pages"){
+             params.Newpages.issubpageprotected =true;
+        } else {
+            params.Newpages.issubpageprotected = false;
+        }
+
         if (IsDefined("params.draft"))
             {
                 params.Newpages.statusid = 2 ;
@@ -95,6 +132,26 @@ component extends="Controller" hint="Controller for crum pages section" {
         checkconfirmpage(params.Newpages.id);
         params.Newpages.statusid = 1 ;
         params.Newpages.updatedby = getUserAttr("id") ;
+         if(params.navigation EQ "Show in main navigation"){
+             params.Newpages.showinnavigation = true;
+        } else {
+            params.Newpages.showinnavigation = false;
+        }
+         if(params.navigation EQ "Show page in footer navigation"){
+             params.Newpages.showinfooternavigation =true;
+        } else {
+            params.Newpages.showinfooternavigation = false;
+        }
+        if(params.protected EQ "Password protect page"){
+             params.Newpages.isprotected = true;
+        } else {
+            params.Newpages.isprotected = false;
+        }
+         if(params.protected EQ "Protect sub-pages"){
+             params.Newpages.issubpageprotected =true;
+        } else {
+            params.Newpages.issubpageprotected = false;
+        }
         if (IsDefined("params.draft"))
             {
                 params.Newpages.statusid = 2 ;
