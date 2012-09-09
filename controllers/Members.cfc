@@ -251,7 +251,7 @@ component extends="Controller" hint="Controller for registered members section" 
                     from = get("defaultEmail"),
                     replyto = get("supportEmail"),
                     to = local.user.email,
-                    subject = getSetting("ResetPasswordEmailSubject"),
+                    subject = get("ResetPasswordEmailSubject"),
                     template = "/emails/resetpassword",
                     detectMultipart = false,
                     type = "html",
