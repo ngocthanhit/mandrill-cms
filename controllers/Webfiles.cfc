@@ -8,7 +8,7 @@ component extends="Controller" hint="Controller for crum FILES section" {
     public any function index() hint="index default file of webfiles controller" {
    _view(pageTitle = "Files");
     }
-
+    varsiteid = getSiteId();
 
     private any function fileUpload() hint="files action" {
         var path = "#expandpath("/")#assets/files/uploadfiles/#getAccountAttr("id")#";
@@ -17,6 +17,10 @@ component extends="Controller" hint="Controller for crum FILES section" {
         var pathrelativefiles = "/assets/files/uploadfiles/#getAccountAttr("id")#";
         var pathrelativeImage = "/assets/img/uploadImages/#getAccountAttr("id")#";
         var result = ArrayNew();
+        var serverport = CGI.SERVER_PORT ;
+        if(serverport != ""){
+        serverport = ":" & CGI.SERVER_PORT & "" ;
+        }
         if (GetHttpRequestData().method EQ "GET"){
 
             if (IsDefined("params.key") AND params.key EQ "Images") {
@@ -28,9 +32,9 @@ component extends="Controller" hint="Controller for crum FILES section" {
 
             for (intRow = 1 ;intRow LTE getfiles.RecordCount ;intRow = (intRow + 1)){
                 if(listcontains(imageext,lcase(getfiles[ "fileext" ][ intRow ])) GT 0) {
-                    urlpath = "http://#getPageContext().getRequest().getServerName()##pathrelativeImage#/#getfiles[ "filename" ][ intRow ]#";
+                    urlpath = "http://#getPageContext().getRequest().getServerName()##serverport##pathrelativeImage#/#getfiles[ "filename" ][ intRow ]#";
                 }else{
-                    urlpath = "http://#getPageContext().getRequest().getServerName()##pathrelativefiles#/#getfiles[ "filename" ][ intRow ]#";
+                    urlpath = "http://#getPageContext().getRequest().getServerName()##serverport##pathrelativefiles#/#getfiles[ "filename" ][ intRow ]#";
                 }
                 var newlink = structnew() ;
                     newlink.name= getfiles[ "filename" ][ intRow ];
@@ -73,8 +77,8 @@ component extends="Controller" hint="Controller for crum FILES section" {
              if (insertfile.save())
                 {
                     _event("I", "Successfully upload file", "Sessions", "Session id is #session.sessionid#, useragent is #CGI.USER_AGENT#", getAccountAttr("id"), getUserAttr("id"));
-                   var urlPath = "http://#getPageContext().getRequest().getServerName()##pathrelative#/#upload.serverfile#";
-	                var newlink = structnew() ;
+                   var urlPath = "http://#getPageContext().getRequest().getServerName()##serverport##pathrelative#/#upload.serverfile#";
+                    var newlink = structnew() ;
                     newlink.name= upload.serverfile;
                     newlink.size= upload.filesize;
                     newlink.url= urlPath ;

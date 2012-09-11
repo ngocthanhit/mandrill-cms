@@ -460,7 +460,7 @@ CREATE TABLE `mandrillcms`.`sites` (
 `name` VARCHAR( 255 ) DEFAULT NULL ,
 `url` VARCHAR( 255 ) DEFAULT NULL ,
 `description` TEXT DEFAULT NULL ,
-`serverProtocal` VARCHAR( 10 ) DEFAULT NULL ,
+`serverProtocol` VARCHAR( 10 ) DEFAULT NULL ,
 `host` VARCHAR( 255 ) DEFAULT NULL ,
 `username` VARCHAR( 255 ) DEFAULT NULL ,
 `password` VARCHAR( 255 ) DEFAULT NULL ,
@@ -470,3 +470,48 @@ CREATE TABLE `mandrillcms`.`sites` (
 `deleteAt` DATETIME NULL DEFAULT NULL,
 PRIMARY KEY (`id`)
 )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8
+
+
+--- drop some column to follow our discussion ----
+ALTER TABLE `sites`
+  DROP `userid`,
+  DROP `accountid`,
+  DROP `serverProtocol`,
+  DROP `host`,
+  DROP `username`,
+  DROP `password`,
+  DROP `port`,
+  DROP `remotepath`;
+
+--- create users mapping with sites ---
+create table sitesusers
+(
+userid int(11)  UNSIGNED NOT NULL,
+accountid int(11)  UNSIGNED NOT NULL,
+siteid int(11)  UNSIGNED NOT NULL
+)
+
+ALTER TABLE  `sitesusers` ADD PRIMARY KEY (  `siteid` )
+
+--- create new site settings table ---
+CREATE TABLE `mandrillcms`.`sitesSettings` (
+`id` INT( 11 ) UNSIGNED NOT NULL AUTO_INCREMENT,
+`serverProtocol` VARCHAR( 10 ) DEFAULT NULL ,
+`host` VARCHAR( 255 ) DEFAULT NULL ,
+`username` VARCHAR( 255 ) DEFAULT NULL ,
+`password` VARCHAR( 255 ) DEFAULT NULL ,
+`port` VARCHAR( 10 ) DEFAULT NULL ,
+`remotepath` VARCHAR( 255 ) DEFAULT NULL ,
+`createdAt` DATETIME NULL DEFAULT NULL ,
+`deleteAt` DATETIME NULL DEFAULT NULL,
+PRIMARY KEY (`id`)
+)ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8
+
+--- create site mapping with settings ---
+create table sitessettingsmappings
+(
+siteid int(11)  UNSIGNED NOT NULL,
+sitessettingid int(11)  UNSIGNED NOT NULL
+)
+
+ALTER TABLE  `sitessettingsmappings` ADD PRIMARY KEY (  `sitessettingid` )

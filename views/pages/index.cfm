@@ -1,5 +1,44 @@
 <!---  Link to add new page --->
+<script type="text/javascript">
+$(document).ready(function(){
+    $(".showCreateDuplicatePageBox").click(function(event) {
+        $('<div/>').dialog2({
+            title: "Add Duplicate",
+            content: "/index.cfm/pages/duplicatePage/" + $(this).attr('alt'),
+            id: "Insert_Duplicate"
+        });
+        event.preventDefault();
+    });
+})
+function validateCreateDuplicateForm() {
+    if($("#title").val()==""){
+        alert('Plase first enter title in title field.');
+        $("#title").focus();
+        return false;
+    }
+    return true;
+}
+</script>
 <cfoutput>
+<cffunction name="getdataParent">
+    <cfargument name="parentID" type="numeric" required="yes">
+    <cfargument name="count" type="numeric" required="yes">
+    <cfquery name="getChilds" dbtype="query">
+        SELECT  * FROM pages WHERE parentID =  #arguments.parentID#
+    </cfquery>
+    <cfif getChilds.recordcount GT 0>
+        <cfloop query="getChilds">
+             <tr>
+                <td style="padding-left:#20*count#px !important;">#HtmlEditFormat(title)#</td>
+              <!---  <td>#HtmlEditFormat(firstname)# #HtmlEditFormat(lastname)#</td>--->
+                <td>#STATUS#</td>
+                <td>#DateFormat(createdAt,"mm/dd/yyyy")#</td>
+                <td>#linkto(text="Edit",action="addeditpage",key=id)# | #linkto(text="Delete",action="Deletepage",key=id,confirm="Are you sure you want to delete this page or its sub-pages ?")# | #linkto(text="Duplicate",class="showCreateDuplicatePageBox",alt=id)#</td>
+            </tr>
+            #getdataParent(id,count+1)#
+        </cfloop>
+      </cfif>
+</cffunction>
 #linkTo(text="+ Add Page",action="addeditpage",class="btn btn-primary")#
 <br /><br />
 
@@ -7,21 +46,30 @@
     <table class="table table-striped table-bordered">
         <thead class="hero-unit">
             <tr>
-                 <th <cfif params.order EQ "title">class="headersort#params.sort#"</cfif>>#linkTo(text="Page", params="order=title&sort=#params.asort#")# </th>
-                 <th <cfif params.order EQ "firstname">class="headersort#params.sort#"</cfif>>#linkTo(text="Author", params="order=firstname&sort=#params.asort#")# </th>
+                <th width="50%">&nbsp;</th>
+                <!--- <th <cfif params.order EQ "title">class="headersort#params.sort#"</cfif>>#linkTo(text="Page", params="order=title&sort=#params.asort#")# </th>--->
+                 <!---<th <cfif params.order EQ "firstname">class="headersort#params.sort#"</cfif>>#linkTo(text="Author", params="order=firstname&sort=#params.asort#")# </th>--->
                  <th <cfif params.order EQ "STATUS">class="headersort#params.sort#"</cfif>>#linkTo(text="Status", params="order=STATUS&sort=#params.asort#")# </th>
-                 <th <cfif params.order EQ "createdAt">class="headersort#params.sort#"</cfif>>#linkTo(text="Date", params="order=createdAt&sort=#params.asort#")# </th>
+                 <th <cfif params.order EQ "createdAt">class="headersort#params.sort#"</cfif>>#linkTo(text="Updated", params="order=createdAt&sort=#params.asort#")# </th>
+                 <th>Options</th>
             </tr>
         </thead>
         <tbody>
-     <cfloop query="pages">
+     <cfif pages.recordcount GT 0>
+         <cfquery name="getParents" dbtype="query">
+            SELECT  * FROM pages WHERE parentID IS NULL
+        </cfquery>
+         <cfloop query="getParents">
             <tr>
-                <td>#linkto(text=HtmlEditFormat(title),action="addeditpage",key=id)#</td>
-                <td>#HtmlEditFormat(firstname)# #HtmlEditFormat(lastname)#</td>
+                <td>#HtmlEditFormat(title)#</td>
+               <!--- <td>#HtmlEditFormat(firstname)# #HtmlEditFormat(lastname)#</td>--->
                 <td>#STATUS#</td>
-                <td>#DateFormat(createdAt,"mm/dd/yyyy")#</td>
+                <td><cfif updatedAt neq "">#DateFormat(updatedAt,"mm/dd/yyyy")#<cfelse>#DateFormat(createdAt,"mm/dd/yyyy")#</cfif></td>
+                <td>#linkto(text="Edit",action="addeditpage",key=id)# | #linkto(text="Delete",action="Deletepage",key=id,confirm="Are you sure you want to delete this page or its sub-pages ?")# | #linkto(text="Duplicate",class="showCreateDuplicatePageBox",alt=id)#</td>
             </tr>
+            #getdataParent(id,1)#
     </cfloop>
+       </cfif>
     </tbody>
 </table>
 

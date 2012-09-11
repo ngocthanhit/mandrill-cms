@@ -11,9 +11,8 @@ component extends="Controller" hint="Controller for crum pages section" {
         initListParams(20, "createdAt");
 
         sites = model("site").findall(
-               //include='user,status,pagesuser',
-               // where="pagesusers.accountid=#getAccountAttr("id")# AND pagesusers.userid = #getUserAttr("id")# AND pagesusers.siteid = #varsiteid#",
-              //  select="title,pages.id,firstname,lastname,pages.createdAt,status",
+               include='sitesuser',
+                where="sitesusers.accountid=#getAccountAttr("id")# AND sitesusers.userid = #getUserAttr("id")#",
                 page = params.page,
                 perPage = params.pagesize,
                 order = "#params.order# #params.sort#"
@@ -25,31 +24,31 @@ component extends="Controller" hint="Controller for crum pages section" {
         if(StructKeyExists(params,"key"))
         {
             NewSites= model("site").findByKey(params.key) ;
-            title = "Edit Site Settings" ;
+            title = "Edit Site" ;
             formAction = "SubmitEditSite" ;
-            createdBy = model("user").findbykey(key=NewSites.userid,select="id,firstname, lastname") ;
+            createdBy = model("user").findbykey(key=getUserAttr("id"),select="id,firstname, lastname") ;
         }
         else
         {
             NewSites= model("site").new() ;
-            title = "Site Settings" ;
+            title = "Site" ;
             formAction = "SubmitaddNewSite";
         }
     }
 
     public any function SubmitaddNewSite() hint="Create new site"{
-        StructInsert(params.NewSites,"userid",getUserAttr("id"));
-        StructInsert(params.NewSites,"accountid",getAccountAttr("id"));
         NewSites = model("site").new(params.NewSites) ;    
         if (NewSites.save())
             {
+                NewSitesUsers = model("sitesuser").new(userid=getUserAttr("id"),accountid=getAccountAttr("id"),siteid=NewSites.id) ;  
+                NewSitesUsers.save()
                 _event("I", "Successfully site created", "Sessions", "Session id is #session.sessionid#, useragent is #CGI.USER_AGENT#", getAccountAttr("id"), getUserAttr("id"));
                 flashInsert(success="Site created successfully.") ;
                 redirectTo(controller=params.controller) ;
             }
         else
             {
-                title = "Site Settings" ;
+                title = "Site" ;
                 formAction = "SubmitaddNewSite" ;
                 _event("W", "Caught attempt to site add information not required", "Sessions", "Session id is #session.sessionid#, useragent is #CGI.USER_AGENT#", getAccountAttr("id"), getUserAttr("id"));
                 renderPage(template="addeditproject") ;
@@ -60,13 +59,17 @@ component extends="Controller" hint="Controller for crum pages section" {
         NewSites = model("site").findByKey(params.NewSites.id) ;
         if (NewSites.update(params.NewSites))
             {
+               //var deleteSiteUsers = model("sitesuser").findbykey(params.NewSites.id) ;
+                   //deleteSiteUsers.delete();
+                NewSitesUsers = model("sitesuser").new(userid=getUserAttr("id"),accountid=getAccountAttr("id"),siteid=params.NewSites.id) ;  
+                NewSitesUsers.save();
                 _event("I", "Successfully updated site", "Sessions", "Session id is #session.sessionid#, useragent is #CGI.USER_AGENT#", getAccountAttr("id"), getUserAttr("id"));
                 flashInsert(success="Site updated successfully.") ;
                 redirectTo(controller=params.controller) ;
             }
         else
             {
-                title = "Edit Site Settings" ;
+                title = "Edit Site" ;
                 formAction = "SubmitEditSite" ;
                 createdBy = model("user").findbykey(key=NewSites.userid,select="id,firstname, lastname") ;
                 _event("W", "Caught attempt to site edit changes not required", "Sessions", "Session id is #session.sessionid#, useragent is #CGI.USER_AGENT#", getAccountAttr("id"), getUserAttr("id"));
@@ -74,4 +77,110 @@ component extends="Controller" hint="Controller for crum pages section" {
             }
     }
 
+    public any function Deleteproject() hint="Delete site settings" {
+        var getallsitesettings = model("sitessettingsmapping").findall(where="siteid=#params.key#");
+        if (getallsitesettings.recordcount GT 0){
+              var getSettingsid = ValueList(getallsitesettings.sitessettingid);
+            var deletesitessettingmapping = model("sitessettingsmapping").deleteAll(where="siteid=#params.key#");
+            var deletesitessetting = model('sitessetting').deleteAll(where="id In (#getSettingsid#)");
+        }
+        var deleteSiteUsers = model("sitesuser").findbykey(params.key) ;
+              deleteSiteUsers.delete();.
+        var project = model("site").findByKey(params.key) ;
+            project.delete();
+         _event("I", "Successfully deleted site", "Sessions", "Session id is #session.sessionid#, useragent is #CGI.USER_AGENT#", getAccountAttr("id"), getUserAttr("id"));
+        flashInsert(success="Successfully site deleted from list.") ;
+        redirectTo(controller=params.controller) ;
+    }
+
+    public any function Choose() hint="choose site options" {
+        sites = model("site").findALL(include="sitesuser",where="accountid=#getAccountAttr("id")# AND userid=#getUserAttr("id")#");
+        if(sites.recordcount EQ 0){
+             flashInsert(success="No site created,first create site.") ;
+            redirectTo(controller="websites",action="addeditproject")
+        }
+    }
+
+    public any function setChooseSite() hint="Set choose site global" {
+        Session.siteid = params.siteid ;
+        redirectTo(controller="members");
+    }
+
+    public any function siteSettings() hint="get particlar site settings" {
+         var getsitesDetail = model("site").findbyKEy(params.key);
+         var local = {};
+
+         _view(pageTitle = "Site Settings  (#getsitesDetail.name#)", renderShowBy = true, stickyAttributes = "pagesize,sort,order");
+
+        initListParams(20, "createdAt");
+
+        siteSettings = model('sitessetting').findall(include="sitessettingsmapping",where="sitessettingsmappings.siteid=#params.key#", page = params.page,
+                perPage = params.pagesize,
+                order = "#params.order# #params.sort#");
+    }
+
+    public any function addeditsitesettings() {
+         getsitesDetail = model("site").findbyKEy(params.key);
+         if(StructKeyExists(params,"settingsid"))
+        {
+            NewSiteSettings= model("sitessetting").findByKey(params.settingsid) ;
+            title = "Edit Site Settings" ;
+            formAction = "SubmitEditSiteSettings" ;
+            createdBy = model("user").findbykey(key=getUserAttr("id"),select="id,firstname, lastname") ;
+        }
+        else
+        {
+            NewSiteSettings= model("sitessetting").new() ;
+            title = "Site Settings" ;
+            formAction = "SubmitaddNewSiteSettings";
+        }
+    }
+
+    public any function SubmitaddNewSiteSettings() {
+
+        NewSiteSettings = model("sitessetting").new(params.NewSiteSettings) ;
+        if (NewSiteSettings.save())
+            {
+                NewSitesSettingsmappings = model("sitessettingsmapping").new(siteid=params.key,sitessettingid=NewSiteSettings.id) ;  
+                NewSitesSettingsmappings.save();
+                _event("I", "Successfully site setting created", "Sessions", "Session id is #session.sessionid#, useragent is #CGI.USER_AGENT#", getAccountAttr("id"), getUserAttr("id"));
+                flashInsert(success="Site settind created successfully.") ;
+                redirectTo(controller=params.controller,action="siteSettings",key=params.key) ;
+            }
+        else
+            {
+                title = "Site Settings" ;
+                formAction = "SubmitaddNewSiteSettings";
+                _event("W", "Caught attempt to site setting add information not required", "Sessions", "Session id is #session.sessionid#, useragent is #CGI.USER_AGENT#", getAccountAttr("id"), getUserAttr("id"));
+                renderPage(template="addeditsitesettings") ;
+            }
+    }
+
+    public any function SubmitEditSiteSettings() {
+         NewSiteSettings = model("sitessetting").findByKey(params.NewSiteSettings.id) ;
+        if (NewSiteSettings.update(params.NewSiteSettings))
+            {
+                _event("I", "Successfully updated site settings", "Sessions", "Session id is #session.sessionid#, useragent is #CGI.USER_AGENT#", getAccountAttr("id"), getUserAttr("id"));
+                flashInsert(success="Site Settings updated successfully.") ;
+                redirectTo(controller=params.controller,action="siteSettings",key=params.key) ;
+            }
+        else
+            {
+                 title = "Edit Site Settings" ;
+                    formAction = "SubmitEditSiteSettings" ;
+                 createdBy = model("user").findbykey(key=getUserAttr("id"),select="id,firstname, lastname") ;
+                _event("W", "Caught attempt to site setting edit changes not required", "Sessions", "Session id is #session.sessionid#, useragent is #CGI.USER_AGENT#", getAccountAttr("id"), getUserAttr("id"));
+                renderPage(template="addeditsitesettings") ;
+            }
+    }
+
+   public any function DeleteSiteSettings(){
+        var deletesitessettingMapping = model('sitessettingsmapping').findbykey(params.settingsid);
+        deletesitessettingMapping.delete();
+        var deletesitessetting = model('sitessetting').findbykey(params.settingsid);
+        deletesitessetting.delete();
+         _event("I", "Successfully deleted site settings", "Sessions", "Session id is #session.sessionid#, useragent is #CGI.USER_AGENT#", getAccountAttr("id"), getUserAttr("id"));
+        flashInsert(success="Successfully site settings deleted from list.") ;
+        redirectTo(controller=params.controller,action="siteSettings",key=params.key) ;
+   }
 }

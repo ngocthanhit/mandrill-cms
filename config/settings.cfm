@@ -108,6 +108,9 @@
     // date format for non-customizable values
     set(defaultDateFormat="dd mmm yyyy");
 
+    // forgot your password email subject
+    set(ResetPasswordEmailSubject="Reset password at MandrillCMS.com");
+
     // billing defaults
     set(defaultPlanId=2);
     set(defaultDiscountId=1);

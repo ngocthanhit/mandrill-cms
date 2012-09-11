@@ -92,8 +92,16 @@ component extends="Wheels" {
         flashInsert(success="access denied.") ;
         redirectTo(controller="members");
         }
-
     }
+
+    public any function restictedwithSite() hint="restrict pages for site" {
+        if(NOT issiteID()) {
+             _event("W", "Caught attempt to access forbidden , firstr select site and then countinue.", "", cgi.HTTP_USER_AGENT);
+            flashInsert(success="access denied.") ;
+            redirectTo(controller="Websites",action="choose");
+        }
+    }
+
      /*
      * HELPERS
      */

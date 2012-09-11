@@ -9,9 +9,9 @@
 <div class="span7">
     <div class="container-fluid" >
     #textArea(label="Main content<br />", objectName="Newpages", property="content",class="markItUp",style="width:650px;height:100px")# <br />
-    #textField(label="Page Title<br />", objectName="Newpages", property="title",size="64")# <br />
-    #textArea(label="Description<br />", objectName="Newpages", property="description",rows="5", cols="50")# <br />
-    #textField(label="Navigation title (optional)<br />", objectName="Newpages", property="navigationtitle",size="64")# <br />
+    #textField(label="Page Title<br />", objectName="Newpages", property="title",size="64",style="width:715px;")# <br />
+    #textArea(label="Description<br />", objectName="Newpages", property="description",rows="5", cols="50",style="width:715px;")# <br />
+    #textField(label="Navigation title (optional)<br />", objectName="Newpages", property="navigationtitle",size="64",style="width:715px;")# <br />
     #submitTag(value="Save as Draft",name="draft",class="btn SubmitButton")# &nbsp; #submitTag(value="Save & Publish",name="publish",class="btn btn-primary SubmitButton")# <br />
     <cfif NOT StructKeyExists(Newpages,"id") >
         #linkto(text="Or publish at a future date ",class="futureDateCont")#
@@ -29,11 +29,9 @@
 <div class="span4">
     #select(label="Parent page<br />", objectName="Newpages", property="parentid", options=getPages,includeBlank="true")# <br />
     #select(label="Template<br />", objectName="Newpages", property="templateid", options=getTemplates)# <br /><br /><br />
-    #checkbox(label="Show page in navigation",objectName="Newpages", property="showinnavigation")#<br />
-    #checkbox(label="Show page in footer navigation",objectName="Newpages", property="showinfooternavigation")#<br /><br />
-    #checkBox(label="Password protect page",objectName="Newpages", property="isprotected")# <br />
-    #checkBox(label="Protect sub-pages", objectName="Newpages", property="issubpageprotected")# <br />
-    #passwordfield(label="Password<br />", objectName="Newpages", property="password")# <br />
+    #selectTag(label="Navigation<br />",includeblank=true,options="Show in main navigation,Show page in footer navigation",name="navigation",selected=params.navigation)# <br /><br />
+    #selectTag(label="Password protection<br />",includeblank=true,options="Password protect page,Protect sub-pages",name="protected",selected=params.protected)# <br /><br />
+    #passwordfield(label="Password<br />", objectName="Newpages", property="password")#
     <cfif StructKeyExists(Newpages,"id") >
     <br />
     <br />
