@@ -35,7 +35,7 @@ td.prefix3{padding-left:6%;}
 .file_image_wrap img{max-height: 50px;}
 div.pagination ul li.active a{  background: #ededed !important;}
 div.pagination ul li a:hover{  background: #c5c5c5 !important;}
-.span3, .span9{out line:1px solid green;}
+.span3, .span9{outline:1px solid green;}
 select.btn, input.btn{text-align:left;}
 textarea.editor_area{display:block; min-height: 300px !important;}
 #editor{min-height: 100px;} 
@@ -44,7 +44,7 @@ textarea.editor_area{display:block; min-height: 300px !important;}
 span.normal{font-weight: normal;}
 ul.checkbox-list {margin:4px 10px;list-style: none;}
 ul.checkbox-list  li{padding:2px 0; list-style: none;}
-.date_row{line-height:1.2em !important; outli ne:1px solid red;}
+.date_row{line-height:1.2em !important; outline:1px solid red;}
 .date_row input, .date_row img{margin:0; line-height:1.2em !important;}
 .date_row img{vertical-align:middle; margin:0 5px; }
 .date_row input.small{width: 14.364640883%;     *width: 14.311449393638298%;}
