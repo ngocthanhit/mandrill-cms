@@ -1,7 +1,7 @@
 <cfoutput>
 
 <!---  Link to add new post --->
-#linkTo(text="+ Add Site Settings",action="addeditproject",class="btn btn-primary")#
+#linkTo(text="+ Add New Site",action="addeditproject",class="btn btn-primary")#
 <br /><br />
 
 <!---  Listing of all "posts" --->
@@ -21,7 +21,7 @@
            <td>#sites.name#</td>
            <td>#sites.url#</td>
            <td>#DateFormat(sites.createdAt,"mm/dd/yyyy")#</td>
-           <td>#linkto(text="Edit",action="addeditproject",key=id)# | #linkto(text="Delete",action="Deleteproject",key=id,confirm="Are you sure you want to delete this site ?")#</td>
+           <td>#linkto(text="Edit",action="addeditproject",key=id)# | #linkto(text="Delete",action="Deleteproject",key=id,confirm="Are you sure you want to delete this site ?")# | #linkto(text="Settings",action="SiteSettings",key=id)#</td>
         </tr>
     </cfloop>
     </tbody>

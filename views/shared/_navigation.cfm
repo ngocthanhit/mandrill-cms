@@ -1,4 +1,4 @@
-﻿<cfset sites = model("site").findALL(where="accountid=#getAccountAttr('id')# AND userid=#getUserAttr('id')#") >
+﻿<cfset sites = model("site").findALL(include="sitesuser",where="accountid=#getAccountAttr('id')# AND userid=#getUserAttr('id')#") >
 <cfoutput>
   <header>
   <div class="navbar navbar-fixed-top">
