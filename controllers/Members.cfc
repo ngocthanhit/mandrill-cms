@@ -244,8 +244,7 @@ component extends="Controller" hint="Controller for registered members section" 
                 local.maildata = {
                     firstname : local.user.firstname,
                     email : local.user.email,
-                    baseURL : get("baseURL"),
-                    stamp : crypt(local.user.id & "-ma1l", true)
+                    link : linkTo(route="passwordConfirm", stamp=crypt(local.user.id & "-ma1l", true), onlyPath=false)
                 }
 
                 sendEmail(

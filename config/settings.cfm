@@ -53,7 +53,7 @@
     // encryption key / hashing salt
     set(encryptionKey="aCmGsnQQ+YuXq8jd9/3r0g==");
     set(encryptionAlgorithm="BLOWFISH");
-    set(encryptionEncoding="Base64");
+    set(encryptionEncoding="HEX");
     set(hashingKey="&0Dsxs2kB.fO");
     
     // ACL settings
