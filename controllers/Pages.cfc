@@ -1,5 +1,4 @@
 component extends="Controller" hint="Controller for crum pages section" {
-
     varsiteid = getSiteId();
     getPages = model("page").findALL(include="pagesuser",where="pagesusers.siteid = '#varsiteid#'"); //This gets all pages to fill in drop down to bind this page as sub page to another parent page, if any.
     getTemplates= model("template").findALL(); // page layouts/ templates
@@ -31,6 +30,7 @@ component extends="Controller" hint="Controller for crum pages section" {
     public any function addeditpage() hint="Add/Edit Page to get new page details and show/ update information for existing pages" {
          params.navigation="";
          params.protected=""
+          password = 0;
         if(StructKeyExists(params,"key"))
         {
             checkconfirmpage(params.key);
@@ -57,6 +57,10 @@ component extends="Controller" hint="Controller for crum pages section" {
           if(Newpages.issubpageprotected){
             params.protected = "Protect sub-pages";
         } 
+        if(Newpages.password NEQ "") {
+            password = 1;
+        }
+        Newpages.password = "";
         }
         else
         {
@@ -66,7 +70,6 @@ component extends="Controller" hint="Controller for crum pages section" {
         formAction = "SubmitaddNewPage";
         }
     }
-
 
     public any function SubmitaddNewPage() hint="Add new page - form submission is done here" {
 
@@ -126,10 +129,13 @@ component extends="Controller" hint="Controller for crum pages section" {
             }
     }
 
-
     public any function SubmitEditPage() hint="Let's edit page details - form submission comes here" {
 
         checkconfirmpage(params.Newpages.id);
+        params.Newpages.password =  params.password ;
+        if((params.protected neq "") AND params.Newpages.password eq ""){
+            StructDelete(params.Newpages,"password");
+        }
         params.Newpages.statusid = 1 ;
         params.Newpages.updatedby = getUserAttr("id") ;
          if(params.navigation EQ "Show in main navigation"){

@@ -494,7 +494,7 @@ siteid int(11)  UNSIGNED NOT NULL
 ALTER TABLE  `sitesusers` ADD PRIMARY KEY (  `siteid` )
 
 --- create new site settings table ---
-CREATE TABLE `mandrillcms`.`sitesSettings` (
+CREATE TABLE `mandrillcms`.`sitessettings` (
 `id` INT( 11 ) UNSIGNED NOT NULL AUTO_INCREMENT,
 `serverProtocol` VARCHAR( 10 ) DEFAULT NULL ,
 `host` VARCHAR( 255 ) DEFAULT NULL ,

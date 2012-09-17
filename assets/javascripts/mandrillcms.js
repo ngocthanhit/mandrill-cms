@@ -1,4 +1,3 @@
-
 (function($){
 
     /*
@@ -74,6 +73,38 @@ $('.markItUp').wysihtml5();
         }).trigger('click');
 
     imagePreview();
+
+    $(".dateField select").each(function(e){
+            if(e==0){
+                    $(this).css('width','100px');
+            }else if(e==2) {
+                    $(this).css('width','65px');
+            }
+            else{
+                    $(this).css('width','50px');
+            }
+    });
+
+    $("#previewBtn").click(function(e) {
+        previewWindow = window.open("","previewWindow","width:500px,height:500px,location=0");
+        var formaction = $("#dataForm").attr('action');
+        var formdata = $("#dataForm").serialize();
+        var getpath = formdata.search("%5B");
+        var actionPath = "";
+        getpath = formdata.substring(0,getpath);
+        if(getpath == "Newpages"){
+            actionPath = "pages";
+        }else{
+            actionPath = "posts";
+        }
+        $("#dataForm").attr('action',"/index.cfm/" + actionPath + "/preview");
+        $("#dataForm").attr('target',"previewWindow");
+        $("#dataForm").submit();
+        previewWindow.focus();
+        $("#dataForm").attr('action',formaction);
+        $("#dataForm").removeAttr('target');
+        e.preventDefault();
+    });
 
 });
 /* ajax Upload methods  */

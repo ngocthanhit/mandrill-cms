@@ -61,8 +61,9 @@ component extends="Controller" hint="Controller for crum pages section" {
             {
                //var deleteSiteUsers = model("sitesuser").findbykey(params.NewSites.id) ;
                    //deleteSiteUsers.delete();
-                NewSitesUsers = model("sitesuser").new(userid=getUserAttr("id"),accountid=getAccountAttr("id"),siteid=params.NewSites.id) ;  
-                NewSitesUsers.save();
+                 var updateSiteUser = model("sitesuser").findByKey(params.NewSites.id);
+                updateSiteUser.update(userid=getUserAttr("id"),accountid=getAccountAttr("id"),siteid=params.NewSites.id) ;
+
                 _event("I", "Successfully updated site", "Sessions", "Session id is #session.sessionid#, useragent is #CGI.USER_AGENT#", getAccountAttr("id"), getUserAttr("id"));
                 flashInsert(success="Site updated successfully.") ;
                 redirectTo(controller=params.controller) ;
@@ -137,7 +138,7 @@ component extends="Controller" hint="Controller for crum pages section" {
     }
 
     public any function SubmitaddNewSiteSettings() {
-
+         getsitesDetail = model("site").findbyKEy(params.key);
         NewSiteSettings = model("sitessetting").new(params.NewSiteSettings) ;
         if (NewSiteSettings.save())
             {
@@ -157,6 +158,7 @@ component extends="Controller" hint="Controller for crum pages section" {
     }
 
     public any function SubmitEditSiteSettings() {
+         getsitesDetail = model("site").findbyKEy(params.key);
          NewSiteSettings = model("sitessetting").findByKey(params.NewSiteSettings.id) ;
         if (NewSiteSettings.update(params.NewSiteSettings))
             {

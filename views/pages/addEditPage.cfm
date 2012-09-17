@@ -5,20 +5,20 @@
 #errorMessagesFor("Newpages")#
 
 <!--- add / edit form page [start]--->
-#startFormTag(name="createNewPageForm",method="post",action=formAction,autocomplete="off")#
+#startFormTag(name="createNewPageForm",method="post",action=formAction,autocomplete="off",id="dataForm")#
 <div class="span7">
     <div class="container-fluid" >
     #textArea(label="Main content<br />", objectName="Newpages", property="content",class="markItUp",style="width:650px;height:100px")# <br />
     #textField(label="Page Title<br />", objectName="Newpages", property="title",size="64",style="width:715px;")# <br />
     #textArea(label="Description<br />", objectName="Newpages", property="description",rows="5", cols="50",style="width:715px;")# <br />
     #textField(label="Navigation title (optional)<br />", objectName="Newpages", property="navigationtitle",size="64",style="width:715px;")# <br />
-    #submitTag(value="Save as Draft",name="draft",class="btn SubmitButton")# &nbsp; #submitTag(value="Save & Publish",name="publish",class="btn btn-primary SubmitButton")# <br />
+    #submitTag(value="Save as Draft",name="draft",class="btn SubmitButton")# &nbsp; #submitTag(value="Save & Publish",name="publish",class="btn btn-primary SubmitButton")# &nbsp; #submitTag(value="Preview",name="preview",class="btn",id="previewBtn")#<br />
     <cfif NOT StructKeyExists(Newpages,"id") >
         #linkto(text="Or publish at a future date ",class="futureDateCont")#
         <div id="futureDateCont">
             <br />
             Publish on date <br />
-            #dateTimeSelect(objectName="Newpages", property="publisheddate",separator=" at ",timeorder="hour,minute",class="span1")# (24 hour format)<br />
+             <div class="dateField">#dateTimeSelect(objectName="Newpages", property="publisheddate",separator=" at ",timeorder="hour,minute")# (24 hour format)</div><br />
             #submitTag(name="publishDate",value="Save & Publish on Date",class="btn btn-primary SubmitButton")#
         </div>
     <cfelse>
@@ -31,7 +31,9 @@
     #select(label="Template<br />", objectName="Newpages", property="templateid", options=getTemplates)# <br /><br /><br />
     #selectTag(label="Navigation<br />",includeblank=true,options="Show in main navigation,Show page in footer navigation",name="navigation",selected=params.navigation)# <br /><br />
     #selectTag(label="Password protection<br />",includeblank=true,options="Password protect page,Protect sub-pages",name="protected",selected=params.protected)# <br /><br />
-    #passwordfield(label="Password<br />", objectName="Newpages", property="password")#
+    #passwordFieldTag(name="password",value="",label="Password<br />")#
+<!---    #passwordfield(label="Password<br />", objectName="Newpages", property="password")#--->
+    #passwordFieldTag(label="Confirm Password<br />", name="confirmPassword")#
     <cfif StructKeyExists(Newpages,"id") >
     <br />
     <br />

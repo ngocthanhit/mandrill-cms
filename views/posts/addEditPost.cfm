@@ -17,19 +17,19 @@ $(document).ready(function(){
 #errorMessagesFor("newPost")#
 
 <!--- add / edit form page [start]--->
-#startFormTag(name="createNewPostForm",method="post",action=formAction,autocomplete="off")#
+#startFormTag(name="createNewPostForm",method="post",action=formAction,autocomplete="off",id="dataForm")#
 <div class="span7">
     <div class="container-fluid" >
      #textArea(label="Main content<br />", objectName="newPost", property="content",class="markItUp",style="width:650px;height:100px")# <br />
     #textField(label="Page Title<br />", objectName="newPost", property="title",size="64",style="width:715px;")# <br />
     #textArea(label="Description<br />", objectName="newPost", property="description",rows="5", cols="50",style="width:715px;")# <br />
-    #submitTag(name="draft",value="Save as Draft",class="btn SubmitButton")# &nbsp; #submitTag(name="publish",value="Save & Publish",class="btn btn-primary SubmitButton")# <br />
+    #submitTag(name="draft",value="Save as Draft",class="btn SubmitButton")# &nbsp; #submitTag(name="publish",value="Save & Publish",class="btn btn-primary SubmitButton")# &nbsp; #submitTag(value="Preview",name="preview",class="btn",id="previewBtn")#<br />
     <cfif NOT StructKeyExists(newPost,"id") >
     #linkto(text="Or publish at a future date ",class="futureDateCont")#
     <div id="futureDateCont">
         <br />
         Publish on date <br />
-        #dateTimeSelect(objectName="newPost", property="publisheddate",separator=" at ",timeorder="hour,minute",class="span1")# (24 hour format)<br />
+       <div class="dateField"> #dateTimeSelect(objectName="newPost", property="publisheddate",separator=" at ",timeorder="hour,minute")# (24 hour format)</div><br />
         #submitTag(name="publishDate",value="Save & Publish on Date",class="btn btn-primary SubmitButton")#
     </div>
         <script type="text/javascript">
