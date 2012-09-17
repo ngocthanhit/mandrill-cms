@@ -116,6 +116,49 @@ component extends="Controller" hint="Controller for crum pages section" {
             {
                 var createpageusermapping = model("pagesuser").new(pageid=Newpages.id,userid=getUserAttr("id"),accountid=getAccountAttr("id"),siteid=varsiteid);
                 createpageusermapping.save();
+
+                if (IsDefined("params.publish")) {
+                    try {
+                        var getPgeSiteSettingsID = model("sitessettingsmapping").findone(where="siteid=#varsiteid#");
+                        var getPgeSiteSettings = model("sitessetting").findall(where="id=#getPgeSiteSettingsID.sitessettingid#");
+                        if (getPgeSiteSettings.recordcount GT 0){
+                            savecontent variable="pageHtml" {
+                                writeoutput("<html>");
+                                    writeoutput("<head>");
+                                           writeoutput("<title>");
+                                            writeoutput(params.Newpages.title);
+                                        writeoutput("</title>");
+                                    writeoutput("</head>");
+                                    writeoutput("<body>");
+                                       writeoutput(params.Newpages.content);
+                                    writeoutput("</body>");
+                                writeoutput("</html>");
+                            }
+                            var filename = params.Newpages.navigationtitle;
+                            if(filename EQ ""){
+                                filename = params.Newpages.title;
+                            }
+                                filename = "#Replace(filename," ","_","ALL")#.html";
+                                var path = "#expandpath("/")#assets/tmpfile/";
+                                   if (!DirectoryExists(path))
+                                {
+                                    DirectoryCreate(path);
+                                }
+                            ftp action = "open"  server = "#getPgeSiteSettings.host#"  username="#getPgeSiteSettings.username#" password="#getPgeSiteSettings.password#" connection = "MyConn" passive="yes" timeout="300";
+                            if(cfftp.Succeeded) {
+                                FileWrite("#path##filename#","#pageHtml#");
+                                ftp action="putfile" connection="MyConn" localfile="#path##filename#" remotefile="#getPgeSiteSettings.remotepath##filename#" passive="yes" stoponerror="yes" ;
+                                ftp action="close" connection="MyConn";
+                                FileDelete("#path##filename#");
+                          _event("I", "Successfully publish file", "Sessions", "Session id is #session.sessionid#, useragent is #CGI.USER_AGENT#", getAccountAttr("id"), getUserAttr("id"));
+                            }
+                         }
+                    } catch (any e) {
+                         _event("W", "Caught attempt to page edit for some error like this '<strong>error : </strong>#e.message#.'", "Sessions", "Session id is #session.sessionid#, useragent is #CGI.USER_AGENT#", getAccountAttr("id"), getUserAttr("id"));
+                        //abort;
+                    }
+                }
+
                 _event("I", "Successfully page created", "Sessions", "Session id is #session.sessionid#, useragent is #CGI.USER_AGENT#", getAccountAttr("id"), getUserAttr("id"));
                 flashInsert(success="Page created successfully.") ;
                 redirectTo(controller=params.controller) ;
@@ -173,6 +216,47 @@ component extends="Controller" hint="Controller for crum pages section" {
 
         if (Newpages.update(params.Newpages))
             {
+                if (IsDefined("params.publish")) {
+                    try {
+                        var getPgeSiteSettingsID = model("sitessettingsmapping").findone(where="siteid=#varsiteid#");
+                        var getPgeSiteSettings = model("sitessetting").findall(where="id=#getPgeSiteSettingsID.sitessettingid#");
+                        if (getPgeSiteSettings.recordcount GT 0){
+                            savecontent variable="pageHtml" {
+                                writeoutput("<html>");
+                                    writeoutput("<head>");
+                                           writeoutput("<title>");
+                                            writeoutput(params.Newpages.title);
+                                        writeoutput("</title>");
+                                    writeoutput("</head>");
+                                    writeoutput("<body>");
+                                       writeoutput(params.Newpages.content);
+                                    writeoutput("</body>");
+                                writeoutput("</html>");
+                            }
+                            var filename = params.Newpages.navigationtitle;
+                            if(filename EQ ""){
+                                filename = params.Newpages.title;
+                            }
+                                filename = "#Replace(filename," ","_","ALL")#.html";
+                                var path = "#expandpath("/")#assets/tmpfile/";
+                                   if (!DirectoryExists(path))
+                                {
+                                    DirectoryCreate(path);
+                                }
+                            ftp action = "open"  server = "#getPgeSiteSettings.host#"  username="#getPgeSiteSettings.username#" password="#getPgeSiteSettings.password#" connection = "MyConn" passive="yes" timeout="300";
+                            if(cfftp.Succeeded) {
+                                FileWrite("#path##filename#","#pageHtml#");
+                                ftp action="putfile" connection="MyConn" localfile="#path##filename#" remotefile="#getPgeSiteSettings.remotepath##filename#" passive="yes" stoponerror="yes" ;
+                                ftp action="close" connection="MyConn";
+                                FileDelete("#path##filename#");
+                          _event("I", "Successfully publish file", "Sessions", "Session id is #session.sessionid#, useragent is #CGI.USER_AGENT#", getAccountAttr("id"), getUserAttr("id"));
+                            }
+                         }
+                    } catch (any e) {
+                         _event("W", "Caught attempt to page edit for some error like this '<strong>error : </strong>#e.message#.'", "Sessions", "Session id is #session.sessionid#, useragent is #CGI.USER_AGENT#", getAccountAttr("id"), getUserAttr("id"));
+                        //abort;
+                    }
+                }
                 _event("I", "Successfully updated page", "Sessions", "Session id is #session.sessionid#, useragent is #CGI.USER_AGENT#", getAccountAttr("id"), getUserAttr("id"));
                 flashInsert(success="Page updated successfully.") ;
                 redirectTo(controller=params.controller) ;
