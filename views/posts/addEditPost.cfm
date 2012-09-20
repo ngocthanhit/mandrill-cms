@@ -11,8 +11,6 @@ $(document).ready(function(){
 })
 </script>
 <cfoutput>
-<!--- heading of the page --->
-<h2>#title#</h2>
 <!--- show error msg if validation properly work --->
 #errorMessagesFor("newPost")#
 
@@ -23,7 +21,7 @@ $(document).ready(function(){
      #textArea(label="Main content<br />", objectName="newPost", property="content",class="markItUp",style="width:650px;height:100px")# <br />
     #textField(label="Page Title<br />", objectName="newPost", property="title",size="64",style="width:715px;")# <br />
     #textArea(label="Description<br />", objectName="newPost", property="description",rows="5", cols="50",style="width:715px;")# <br />
-    #submitTag(name="draft",value="Save as Draft",class="btn SubmitButton")# &nbsp; #submitTag(name="publish",value="Save & Publish",class="btn btn-primary SubmitButton")# &nbsp; #submitTag(value="Preview",name="preview",class="btn",id="previewBtn")#<br />
+    #submitTag(value="Preview",name="preview",class="btn",id="previewBtn")# &nbsp; #submitTag(name="draft",value="Save as Draft",class="btn SubmitButton")# &nbsp; #submitTag(name="publish",value="Save & Publish",class="btn btn-primary SubmitButton")#<br />
     <cfif NOT StructKeyExists(newPost,"id") >
     #linkto(text="Or publish at a future date ",class="futureDateCont")#
     <div id="futureDateCont">

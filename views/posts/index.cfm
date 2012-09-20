@@ -20,19 +20,17 @@ function validateCreateDuplicateForm() {
 </script>
 <cfoutput>
 <!---  Link to add new post --->
-#linkTo(text="+ Add Post",action="addeditpost",class="btn btn-primary")#
-<br /><br />
 
 <!---  Listing of all "posts" --->
 <table class="table table-striped table-bordered">
     <thead class="hero-unit">
         <tr>
-            <th width="50%">&nbsp;</th>
+            <th width="70%">&nbsp;</th>
             <!---<th <cfif params.order EQ "title">class="headersort#params.sort#"</cfif>>#linkTo(text="Post", params="order=title&sort=#params.asort#")# </th>--->
             <!---<th <cfif params.order EQ "firstname">class="headersort#params.sort#"</cfif>>#linkTo(text="Author", params="order=firstname&sort=#params.asort#")# </th>--->
-            <th <cfif params.order EQ "STATUS">class="headersort#params.sort#"</cfif>>#linkTo(text="Status", params="order=STATUS&sort=#params.asort#")# </th>
-            <th <cfif params.order EQ "createdAt">class="headersort#params.sort#"</cfif>>#linkTo(text="Updated", params="order=createdAt&sort=#params.asort#")# </th>
-            <th>Options</th>
+            <th width="10%" <cfif params.order EQ "STATUS">class="headersort#params.sort#"</cfif>>#linkTo(text="Status", params="order=STATUS&sort=#params.asort#")# </th>
+            <th width="10%"<cfif params.order EQ "createdAt">class="headersort#params.sort#"</cfif>>#linkTo(text="Updated", params="order=createdAt&sort=#params.asort#")# </th>
+            <th width="10%">Options</th>
         </tr>
     </thead>
     <tbody>
@@ -50,7 +48,7 @@ function validateCreateDuplicateForm() {
                          #linkTo(text="Edit",action="addeditpost",key=id)# | #linkto(text="Delete",action="Deletepost",key=id,confirm="Are you sure you want to delete this post ?")#
                     </cfif>
                 <cfelse>
-                    #linkTo(text="Edit",action="addeditpost",key=id)# | #linkto(text="Delete",action="Deletepost",key=id,confirm="Are you sure you want to delete this post ?")# | #linkto(text="Duplicate",class="showCreateDuplicatePostBox",alt=id)#
+                    #linkTo(text="Edit",action="addeditpost",key=id)# | #linkto(text="Delete",action="Deletepost",key=id,confirm="Are you sure you want to delete this post ?")# <!---| #linkto(text="Duplicate",class="showCreateDuplicatePostBox",alt=id)#--->
                 </cfif>
             </td>
         </tr>

@@ -1,9 +1,5 @@
 <cfoutput>
 
-<!---  Link to add new post --->
-#linkTo(text="+ Add Site Settings",action="addeditsitesettings",class="btn btn-primary",key=#params.key#)#
-<br /><br />
-
 <!---  Listing of all "posts" --->
 
 <table class="table table-striped table-bordered">

@@ -1,9 +1,5 @@
 <cfoutput>
 
-<!---  Link to add new post --->
-#linkTo(text="+ Add New Site",action="addeditproject",class="btn btn-primary")#
-<br /><br />
-
 <!---  Listing of all "posts" --->
 
 <table class="table table-striped table-bordered">

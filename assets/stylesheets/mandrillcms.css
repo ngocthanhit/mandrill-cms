@@ -1,10 +1,10 @@
 .small.center.login {
-	float: none;
-	margin: 0 auto;
-	width: 470px;
-	margin-top: 100px;
-	margin-bottom: 100px;
-	padding-bottom: 5px;
+    float: none;
+    margin: 0 auto;
+    width: 470px;
+    margin-top: 100px;
+    margin-bottom: 100px;
+    padding-bottom: 5px;
 }
 
 .toggling {
@@ -25,3 +25,8 @@
 
 /* button on the top of table list */
 .buttonList{margin-bottom: 20px;}
+.headingLink{
+    position:absolute;
+    right:25px;
+    top:85px;
+}

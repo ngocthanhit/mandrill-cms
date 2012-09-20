@@ -6,7 +6,7 @@ component extends="Controller" hint="Controller for crum pages section" {
 
     public any function index() hint="Intercept direct access to /pages/" {
          var local = {};
-         _view(pageTitle = "Site Settings", renderShowBy = true, stickyAttributes = "pagesize,sort,order");
+         _view(pageTitle = "Site Settings<div class='headingLink'>#linkTo(text="+ Add New Site",action="addeditproject",class="btn btn-primary")#</div>", renderShowBy = true, stickyAttributes = "pagesize,sort,order");
 
         initListParams(20, "createdAt");
 
@@ -23,6 +23,7 @@ component extends="Controller" hint="Controller for crum pages section" {
 
         if(StructKeyExists(params,"key"))
         {
+            _view(pageTitle = "Edit Site", renderShowBy = true);
             NewSites= model("site").findByKey(params.key) ;
             title = "Edit Site" ;
             formAction = "SubmitEditSite" ;
@@ -30,6 +31,7 @@ component extends="Controller" hint="Controller for crum pages section" {
         }
         else
         {
+            _view(pageTitle = "Add Site", renderShowBy = true);
             NewSites= model("site").new() ;
             title = "Site" ;
             formAction = "SubmitaddNewSite";
@@ -111,7 +113,7 @@ component extends="Controller" hint="Controller for crum pages section" {
          var getsitesDetail = model("site").findbyKEy(params.key);
          var local = {};
 
-         _view(pageTitle = "Site Settings  (#getsitesDetail.name#)", renderShowBy = true, stickyAttributes = "pagesize,sort,order");
+         _view(pageTitle = "Site Settings  (#getsitesDetail.name#)<div class='headingLink'>#linkTo(text="+ Add Site Settings",action="addeditsitesettings",class="btn btn-primary",key=#params.key#)#</div>", renderShowBy = true, stickyAttributes = "pagesize,sort,order");
 
         initListParams(20, "createdAt");
 
@@ -124,6 +126,7 @@ component extends="Controller" hint="Controller for crum pages section" {
          getsitesDetail = model("site").findbyKEy(params.key);
          if(StructKeyExists(params,"settingsid"))
         {
+             _view(pageTitle = "Edit Site Settings", renderShowBy = true);
             NewSiteSettings= model("sitessetting").findByKey(params.settingsid) ;
             title = "Edit Site Settings" ;
             formAction = "SubmitEditSiteSettings" ;
@@ -131,6 +134,7 @@ component extends="Controller" hint="Controller for crum pages section" {
         }
         else
         {
+             _view(pageTitle = "Add Site Settings", renderShowBy = true);
             NewSiteSettings= model("sitessetting").new() ;
             title = "Site Settings" ;
             formAction = "SubmitaddNewSiteSettings";

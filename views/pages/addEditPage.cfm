@@ -1,6 +1,4 @@
 <cfoutput>
-<!--- heading of the page --->
-<h2>#title#</h2>
 <!--- show error msg if validation properly work --->
 #errorMessagesFor("Newpages")#
 
@@ -12,7 +10,7 @@
     #textField(label="Page Title<br />", objectName="Newpages", property="title",size="64",style="width:715px;")# <br />
     #textArea(label="Description<br />", objectName="Newpages", property="description",rows="5", cols="50",style="width:715px;")# <br />
     #textField(label="Navigation title (optional)<br />", objectName="Newpages", property="navigationtitle",size="64",style="width:715px;")# <br />
-    #submitTag(value="Save as Draft",name="draft",class="btn SubmitButton")# &nbsp; #submitTag(value="Save & Publish",name="publish",class="btn btn-primary SubmitButton")# &nbsp; #submitTag(value="Preview",name="preview",class="btn",id="previewBtn")#<br />
+    #submitTag(value="Preview",name="preview",class="btn",id="previewBtn")# &nbsp; #submitTag(value="Save as Draft",name="draft",class="btn SubmitButton")# &nbsp; #submitTag(value="Save & Publish",name="publish",class="btn btn-primary SubmitButton")#<br />
     <cfif NOT StructKeyExists(Newpages,"id") >
         #linkto(text="Or publish at a future date ",class="futureDateCont")#
         <div id="futureDateCont">
@@ -29,8 +27,8 @@
 <div class="span4">
     #select(label="Parent page<br />", objectName="Newpages", property="parentid", options=getPages,includeBlank="true")# <br />
     #select(label="Template<br />", objectName="Newpages", property="templateid", options=getTemplates)# <br /><br /><br />
-    #selectTag(label="Navigation<br />",includeblank=true,options="Show in main navigation,Show page in footer navigation",name="navigation",selected=params.navigation)# <br /><br />
-    #selectTag(label="Password protection<br />",includeblank=true,options="Password protect page,Protect sub-pages",name="protected",selected=params.protected)# <br /><br />
+    #selectTag(label="Navigation<br />",options="Show in main navigation,Show page in footer navigation",name="navigation",selected=params.navigation)# <br /><br />
+    #selectTag(label="Password protection<br />",options="No password required,Password protect page,Protect sub-pages",name="protected",selected=params.protected)# <br /><br />
     #passwordFieldTag(name="password",value="",label="Password<br />")#
 <!---    #passwordfield(label="Password<br />", objectName="Newpages", property="password")#--->
     #passwordFieldTag(label="Confirm Password<br />", name="confirmPassword")#

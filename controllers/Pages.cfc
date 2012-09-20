@@ -13,7 +13,7 @@ component extends="Controller" hint="Controller for crum pages section" {
 
      var local = {};
 
-         _view(pageTitle = "Pages", renderShowBy = true, stickyAttributes = "pagesize,sort,order");
+         _view(pageTitle = "Pages<div class='headingLink'>#linkTo(text="+ Add Page",action="addeditpage",class="btn btn-primary pull-right")#</div>", renderShowBy = true, stickyAttributes = "pagesize,sort,order");
 
         initListParams(20, "createdAt");
 
@@ -29,10 +29,11 @@ component extends="Controller" hint="Controller for crum pages section" {
 
     public any function addeditpage() hint="Add/Edit Page to get new page details and show/ update information for existing pages" {
          params.navigation="";
-         params.protected=""
+         params.protected="No password required"
           password = 0;
         if(StructKeyExists(params,"key"))
         {
+             _view(pageTitle = "Edit Page", renderShowBy = true);
             checkconfirmpage(params.key);
         Newpages= model("page").findByKey(params.key) ;
         title = "Edit Page" ;
@@ -64,6 +65,7 @@ component extends="Controller" hint="Controller for crum pages section" {
         }
         else
         {
+         _view(pageTitle = "Add Page", renderShowBy = true);
         Newpages= model("page").new() ;
         Newpages.showinnavigation = 1 ;
         title = "Pages" ;
@@ -85,6 +87,10 @@ component extends="Controller" hint="Controller for crum pages section" {
              params.Newpages.showinfooternavigation =true;
         } else {
             params.Newpages.showinfooternavigation = false;
+        }
+
+         if(params.protected EQ "No password required"){
+             params.Newpages.isprotected = false;
         }
 
          if(params.protected EQ "Password protect page"){
@@ -191,6 +197,11 @@ component extends="Controller" hint="Controller for crum pages section" {
         } else {
             params.Newpages.showinfooternavigation = false;
         }
+
+         if(params.protected EQ "No password required"){
+             params.Newpages.isprotected = false;
+        }
+
         if(params.protected EQ "Password protect page"){
              params.Newpages.isprotected = true;
         } else {

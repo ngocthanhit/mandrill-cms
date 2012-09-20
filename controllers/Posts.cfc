@@ -12,7 +12,7 @@ component extends="Controller" hint="Controller for crum posts section" {
 
     public any function index() hint="listing of all posts" {
 
-        _view(pageTitle = "Posts", renderShowBy = true, stickyAttributes = "pagesize,sort,order");
+        _view(pageTitle = "Posts<div class='headingLink'>#linkTo(text="+ Add Post",action="addeditpost",class="btn btn-primary")#</div>", renderShowBy = true, stickyAttributes = "pagesize,sort,order");
 
         initListParams(20, "createdAt");
 
@@ -31,6 +31,7 @@ component extends="Controller" hint="Controller for crum posts section" {
 
         if (StructKeyExists(params,"key"))
             {
+                 _view(pageTitle = "Edit Post", renderShowBy = true);
                 checkconfirmpost(params.key);
                 newPost = model("post").findByKey(params.key) ;
                 if(isAuthor() && (newPost.userid NEQ getUserAttr("id")) OR isGuest())
@@ -50,6 +51,7 @@ component extends="Controller" hint="Controller for crum posts section" {
             }
         else
             {
+                 _view(pageTitle = "Add Post", renderShowBy = true);
                 newPost = model("post").new() ;
                 title = "Posts" ;
                 formAction = "SubmitAddNewPost" ;

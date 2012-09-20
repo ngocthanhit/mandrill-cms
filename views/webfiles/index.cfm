@@ -60,7 +60,7 @@
         <div class="fileupload-loading"></div>
         <br>
         <!-- The table listing the files available for upload/download -->
-        <table role="presentation" class="table table-striped"><tbody class="files" data-toggle="modal-gallery" data-target="##modal-gallery"><tr><th width="35%">&nbsp;</th><th width="15%">File name</th><th width="10%">Size</th><th colspan="2" width="15%">&nbsp;</th><th width="25%">Options</th><th>&nbsp;</th><th>&nbsp;</th></tr></tbody></table>
+        <table role="presentation" class="table table-striped"><tbody class="files" data-toggle="modal-gallery" data-target="##modal-gallery"><tr><th width="35%">&nbsp;</th><th width="15%">File name</th><th width="10%">Size</th><th colspan="2" width="15%">&nbsp;</th><th width="25%">Options</th></tr></tbody></table>
 #endFormTag()#
 
     <!-- modal-gallery is the modal dialog used for the image gallery -->

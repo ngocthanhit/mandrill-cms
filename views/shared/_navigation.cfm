@@ -8,9 +8,9 @@
                 <cfquery dbtype="query" name="getSite">
                     SELECT * FROM SITES WHERE  id = '#getsiteid()#'
                 </cfquery>
-                 <a class="brand pull-left" href="/"><small>#getSite.name#</small><br /><strong>#getSite.URL#</strong></a>
+                 <a class="brand pull-left" href="/"><small><!---#getSite.name#--->&nbsp;</small><br /><strong>#UCASE(getSite.URL)#</strong></a>
               <cfelse>
-              <a class="brand pull-left" href="/"><small>COMPANY NAME</small><br /><strong>COMPANY-WEBSITE.CO.UK</strong></a>
+              <a class="brand pull-left" href="/"><small><!---COMPANY NAME--->&nbsp;</small><br /><strong>COMPANY-WEBSITE.CO.UK</strong></a>
          </cfif>
         <div class="nav-collapse">
           <ul class="nav mainnav">
@@ -35,7 +35,7 @@
               <ul class="dropdown-menu" id="content_menu">
                 <li>#linkTo(text='Pages', controller='Pages')#</li>
                 <li>#linkTo(text='Posts', controller='Posts')#</li>
-                <li><a href="##"> Forms</a></li>
+                <!---<li><a href="##"> Forms</a></li>--->
                 <li>#linkTo(text='Files', controller='Webfiles')#</li>
               </ul>
             </li>
