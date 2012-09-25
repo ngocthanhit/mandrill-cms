@@ -51,10 +51,10 @@ component extends="Controller" hint="Controller for TEMPLATE section" {
 	/* Process Create Template */
 	public any function processCreateTemplate() hint="Process Create Template"{
 		
-		newTemplate = model("template").new(params.template);    
-		newTemplate.userid = getUserAttr('id');
+		Template = model("template").new(params.template);    
+		Template.userid = getUserAttr('id');
 		
-		if (newTemplate.save()){
+		if (Template.save()){
 		    _event("I", "Successfully template created", "Sessions", "Session id is #session.sessionid#, useragent is #CGI.USER_AGENT#", getAccountAttr("id"), getUserAttr("id"));
 		    flashInsert(success="Template created successfully.") ;
 	    	redirectTo(controller=params.controller) ;
@@ -71,10 +71,42 @@ component extends="Controller" hint="Controller for TEMPLATE section" {
 	/* Process Update Template */
 	public any function processUpdateTemplate() hint="Process Update Template"{
 		
+		params.template['updatedAt'] = Now();
+		Template = model("template").findByKey(params.template.id);
+		
+		if( Template.update( properties = params.template ) ){
+			_event("I", "Successfully template updated", "Sessions", "Session id is #session.sessionid#, useragent is #CGI.USER_AGENT#", getAccountAttr("id"), getUserAttr("id"));
+		    flashInsert(success="Template updated successfully.");
+	    	redirectTo(controller=params.controller);	
+		}
+		else {
+			_event("W", "Caught attempt to template update information not required", "Sessions", "Session id is #session.sessionid#, useragent is #CGI.USER_AGENT#", getAccountAttr("id"), getUserAttr("id"));
+					
+	        _view(pageTitle = "Edit Template");	
+	        formParams.action = "processUpdateTemplate" ;
+	        renderPage(template="addedittemplate") ;	
+		}
 	}
 	
-	/* Process Delete Template */
+	/**
+	* Process Delete Template
+	* 	Deleted process is using softdelete. 
+	* */ 
 	public any function processDeleteTemplate() hint="Process Delete Template"{
+		
+		var isSuccessDeleted = 0
+		
+		Template = model("template").findByKey(params.key);	
+		
+		if( Template.delete() ){
+			_event("I", "Deleted template ###Template.id# (#Template.templatename#)");
+			flashInsert(success="Template was deleted successfully");
+			redirectTo(controller=params.controller) ;	
+		}
+		else{
+			_event("E", "Failed to delete template ###Template.id# (#Template.templatename#))");
+            _error("Template deleting failed");		
+		}
 		
 	}
 	

@@ -515,3 +515,49 @@ sitessettingid int(11)  UNSIGNED NOT NULL
 )
 
 ALTER TABLE  `sitessettingsmappings` ADD PRIMARY KEY (  `sitessettingid` )
+
+
+
+
+
+-- ---------------------- TEMPLATES ----------------------
+
+-- ----------------------------
+-- Table structure for `templateroles`
+-- ----------------------------
+DROP TABLE IF EXISTS `templateroles`;
+CREATE TABLE `templateroles` (
+  `id` int(11) NOT NULL auto_increment,
+  `role` varchar(255) default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of templateroles
+-- ----------------------------
+INSERT INTO `templateroles` VALUES ('1', 'index');
+INSERT INTO `templateroles` VALUES ('2', 'post');
+INSERT INTO `templateroles` VALUES ('3', 'posts');
+INSERT INTO `templateroles` VALUES ('4', 'page');
+
+-- ----------------------------
+-- Table structure for `templates`
+-- ----------------------------
+DROP TABLE IF EXISTS `templates`;
+CREATE TABLE `templates` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `userid` int(10) unsigned NOT NULL,
+  `templatename` varchar(255) NOT NULL,
+  `templatecontent` longtext,
+  `templateroleid` int(11) NOT NULL,
+  `isactive` tinyint(4) NOT NULL default '1',
+  `isdefaulttemplate` tinyint(4) NOT NULL default '0',
+  `createdat` datetime default NULL,
+  `updatedat` datetime default NULL,
+  `deletedat` datetime default NULL,
+  PRIMARY KEY  (`id`),
+  KEY `userid` (`userid`),
+  KEY `templateroleid` (`templateroleid`),
+  CONSTRAINT `templates_ibfk_1` FOREIGN KEY (`userid`) REFERENCES `users` (`id`) ON DELETE NO ACTION,
+  CONSTRAINT `templates_ibfk_2` FOREIGN KEY (`templateroleid`) REFERENCES `templateroles` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
