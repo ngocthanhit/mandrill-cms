@@ -124,7 +124,7 @@
                                    "<a href='#' class='btn ' data-dismiss='modal'>Cancel & close this window</a>" +
                                "</div>" +
                            "</div>" +
-                           "<a class='btn' data-wysihtml5-command='insertImage' title='Insert image'><i class='icon-picture'></i></a>" +
+                           "<a class='btn' data-wysihtml5-command='insertImage' id='imageModalShow' title='Insert image'><i class='icon-picture'></i></a>" +
                        "</li>",
         "page":       "<li>" +
                            "<div class='bootstrap-wysihtml5-insert-page-modal modal hide fade'>" +
@@ -213,9 +213,9 @@
 
         createEditor: function(options) {
             options = $.extend(defaultOptions, options || {});
-		    options.toolbar = this.toolbar[0];
+            options.toolbar = this.toolbar[0];
 
-		    var editor = new wysi.Editor(this.el[0], options);
+            var editor = new wysi.Editor(this.el[0], options);
 
             if(options && options.events) {
                 for(var eventName in options.events) {
@@ -298,6 +298,10 @@
                 }
             });
 
+
+            insertButton.click(function(e){
+             self.editor.currentView.element.focus();
+            });
             insertButton.click(insertImage);
 
             insertImageModal.on('shown', function() {
@@ -311,8 +315,8 @@
             toolbar.find('a[data-wysihtml5-command=insertImage]').click(function() {
                 insertImageModal.modal('show');
                 insertImageModal.on('click.dismiss.modal', '[data-dismiss="modal"]', function(e) {
-					e.stopPropagation();
-				});
+                    e.stopPropagation();
+                });
                 return false;
             });
         },
@@ -341,9 +345,11 @@
                     insertLinkModal.modal('hide');
                 }
             });
-
+            
             insertButton.click(insertLink);
-
+            
+            
+            
             insertLinkModal.on('shown', function() {
                 urlInput.focus();
             });
@@ -355,8 +361,8 @@
             toolbar.find('a[data-wysihtml5-command=createLink]').click(function() {
                 insertLinkModal.modal('show');
                 insertLinkModal.on('click.dismiss.modal', '[data-dismiss="modal"]', function(e) {
-					e.stopPropagation();
-				});
+                    e.stopPropagation();
+                });
                 return false;
             });
 
@@ -379,9 +385,10 @@ $(function() {
         $('<div/>').dialog2({
             title: "Insert Image",
             content: "/index.cfm/webfiles/imageupload",
-            id: "Insert_Image"
+            id: "Insert_Image",
+            width:"650"
         });
-        event.preventDefault();
+         event.preventDefault();
     });
      $("#show-server-page-link").click(function(event) {
         $('<div/>').dialog2({
@@ -391,4 +398,8 @@ $(function() {
         });
         event.preventDefault();
     });
+     $("#imageModalShow").click(function(){
+                $("#selectedfilelist").html('');
+                $("#bootstrap-wysihtml5-insert-image-url").val('')
+        });
 });

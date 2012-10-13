@@ -16,8 +16,8 @@
         <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
     <script src="//feather.aviary.com/js/feather.js"></script>
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-	<!--- jquery --->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <!--- jquery --->
     #javaScriptIncludeTag("jquery.ui,layout,mandrillcms,lib/js/wysihtml5-0.3.0,src/bootstrap-wysihtml5")#
     #javaScriptIncludeTag("bootstrap,jquery.dialog2")#
   </head>

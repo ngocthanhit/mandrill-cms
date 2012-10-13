@@ -91,6 +91,10 @@
         </a>
         </div>
     </div>
+    <cfset serverport = CGI.SERVER_PORT>
+    <cfif serverport NEQ "">
+        <cfset serverport = ":" & serverport>
+    </cfif>
     <!-- The template to display files available for upload -->
     <script id="template-upload" type="text/x-tmpl">
     {% for (var i=0, file; file=o.files[i]; i++) { %}
@@ -150,7 +154,7 @@
             </button>
         </td>
               <td class="Add">
-               <a class="btn btn-primary AddButton" href="javascript:setval('{%=file.NAME%}','{%=file.SIZE%}','/assets/img/uploadImages/#getAccountAttr('id')#/')" >
+               <a class="btn btn-primary AddButton" href="javascript:setval('{%=file.NAME%}','{%=file.SIZE%}','http://#getPageContext().getRequest().getServerName()##serverport#/assets/img/uploadImages/#getAccountAttr('id')#/')" >
                 <i class="icon-white"></i>
                 <span >Select</span>
                 </a>

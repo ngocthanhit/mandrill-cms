@@ -143,13 +143,17 @@ component extends="Controller" hint="Controller for crum FILES section" {
         var newImage = "";
         var getImageSource = "";
         var db = false;
+        var getImageData = "";
         var newfile = structnew();
-
+         var serverport = CGI.SERVER_PORT ;
+        if(serverport != ""){
+        serverport = ":" & CGI.SERVER_PORT & "" ;
+        }
         if(find("http",lcase(params.newURLLink)) GT 0) {
              getImageSource = ImageRead(Params.newURLLink) ;
              newImage = ImageNew(getImageSource) ;
         }else if (find("EDIT",getimageName) GT 0) {
-             getImageSource = ImageRead("http://#getPageContext().getRequest().getServerName()#/assets/img/uploadImages/#getAccountAttr("id")#/#getimageName#") ;
+             getImageSource = ImageRead("http://#getPageContext().getRequest().getServerName()##serverport#/assets/img/uploadImages/#getAccountAttr("id")#/#getimageName#") ;
              getimageName = replace(getimageName,"EDIT","")
              newImage = ImageNew(getImageSource) ;
         }
@@ -169,19 +173,20 @@ component extends="Controller" hint="Controller for crum FILES section" {
             FileDelete("#path#/#trim(Params.OldName)#");
             db = true;
         }
+        getImageData = getFileInfo(path & "/" & getimageName);
         if(db) {
              newfile.filename = getimageName ;
              newfile.fileext = lcase(listlast(getimageName,".")) ;
              newfile.userid =  "#getUserAttr("id")#";
              newfile.accountid =  "#getAccountAttr("id")#";
-             newfile.title =  'test';
-             newfile.filesize =  '';
+             newfile.title =  '';
+             newfile.filesize =  getImageData.size;
              insertfile = model("file").new(newfile);
                 if (insertfile.save()) {
                      _event("I", "Successfully save file", "Sessions", "Session id is #session.sessionid#, useragent is #CGI.USER_AGENT#", getAccountAttr("id"), getUserAttr("id"));
                 }
         }
-      writeOutput("http://#getPageContext().getRequest().getServerName()#/assets/img/uploadImages/#getAccountAttr("id")#/#getimageName#");
+      writeOutput("http://#getPageContext().getRequest().getServerName()##serverport#/assets/img/uploadImages/#getAccountAttr("id")#/#getimageName#");
         abort;
     }
 }

@@ -228,13 +228,13 @@ var featherEditor = new Aviary.Feather({
         img.src = newURL;
         $.post('/index.cfm/webfiles/updateimage',{newURLLink:newURL,OldName:imagename,returnformat:'JSON'},function(data) {
             img.src = data ;
-             $("##bootstrap-wysihtml5-insert-image-url").val(data);
-             $('##myModal').modal('hide');
+             $("#bootstrap-wysihtml5-insert-image-url").val(data);
+             $('#myModal').modal('hide');
              $(".modal-backdrop").css('z-index','1040');
         });
     },
     onSaveButtonClicked:function(){
-        $('##myModal').modal({
+        $('#myModal').modal({
          keyboard: false,
          backdrop:'static'
         });

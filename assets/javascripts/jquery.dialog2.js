@@ -107,6 +107,9 @@
             if (!selection.is(".modal-body")) {
                 var overlay = $('<div class="modal-backdrop"></div>').hide();
                 var parentHtml = $(__DIALOG_HTML);
+                if(options.width != 'undefined'){
+                    $(parentHtml).css('width',options.width);
+                }
 
                 if (options.modalClass) {
                     parentHtml.addClass(options.modalClass);
