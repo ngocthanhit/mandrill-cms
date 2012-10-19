@@ -138,7 +138,7 @@ component extends="Controller" hint="Controller for crum FILES section" {
     }
 
     private any function insertlinktoimage() hint="Insert link to image" {
-        var getimageName = Params.OldName ;
+        var getimageName = trim(Params.OldName) ;
         var path = "#expandpath("/")#assets/img/uploadImages/#getAccountAttr("id")#";
         var newImage = "";
         var getImageSource = "";
@@ -149,15 +149,15 @@ component extends="Controller" hint="Controller for crum FILES section" {
         if(serverport != ""){
         serverport = ":" & CGI.SERVER_PORT & "" ;
         }
-        if(find("http",lcase(params.newURLLink)) GT 0) {
-             getImageSource = ImageRead(Params.newURLLink) ;
+        if(find("http",lcase(trim(params.newURLLink))) GT 0) {
+             getImageSource = ImageRead(trim(Params.newURLLink)) ;
              newImage = ImageNew(getImageSource) ;
         }else if (find("EDIT",getimageName) GT 0) {
              getImageSource = ImageRead("http://#getPageContext().getRequest().getServerName()##serverport#/assets/img/uploadImages/#getAccountAttr("id")#/#getimageName#") ;
              getimageName = replace(getimageName,"EDIT","")
              newImage = ImageNew(getImageSource) ;
         }
-        if(find("http",lcase(Params.newURLLink)) GT 0) {
+        if(find("http",lcase(trim(Params.newURLLink))) GT 0) {
             if (!DirectoryExists("#path#"))
              {
              DirectoryCreate("#path#");
@@ -168,9 +168,9 @@ component extends="Controller" hint="Controller for crum FILES section" {
             }
             ImageWrite(newImage,path & "/" & getimageName) ;
             db = true;
-        } else if (find("EDIT",Params.OldName) GT 0) {
-            ImageWrite(newImage,path & "/" & getimageName) ;
+        } else if (find("EDIT",trim(Params.OldName)) GT 0) {
             FileDelete("#path#/#trim(Params.OldName)#");
+            ImageWrite(newImage,path & "/" & getimageName) ;
             db = true;
         }
         getImageData = getFileInfo(path & "/" & getimageName);
