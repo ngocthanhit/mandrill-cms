@@ -1,7 +1,9 @@
 component extends="Controller" hint="Controller for crum pages section" {
     varsiteid = getSiteId();
     getPages = model("page").findALL(include="pagesuser",where="pagesusers.siteid = '#varsiteid#'"); //This gets all pages to fill in drop down to bind this page as sub page to another parent page, if any.
-    getTemplates= model("template").findALL(); // page layouts/ templates
+    //getTemplates= model("template").findALL(); // page layouts/ templates
+    
+    getTemplates = model("template").findAll(where = "userid = #getUserAttr('id')# AND templateroleid = 4",order = "templatename");
 
     public any function init() hint="Initialize the controller" {
     filters(through="memberOnly");
@@ -28,48 +30,49 @@ component extends="Controller" hint="Controller for crum pages section" {
     }
 
     public any function addeditpage() hint="Add/Edit Page to get new page details and show/ update information for existing pages" {
-         params.navigation="";
-         params.protected="No password required"
-          password = 0;
+		params.navigation="";
+		params.protected="No password required"
+		password = 0;
+		
         if(StructKeyExists(params,"key"))
         {
              _view(pageTitle = "Edit Page", renderShowBy = true);
             checkconfirmpage(params.key);
-        Newpages= model("page").findByKey(params.key) ;
-        title = "Edit Page" ;
-        formAction = "SubmitEditPage" ;
-        createdBy = model("user").findbykey(key=Newpages.userid,select="id,firstname, lastname") ;
-        if (Newpages.updatedby NEQ "")
-        {
-        updatedBy = model("user").findbykey(key=Newpages.updatedby,select="id,firstname, lastname") ;
-        }
-        Status = model("status").findbykey(key=Newpages.statusid,select="statusid,status");
-
-        if(Newpages.showinnavigation){
-            params.navigation = "Show in main navigation";
-        }
-          if(Newpages.showinfooternavigation){
-            params.navigation = "Show page in footer navigation";
-        }
-
-         if(Newpages.isprotected){
-            params.protected = "Password protect page";
-        }
-          if(Newpages.issubpageprotected){
-            params.protected = "Protect sub-pages";
-        } 
-        if(Newpages.password NEQ "") {
-            password = 1;
-        }
-        Newpages.password = "";
+	        Newpages= model("page").findByKey(params.key) ;
+	        title = "Edit Page" ;
+	        formAction = "SubmitEditPage" ;
+	        createdBy = model("user").findbykey(key=Newpages.userid,select="id,firstname, lastname") ;
+	        if (Newpages.updatedby NEQ "")
+	        {
+	        	updatedBy = model("user").findbykey(key=Newpages.updatedby,select="id,firstname, lastname") ;
+	        }
+	        Status = model("status").findbykey(key=Newpages.statusid,select="statusid,status");
+	
+	        if(Newpages.showinnavigation){
+	            params.navigation = "Show in main navigation";
+	        }
+			if(Newpages.showinfooternavigation){
+	            params.navigation = "Show page in footer navigation";
+	        }
+	
+	        if(Newpages.isprotected){
+	            params.protected = "Password protect page";
+	        }
+	        if(Newpages.issubpageprotected){
+	            params.protected = "Protect sub-pages";
+	        } 
+	        if(Newpages.password NEQ "") {
+	            password = 1;
+	        }
+	        Newpages.password = "";
         }
         else
         {
-         _view(pageTitle = "Add Page", renderShowBy = true);
-        Newpages= model("page").new() ;
-        Newpages.showinnavigation = 1 ;
-        title = "Pages" ;
-        formAction = "SubmitaddNewPage";
+			_view(pageTitle = "Add Page", renderShowBy = true);
+	     	Newpages= model("page").new() ;
+	        Newpages.showinnavigation = 1 ;
+	        title = "Pages" ;
+	        formAction = "SubmitaddNewPage";
         }
     }
 

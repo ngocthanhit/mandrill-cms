@@ -98,15 +98,35 @@ component extends="Controller" hint="Controller for TEMPLATE section" {
 		
 		Template = model("template").findByKey(params.key);	
 		
-		if( Template.delete() ){
-			_event("I", "Deleted template ###Template.id# (#Template.templatename#)");
-			flashInsert(success="Template was deleted successfully");
+		// Check first, is the template still used 
+		qPage = model("page").findOne(
+						select = 'id',
+						where="templateid = #params.key#",
+						returnAs = 'query'
+		)
+		qPost = model("post").findOne(
+						select = 'id',
+						where="templateid = #params.key#",
+						returnAs = 'query'
+		)
+		
+		if( qPage.RecordCount EQ 0 AND qPost.RecordCount EQ 0){
+			if( Template.delete() ){
+				_event("I", "Deleted template ###Template.id# (#Template.templatename#)");
+				flashInsert(success="Template was deleted successfully");
+				redirectTo(controller=params.controller) ;	
+			}
+			else{
+				_event("E", "Failed to delete template ###Template.id# (#Template.templatename#))");
+	            _error("Template deleting failed");		
+			}	
+		}
+		else {
+			_event("E", "Failed to delete template ###Template.id# (#Template.templatename#)) because it still used by pages/posts");
+            flashInsert(success="Template deleting failed.  You will not be able to delete the template until no pages/posts are using the template.");
 			redirectTo(controller=params.controller) ;	
 		}
-		else{
-			_event("E", "Failed to delete template ###Template.id# (#Template.templatename#))");
-            _error("Template deleting failed");		
-		}
+		
 		
 	}
 	

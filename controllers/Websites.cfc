@@ -39,6 +39,10 @@ component extends="Controller" hint="Controller for crum pages section" {
     }
 
     public any function SubmitaddNewSite() hint="Create new site"{
+        dump(params);
+        abort;
+
+
         NewSites = model("site").new(params.NewSites) ;    
         if (NewSites.save())
             {
