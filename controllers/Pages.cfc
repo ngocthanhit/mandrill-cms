@@ -1,8 +1,6 @@
 component extends="Controller" hint="Controller for crum pages section" {
     varsiteid = getSiteId();
     getPages = model("page").findALL(include="pagesuser",where="pagesusers.siteid = '#varsiteid#'"); //This gets all pages to fill in drop down to bind this page as sub page to another parent page, if any.
-    //getTemplates= model("template").findALL(); // page layouts/ templates
-    
     getTemplates = model("template").findAll(where = "userid = #getUserAttr('id')# AND templateroleid = 4",order = "templatename");
 
     public any function init() hint="Initialize the controller" {

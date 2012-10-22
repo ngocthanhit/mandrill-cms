@@ -1,7 +1,7 @@
 component extends="Controller" hint="Controller for crum posts section" {
 
     varsiteid = getSiteId();
-    getTemplates= model("template").findALL() ;
+    getTemplates = model("template").findAll(where = "userid = #getUserAttr('id')# AND templateroleid = 2",order = "templatename");
     ALlCatagories = model("category").findALL() ;
     public any function init() hint="Initialize the controller" {
         filters(through="memberOnly");
