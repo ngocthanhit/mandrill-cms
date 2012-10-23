@@ -46,14 +46,25 @@
             });
             $(".modal-backdrop").css('z-index','10000');
             $.post('/index.cfm/webfiles/insertlinktoimage',{newURLLink:$("#bootstrap-wysihtml5-insert-image-url").val(),OldName:imagename,returnformat:'JSON'},function(data) {
-               $('iframe.wysihtml5-sandbox').each(function(i, el){
+               /*$('iframe.wysihtml5-sandbox').each(function(i, el){
                     el.contentWindow.document.getElementById('Imageid').setAttribute('src',data) ;
                     el.contentWindow.document.getElementById('Imageid').removeAttribute('id') ;
                     $(".markItUp").html(el.contentWindow.document.body.innerHTML.replace(/%0D/g,"").replace(/%0A/g,"").replace(/%09/g,""));
                     el.contentWindow.document.body.innerHTML = $(".markItUp").html().replace(/&lt;/g,"<").replace(/&gt;/g,">");
                     $('#myModal').modal('hide');
                     $(".modal-backdrop").css('z-index','1040');
-                });
+                });*/
+               $('iframe.wysihtml5-sandbox').each(function(i, el){
+                    var imageElement = el.contentWindow.document.getElementById('Imageid');
+                    if(imageElement != null){
+                        imageElement.setAttribute('src',data) ;
+                        imageElement.removeAttribute('id') ;
+                        $(".markItUp").html(el.contentWindow.document.body.innerHTML.replace(/%0D/g,"").replace(/%0A/g,"").replace(/%09/g,""));
+                        el.contentWindow.document.body.innerHTML = $(".markItUp").html().replace(/&lt;/g,"<").replace(/&gt;/g,">");
+                    }
+                 });
+                $('#myModal').modal('hide');
+                $(".modal-backdrop").css('z-index','1040');
             });
         }
     }

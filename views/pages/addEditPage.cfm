@@ -1,11 +1,11 @@
 <cfoutput>
-	
+
 <!--- show error msg if validation properly work --->
 #errorMessagesFor("Newpages")#
 
 <!--- add / edit form page [start]--->
 #startFormTag(name="createNewPageForm",method="post",action=formAction,autocomplete="off",id="dataForm")#
-<div class="span7">
+<div class="span8">
     <div class="container-fluid" >
     #textArea(label="Main content<br />", objectName="Newpages", property="content",class="markItUp",style="width:650px;height:100px")# <br />
     #textField(label="Page Title<br />", objectName="Newpages", property="title",size="64",style="width:715px;")# <br />
