@@ -44,6 +44,16 @@ component extends="Wheels" {
 
     }
 
+    private any function accountOwnerOrDeveloperOnly() hint="Require user to be account owner to access actions" {
+
+        if (NOT isAccountOwner() and NOT isDeveloper()) {
+            _view(pageTitle = "Forbidden");
+            _event("W", "Caught attempt to access forbidden manager-only page", "", cgi.HTTP_USER_AGENT);
+            renderPage(controller="members", action="forbidden");
+        }
+
+    }
+
 
     private any function adminOnly() hint="Require user to be admin to access actions" {
 
