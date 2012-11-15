@@ -535,10 +535,10 @@ CREATE TABLE `templateroles` (
 -- ----------------------------
 -- Records of templateroles
 -- ----------------------------
-INSERT INTO `templateroles` VALUES ('1', 'index');
-INSERT INTO `templateroles` VALUES ('2', 'post');
-INSERT INTO `templateroles` VALUES ('3', 'posts');
-INSERT INTO `templateroles` VALUES ('4', 'page');
+INSERT INTO `templateroles` VALUES ('1', 'Home Page');
+INSERT INTO `templateroles` VALUES ('2', 'Individual Post');
+INSERT INTO `templateroles` VALUES ('3', 'Posts List');
+INSERT INTO `templateroles` VALUES ('4', 'Page');
 
 -- ----------------------------
 -- Table structure for `templates`
