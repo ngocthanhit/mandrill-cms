@@ -14,7 +14,7 @@
     <tbody>
     <cfloop query="sites">
         <tr>
-           <td>#sites.name#</td>
+           <td>#linkTo(text=#HTMLEditFormat(sites.name)#,controller = "websites",action="set-choose-site",params="siteid=#sites.id#")#</td>
            <td>#sites.url#</td>
            <td>#DateFormat(sites.createdAt,"mm/dd/yyyy")#</td>
            <td>#linkto(text="Edit",action="addeditproject",key=id)# | #linkto(text="Delete",action="Deleteproject",key=id,confirm="Are you sure you want to delete this site ?")# | #linkto(text="Settings",action="SiteSettings",key=id)#</td>
