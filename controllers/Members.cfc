@@ -28,8 +28,28 @@ component extends="Controller" hint="Controller for registered members section" 
         _view(pageTitle = "Dashboard");
 
     }
+    
+     public any function sites() hint="Current user list of sites" {
 
-
+        if (NOT isLoggedIn()) {
+            redirectTo(action="login");
+        }
+        var local = {};
+		initListParams(20, "name");
+		sites = model("site").findALL(include="sitesusers",where="accountid=#getAccountAttr('id')# AND userid=#getUserAttr('id')#",
+        	page=params.page,
+            perPage=params.pagesize,
+            order="#params.order# #params.sort#");  
+        if(sites.RecordCount eq 1){
+        	redirectTo(controller = "websites",action="set-choose-site",params="siteid=#sites.id#");
+        }
+        else if (sites.RecordCount eq 0){
+        	redirectTo(controller = "websites", action = "addeditproject");
+        }
+        _view(pageTitle = "Sites", renderShowBy = true, stickyAttributes = "pagesize,sort,order");
+        _view(headLink = linkTo(text="Go to", action="siteChoose"));       
+    	}
+    	
     public any function profile() hint="Current user profile" {
 
         var local = {};
@@ -154,8 +174,8 @@ component extends="Controller" hint="Controller for registered members section" 
 
                 // save event for logged user
                 _event("I", "Successfully logged in", "Sessions", "Session id is #session.sessionid#, useragent is #CGI.USER_AGENT#", local.account.id, local.user.id);
-
-                redirectTo(route="home");
+				
+                redirectTo(action="sites");
 
             }
             catch (any local.e) {
