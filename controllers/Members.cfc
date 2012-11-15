@@ -36,7 +36,7 @@ component extends="Controller" hint="Controller for registered members section" 
         }
         var local = {};
 		initListParams(20, "name");
-		sites = model("site").findALL(include="sitesusers",where="accountid=#getAccountAttr('id')# AND userid=#getUserAttr('id')#",
+		sites = model("site").findALL(include="sitesuser",where="accountid=#getAccountAttr('id')# AND userid=#getUserAttr('id')#",
         	page=params.page,
             perPage=params.pagesize,
             order="#params.order# #params.sort#");  
