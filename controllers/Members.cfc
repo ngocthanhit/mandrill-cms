@@ -155,7 +155,7 @@ component extends="Controller" hint="Controller for registered members section" 
                 // save event for logged user
                 _event("I", "Successfully logged in", "Sessions", "Session id is #session.sessionid#, useragent is #CGI.USER_AGENT#", local.account.id, local.user.id);
 				
-                redirectTo(controller="websites",action="index");
+                redirectTo(controller="websites",action="listSites");
 
             }
             catch (any local.e) {
