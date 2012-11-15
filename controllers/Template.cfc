@@ -122,7 +122,7 @@ component extends="Controller" hint="Controller for TEMPLATE section" {
 		}
 		else {
 			_event("E", "Failed to delete template ###Template.id# (#Template.templatename#)) because it still used by pages/posts");
-            flashInsert(success="Template deleting failed.  You will not be able to delete the template until no pages/posts are using the template.");
+            flashInsert(success="This template can not be deleted as it is still in use. To delete this template, please ensure that no pages or posts are using this template for their layout");
 			redirectTo(controller=params.controller) ;
 		}
 
