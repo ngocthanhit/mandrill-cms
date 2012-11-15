@@ -72,9 +72,9 @@ $(function () {
            });
         });
         if(typeof show != 'undefined' && show == 'Images') {
-            $('#fileupload').fileupload('option',{maxFileSize: 100000000,acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i}) ;
+            $('#fileupload').fileupload('option',{maxFileSize: 100000000, prependFiles: true,acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i}) ;
         } else {
-            $('#fileupload').fileupload('option',{maxFileSize: 100000000,acceptFileTypes: /(\.|\/)(gif|jpe?g|png|pdf|doc|rtf|txt)$/i}) ;
+            $('#fileupload').fileupload('option',{maxFileSize: 100000000, prependFiles: true,acceptFileTypes: /(\.|\/)(gif|jpe?g|png|pdf|doc|rtf|txt)$/i}) ;
         }
     }
 });

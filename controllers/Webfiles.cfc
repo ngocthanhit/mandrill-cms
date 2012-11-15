@@ -13,13 +13,13 @@ component extends="Controller" hint="Controller for crum FILES section" {
     private any function fileUpload() hint="files action" {
         var path = "#expandpath("/")#assets/files/uploadfiles/#getAccountAttr("id")#";
         var pathImage = "#expandpath("/")#assets/img/uploadImages/#getAccountAttr("id")#";
-        var pathrelative = "/assets/files/uploadfiles/#getAccountAttr("id")#";
-        var pathrelativefiles = "/assets/files/uploadfiles/#getAccountAttr("id")#";
-        var pathrelativeImage = "/assets/img/uploadImages/#getAccountAttr("id")#";
+        var pathrelative = "/#get('filePath')#/uploadfiles/#getAccountAttr("id")#";
+        var pathrelativefiles = "/#get('filePath')#/uploadfiles/#getAccountAttr("id")#";
+        var pathrelativeImage = "/#get('imagePath')#/uploadImages/#getAccountAttr("id")#";
         var result = ArrayNew();
         var serverport = CGI.SERVER_PORT ;
         if(serverport != ""){
-        serverport = ":" & CGI.SERVER_PORT & "" ;
+        	serverport = ":" & CGI.SERVER_PORT & "" ;
         }
         if (GetHttpRequestData().method EQ "GET"){
 
@@ -30,23 +30,23 @@ component extends="Controller" hint="Controller for crum FILES section" {
             }
 
 
-            for (intRow = 1 ;intRow LTE getfiles.RecordCount ;intRow = (intRow + 1)){
+            for (var intRow = 1 ;intRow LTE getfiles.RecordCount ;intRow = (intRow + 1)){
                 if(listcontains(imageext,lcase(getfiles[ "fileext" ][ intRow ])) GT 0) {
-                    urlpath = "http://#getPageContext().getRequest().getServerName()##serverport##pathrelativeImage#/#getfiles[ "filename" ][ intRow ]#";
+                    var urlpath = "http://#getPageContext().getRequest().getServerName()##serverport##pathrelativeImage#/#getfiles[ "filename" ][ intRow ]#";
                 }else{
-                    urlpath = "http://#getPageContext().getRequest().getServerName()##serverport##pathrelativefiles#/#getfiles[ "filename" ][ intRow ]#";
+                    var urlpath = "http://#getPageContext().getRequest().getServerName()##serverport##pathrelativefiles#/#getfiles[ "filename" ][ intRow ]#";
                 }
                 var newlink = structnew() ;
-                    newlink.name= getfiles[ "filename" ][ intRow ];
-                    newlink.size= getfiles[ "filesize" ][ intRow ];
-                    newlink.url= urlpath ;
-              if(NOT (isAuthor() && (getfiles[ "userid" ][ intRow ] NEQ getUserAttr("id")) OR isGuest())){
-                        newlink.delete_url= URLfor(action="fileUpload", method="DELETE#intRow#",key=getfiles[ "id" ][ intRow ]);
-                        newlink.delete_type= "DELETE";
-                    }
-                    newlink.thumbnail_url= urlpath;
-                    newlink.type= 'image/gif';
-                    arrayappend(result,newlink);
+                newlink.name= getfiles[ "filename" ][ intRow ];
+                newlink.size= getfiles[ "filesize" ][ intRow ];
+                newlink.url= urlpath ;
+                if(NOT (isAuthor() && (getfiles[ "userid" ][ intRow ] NEQ getUserAttr("id")) OR isGuest())){
+                    newlink.delete_url= URLfor(action="fileUpload", method="DELETE#intRow#",key=getfiles[ "id" ][ intRow ]);
+                    newlink.delete_type= "DELETE";
+                }
+                newlink.thumbnail_url= urlpath;
+                newlink.type= 'image/gif';
+                arrayappend(result,newlink);
             }
         }
         else if (GetHttpRequestData().method EQ "POST"){
@@ -112,8 +112,9 @@ component extends="Controller" hint="Controller for crum FILES section" {
                  }
             result = params.key ;
         }
-    writeoutput(serializejson(result));
-    abort;
+
+	    writeoutput(serializejson(result));
+	    abort;
     }
 
     private any function updateimage() hint="Update Image" {
