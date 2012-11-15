@@ -1,13 +1,14 @@
 component extends="Controller" hint="Controller for crum FILES section" {
 
-     imageext = "jpg,png,gif,jpeg";
-     public any function init() hint="Initialize the controller" {
+    imageext = "jpg,png,gif,jpeg";
+    public any function init() hint="Initialize the controller" {
        filters(through="memberOnly");
     }
 
     public any function index() hint="index default file of webfiles controller" {
-   _view(pageTitle = "Files");
+        _view(pageTitle = "Files");
     }
+
     varsiteid = getSiteId();
 
     private any function fileUpload() hint="files action" {
@@ -33,8 +34,10 @@ component extends="Controller" hint="Controller for crum FILES section" {
             for (var intRow = 1 ;intRow LTE getfiles.RecordCount ;intRow = (intRow + 1)){
                 if(listcontains(imageext,lcase(getfiles[ "fileext" ][ intRow ])) GT 0) {
                     var urlpath = "http://#getPageContext().getRequest().getServerName()##serverport##pathrelativeImage#/#getfiles[ "filename" ][ intRow ]#";
+                    var thumbnailUrlPath = "http://#getPageContext().getRequest().getServerName()##serverport##pathrelativeImage#/thumb_#getfiles[ "filename" ][ intRow ]#";
                 }else{
                     var urlpath = "http://#getPageContext().getRequest().getServerName()##serverport##pathrelativefiles#/#getfiles[ "filename" ][ intRow ]#";
+					var thumbnailUrlPath = urlPath;
                 }
                 var newlink = structnew() ;
                 newlink.name= getfiles[ "filename" ][ intRow ];
@@ -44,7 +47,7 @@ component extends="Controller" hint="Controller for crum FILES section" {
                     newlink.delete_url= URLfor(action="fileUpload", method="DELETE#intRow#",key=getfiles[ "id" ][ intRow ]);
                     newlink.delete_type= "DELETE";
                 }
-                newlink.thumbnail_url= urlpath;
+                newlink.thumbnail_url= thumbnailUrlPath;
                 newlink.type= 'image/gif';
                 arrayappend(result,newlink);
             }
@@ -55,15 +58,22 @@ component extends="Controller" hint="Controller for crum FILES section" {
                 DirectoryCreate(path);
             }
             var upload =  FileUpload(destination="#path#",fileField="files[]",nameConflict="makeunique");
+            var isImageUpload = false;
 
-               if(listcontains(imageext,lcase(upload.serverfileext)) GT 0){
-                pathrelative = "/assets/img/uploadImages/#getAccountAttr("id")#";
-               if (!DirectoryExists("#pathImage#"))
-                 {
-                 DirectoryCreate("#pathImage#");
-                 }
-              FileDelete("#path#/#upload.serverfile#");
-              upload =  FileUpload(destination="#pathImage#",fileField="files[]",nameConflict="makeunique");
+            if(listcontains(imageext, lcase(upload.serverfileext)) GT 0){
+                isImageUpload = true;
+                pathrelative = "/#get('imagePath')#/uploadImages/#getAccountAttr("id")#";
+                if (!DirectoryExists("#pathImage#")) {
+                    DirectoryCreate("#pathImage#");
+                }
+                FileDelete("#path#/#upload.serverfile#");
+                upload = FileUpload(destination="#pathImage#",fileField="files[]",nameConflict="makeunique");
+
+				//create thumbnails
+				var imgThumb = ImageNew(pathImage&"/"&upload.serverFile);
+				ImageScaleTofit(imgThumb, get('imageUploadThumbWidth'), get('imageUploadThumbHeight'));
+				imageWrite(imgThumb, pathImage&"/thumb_"&upload.serverFile);
+
              }
              var newfile = structnew();
                  newfile.filename = upload.serverfile ;
@@ -74,22 +84,20 @@ component extends="Controller" hint="Controller for crum FILES section" {
                  newfile.filesize =  upload.filesize;
                  insertfile = model("file").new(newfile);
 
-             if (insertfile.save())
-                {
-                    _event("I", "Successfully upload file", "Sessions", "Session id is #session.sessionid#, useragent is #CGI.USER_AGENT#", getAccountAttr("id"), getUserAttr("id"));
-                   var urlPath = "http://#getPageContext().getRequest().getServerName()##serverport##pathrelative#/#upload.serverfile#";
-                    var newlink = structnew() ;
-                    newlink.name= upload.serverfile;
-                    newlink.size= upload.filesize;
-                    newlink.url= urlPath ;
-                    newlink.delete_url= URLfor(action="fileUpload", method="DELETE",key=insertfile.id);
-                    newlink.delete_type= "DELETE";
-                    newlink.thumbnail_url= urlpath;
-                    newlink.type= 'image/gif';
+            if (insertfile.save()) {
+                _event("I", "Successfully upload file", "Sessions", "Session id is #session.sessionid#, useragent is #CGI.USER_AGENT#", getAccountAttr("id"), getUserAttr("id"));
+                var urlPath = "http://#getPageContext().getRequest().getServerName()##serverport##pathrelative#/#upload.serverfile#";
+                var urlThumb = "http://#getPageContext().getRequest().getServerName()##serverport##pathrelative#/thumb_#upload.serverfile#";
+                var newlink = structnew() ;
+                newlink.name= upload.serverfile;
+                newlink.size= upload.filesize;
+                newlink.url= urlPath ;
+                newlink.delete_url= URLfor(action="fileUpload", method="DELETE",key=insertfile.id);
+                newlink.delete_type= "DELETE";
+                newlink.thumbnail_url = isImageUpload ? urlThumb : urlPath;
+                newlink.type= 'image/gif';
                 arrayappend(result,newlink);
-
-                }
-            else{
+            } else{
                 _event("E", "Something wrong with file", "Sessions", "Session id is #session.sessionid#, useragent is #CGI.USER_AGENT#", getAccountAttr("id"), getUserAttr("id"));
                 result="error";
             }
@@ -125,7 +133,7 @@ component extends="Controller" hint="Controller for crum FILES section" {
 
          if (!DirectoryExists("#path#"))
          {
-         DirectoryCreate("#path#");
+             DirectoryCreate("#path#");
          }
 
         if (FileExists("#path#/#getimageName#")) {
@@ -146,23 +154,22 @@ component extends="Controller" hint="Controller for crum FILES section" {
         var db = false;
         var getImageData = "";
         var newfile = structnew();
-         var serverport = CGI.SERVER_PORT ;
+        var serverport = CGI.SERVER_PORT ;
         if(serverport != ""){
-        serverport = ":" & CGI.SERVER_PORT & "" ;
+            serverport = ":" & CGI.SERVER_PORT & "" ;
         }
         if(find("http",lcase(trim(params.newURLLink))) GT 0) {
              getImageSource = ImageRead(trim(Params.newURLLink)) ;
              newImage = ImageNew(getImageSource) ;
         }else if (find("EDIT",getimageName) GT 0) {
-             getImageSource = ImageRead("http://#getPageContext().getRequest().getServerName()##serverport#/assets/img/uploadImages/#getAccountAttr("id")#/#getimageName#") ;
-             getimageName = replace(getimageName,"EDIT","")
+             getImageSource = ImageRead("http://#getPageContext().getRequest().getServerName()##serverport#/assets/img/uploadImages/#getAccountAttr("id")#/#getimageName#");
+             getimageName = replace(getimageName,"EDIT","");
              newImage = ImageNew(getImageSource) ;
         }
         if(find("http",lcase(trim(Params.newURLLink))) GT 0) {
-            if (!DirectoryExists("#path#"))
-             {
-             DirectoryCreate("#path#");
-             }
+            if (!DirectoryExists("#path#")) {
+                DirectoryCreate("#path#");
+            }
 
             if (FileExists("#path#/#getimageName#")) {
                 getimageName = "#getUserAttr("id")##getAccountAttr("id")##dateformat(now(),"mmddyyyy")##timeformat(now(),"hhmmss")#.#lcase(listlast(getimageName,"."))#" ;
