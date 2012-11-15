@@ -6,10 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="description" content="">
         <meta name="author" content="">
-
-        <link href="/#get('stylesheetPath')#/bootstrap.css" rel="stylesheet">
-        <link href="/#get('stylesheetPath')#/mandrillcms.css" rel="stylesheet">
-        <link href="/#get('stylesheetPath')#/bootstrap-responsive.css" rel="stylesheet">
+		#styleSheetLinkTag("bootstrap,mandrillcms,bootstrap-responsive")#
         <!--[if lt IE 9]>
             <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
         <![endif]-->
@@ -24,11 +21,11 @@
 			#includeContent()#
 
         </div>
-		
+
 	</div>
-		
+
 	#javaScriptIncludeTag("bootstrap")#
-		
+
 </body>
 </html>
 </cfoutput>

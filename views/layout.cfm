@@ -7,6 +7,12 @@
     <meta name="description" content="">
     <meta name="author" content="">
 	#styleSheetLinkTag('bootstrap,style,mandrillcms,jquery.ui,bootstrap-responsive,bootstrap-wysihtml5')#
+	<!---<link href="/#get('stylesheetPath')#/bootstrap.css" rel="stylesheet">
+	<link href="/#get('stylesheetPath')#/style.css" rel="stylesheet">
+	<link href="/#get('stylesheetPath')#/mandrillcms.css" rel="stylesheet">
+	<link href="/#get('stylesheetPath')#/jquery.ui.css" rel="stylesheet">
+	<link href="/#get('stylesheetPath')#/bootstrap-responsive.css" rel="stylesheet">
+	<link href="/#get('stylesheetPath')#/bootstrap-wysihtml5.css" rel="stylesheet">--->
     <!--[if lt IE 9]>
         <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->

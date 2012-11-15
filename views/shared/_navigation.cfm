@@ -19,7 +19,9 @@
               <a href="##" class="dropdown-toggle" data-toggle="dropdown">Sites <b class="caret"></b></a>
               <ul class="dropdown-menu" id="sites_menu">
                 <li>#linkTo(text='Site Settings', controller='Websites')#</li>
-                <li>#linkTo(text='Templates', controller='Template')#</li>
+				<cfif isAccountOwner() or isDeveloper()>
+	                <li>#linkTo(text='Templates', controller='Template')#</li>
+				</cfif>
                 <li><a href="##">Integrations</a></li>
                 <cfif sites.recordcount GT 0>
                     <li class="divider"></li>
