@@ -6,6 +6,20 @@ component extends="Controller" hint="Controller for crum pages section" {
 
     public any function index() hint="Intercept direct access to /pages/" {
          var local = {};
+         _view(pageTitle = "Site Settings<div class='headingLink'>#linkTo(text="+ Add New Site",action="addeditproject",class="btn btn-primary")#</div>", renderShowBy = true, stickyAttributes = "pagesize,sort,order");
+
+        initListParams(20, "createdAt");
+
+        sites = model("site").findall(
+               include='sitesuser',
+                where="sitesusers.accountid=#getAccountAttr("id")# AND sitesusers.userid = #getUserAttr("id")#",
+                page = params.page,
+                perPage = params.pagesize,
+                order = "#params.order# #params.sort#"
+                ); //Get all pages in "pages" structure variable INNER JOIN "users" and  "statuses" table
+    }
+    public any function listSites() hint="Intercept direct access to /pages/" {
+         var local = {};
 		initListParams(20, "name");
         sites = model("site").findall(
                include='sitesuser',
@@ -20,7 +34,7 @@ component extends="Controller" hint="Controller for crum pages section" {
         		else if (sites.RecordCount eq 0){
         			redirectTo(controller = "websites", action = "addeditproject");
         		}
-        		_view(pageTitle = "Site Settings<div class='headingLink'>#linkTo(text="+ Add New Site",action="addeditproject",class="btn btn-primary")#</div>", renderShowBy = true, stickyAttributes = "pagesize,sort,order");
+        		_view(pageTitle = "Site list<div class='headingLink'>#linkTo(text="+ Add New Site",action="addeditproject",class="btn btn-primary")#</div>", renderShowBy = true, stickyAttributes = "pagesize,sort,order");
         		initListParams(20, "createdAt");
     }
 
