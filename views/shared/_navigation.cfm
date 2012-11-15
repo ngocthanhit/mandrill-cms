@@ -7,7 +7,7 @@
                 <cfquery dbtype="query" name="getSite">
                     SELECT * FROM SITES WHERE  id = '#getsiteid()#'
                 </cfquery>
-                 <a class="brand pull-left" href="/"><small><!---#getSite.name#--->&nbsp;</small><br /><strong>#UCASE(getSite.URL)#</strong></a>
+                 <a class="brand pull-left" href="/"><small><!---#getSite.name#--->&nbsp;</small><br /><strong>#UCASE(getSite.name)#</strong></a>
         <div class="nav-collapse">
           <ul class="nav mainnav">
             <li <cfif params.controller eq "Members">class="active"</cfif>>#linkTo(text='Dashboard', route="home")#</li>
