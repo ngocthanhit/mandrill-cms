@@ -23,7 +23,7 @@
 			<td>#YesNoFormat(templates.isdefaulttemplate)#</td>
 			<td>#DateFormat(templates.createdAt,"mm/dd/yyyy")#</td>
 			<td>#YesNoFormat(templates.isActive)#</td>
-			<td>#linkto(text="Edit",action="addedittemplate",key=id)# | #linkto(text="Delete",action="processDeleteTemplate",key=id,confirm="Are you sure you want to delete this site ?")#</td>
+			<td>#linkto(text="Edit",action="addedittemplate",key=id)# | #linkto(text="Delete",action="processDeleteTemplate",key=id,confirm="Are you sure you want to delete this template ?")#</td>
 		</tr>
 	</cfloop>
 	</tbody>
