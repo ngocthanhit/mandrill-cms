@@ -29,10 +29,9 @@
     #select(label="Parent page<br />", objectName="Newpages", property="parentid", options=getPages,includeBlank="true")# <br />
     #select(label="Template<br />", objectName="Newpages", property="templateid", options=getTemplates)# <br /><br /><br />
     #selectTag(label="Navigation<br />",options="Show in main navigation,Show page in footer navigation",name="navigation",selected=params.navigation)# <br /><br />
-    #selectTag(label="Password protection<br />",options="No password required,Password protect page,Protect sub-pages",name="protected",selected=params.protected)# <br /><br />
-    #passwordFieldTag(name="password",value="",label="Password<br />")#
+    #selectTag(label="Password protection<br />",id="protected",options="No password required,Password required to view page",valueField="1,2",name="protected",selected=params.protected)# <br /><br />
+    #passwordFieldTag(name="password",id="password", style="visibility:hidden")#<br /><br />
 <!---    #passwordfield(label="Password<br />", objectName="Newpages", property="password")#--->
-    #passwordFieldTag(label="Confirm Password<br />", name="confirmPassword")#
     <cfif StructKeyExists(Newpages,"id") >
     <br />
     <br />
@@ -52,4 +51,15 @@
 
 <div style="clear:both;"></div>
 <div class="bendl"></div>
-<div class="bendr"></div>
+<div class="bendr"><script text="javascript">
+	$(document).ready(function() {
+    $("#protected").change(function() {
+     if ($(this).val() == "Password required to view page") {
+	 	$("#password").css("visibility", "visible");
+	 	$("#password").before("<label>Password</label>")
+	 }
+    });
+});
+
+</script></div>
+

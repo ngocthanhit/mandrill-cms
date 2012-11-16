@@ -16,11 +16,6 @@ component extends="Model" {
                 if (form.password eq "" AND ((NOT IsDefined("this.password")) OR this.password EQ "")) {
                     adderror(property="password",message="Password field is required, if you want to protect page or sub-pages.") ;
                  }
-                if(form.password NEQ form.confirmPassword AND ((NOT IsDefined("this.password")) OR this.password EQ "")) {
-                    adderror(property="password",message="Password field is required match with confirmPassword field, if you want to protect page or sub-pages.") ;
-                }else if(((NOT IsDefined("this.password")) OR this.password NEQ "") AND form.password NEQ form.confirmPassword){
-                    adderror(property="password",message="Password field is required match with confirmPassword field, if you want to protect page or sub-pages.") ;                
-                }
             }
      }
 
