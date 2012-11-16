@@ -104,20 +104,23 @@ component extends="Controller" hint="Controller for crum FILES section" {
         }
         else if (GetHttpRequestData().method EQ "DELETE" OR isDefined("params.key")){
             var getfile = model("file").findbykey(params.key);
-               if(isAuthor() && (getfile.userid NEQ getUserAttr("id")) OR isGuest()) {
-                    _event("W", "Caught attempt to access forbidden member-only page to remove file", "Sessions", "Session id is #session.sessionid#, useragent is #CGI.USER_AGENT#", getAccountAttr("id"), getUserAttr("id"));
-                    flashInsert(success="access denied.") ;
-                    redirectTo(action="index");
-                }
+            if(isAuthor() && (getfile.userid NEQ getUserAttr("id")) OR isGuest()) {
+                _event("W", "Caught attempt to access forbidden member-only page to remove file", "Sessions", "Session id is #session.sessionid#, useragent is #CGI.USER_AGENT#", getAccountAttr("id"), getUserAttr("id"));
+                flashInsert(success="access denied.") ;
+                redirectTo(action="index");
+            }
 
-              if(listcontains(imageext,getfile.fileext) GT 0){
-                  path = "#expandpath("/")#assets/img/uploadImages/#getAccountAttr("id")#";
-              }
-                if(getfile.userid EQ getUserAttr("id")) {
-                    _event("I", "successfully removed file", "Sessions", "Session id is #session.sessionid#, useragent is #CGI.USER_AGENT#", getAccountAttr("id"), getUserAttr("id"));
-                  FileDelete("#path#/#getfile.filename#");
-                  getfile.delete();
-                 }
+            if(listcontains(imageext,getfile.fileext) GT 0){
+                path = "#expandpath("/")#assets/img/uploadImages/#getAccountAttr("id")#";
+            }
+            if(getfile.userid EQ getUserAttr("id")) {
+                _event("I", "successfully removed file", "Sessions", "Session id is #session.sessionid#, useragent is #CGI.USER_AGENT#", getAccountAttr("id"), getUserAttr("id"));
+                FileDelete("#path#/#getfile.filename#");
+				if (FileExists("#path#/thumb_#getfile.filename#")) {
+                    FileDelete("#path#/thumb_#getfile.filename#");
+                }
+                getfile.delete();
+            }
             result = params.key ;
         }
 
