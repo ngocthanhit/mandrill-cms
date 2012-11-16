@@ -42,36 +42,40 @@
 
     // base URL for absolute paths
     set(baseURL="http://#cgi.SERVER_NAME#");
-    
+
     // application emails
     set(defaultEmail="mandrillbot@mandrillcms.com");
     set(supportEmail="hello@mandrillcms.com");
-    
+
     // marketing/sales website URL
     set(metaWebsiteURL="http://dev.mandrillcms.com");
-    
+
     // encryption key / hashing salt
     set(encryptionKey="aCmGsnQQ+YuXq8jd9/3r0g==");
     set(encryptionAlgorithm="BLOWFISH");
     set(encryptionEncoding="HEX");
     set(hashingKey="&0Dsxs2kB.fO");
-    
+
     // ACL settings
     set(visitorsAccountId=1);
     set(visitorUserId=1);
     set(adminsAccountId=2);
-    set(accessLevelVisitor=0);    
+    set(accessLevelVisitor=0);
     set(accessLevelGuest=1);
     set(accessLevelAuthor=2);
     set(accessLevelEditor=3);
     set(accessLevelDeveloper=4);
     set(accessLevelAccountOwner=5);
-    set(accessLevelAdmin=6);    
+    set(accessLevelAdmin=6);
     // append id to access developer-only features
     set(developersUserId="3,4,5");
-    
+
     // common defaults
     set(defaultTimeZone=27);
+
+	//image upload thumb creation
+	set(imageUploadThumbWidth=50);
+	set(imageUploadThumbHeight=50);
 
     // autologin
     set(autologinCookie="mandrillcms_rememberme");
