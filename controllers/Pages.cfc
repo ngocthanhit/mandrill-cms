@@ -29,7 +29,7 @@ component extends="Controller" hint="Controller for crum pages section" {
 
     public any function addeditpage() hint="Add/Edit Page to get new page details and show/ update information for existing pages" {
         params.navigation="";
-        params.protected="No password required"
+        params.protected="No password required";
         password = 0;
 
         if(StructKeyExists(params,"key"))
@@ -75,6 +75,8 @@ component extends="Controller" hint="Controller for crum pages section" {
     }
 
     public any function SubmitaddNewPage() hint="Add new page - form submission is done here" {
+		param name="params.navigation" default="";
+		param name="params.protected" default="";
 
         params.Newpages.userid = getUserAttr("id") ;
         params.Newpages.updatedby = getUserAttr("id") ;
@@ -114,8 +116,8 @@ component extends="Controller" hint="Controller for crum pages section" {
                 params.Newpages.publisheddate = Now() ;
                 params.Newpages.publishedby = getUserAttr("id") ;
             }
-        params.Newpages.title = xmlFormat(params.Newpages.title) ;
-        params.Newpages.navigationtitle = xmlFormat(params.Newpages.navigationtitle);
+        params.Newpages.title = IsDefined("params.Newpages.title") ? xmlFormat(params.Newpages.title) : "";
+        params.Newpages.navigationtitle = IsDefined("params.Newpages.navigationtitle") ? xmlFormat(params.Newpages.navigationtitle) : "";
 
         Newpages = model("page").new(params.Newpages) ;
 

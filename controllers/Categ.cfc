@@ -8,9 +8,10 @@ component extends="Controller" hint="Controller for crum pages section" {
         var localStruct =  StructNew() ;
         localStruct.category=params.category;
         localStruct.createdby=getUserAttr("id");
-          newCategory = model("categorie").new(localStruct) ;
-        
-         newCategory.save() ;
+        localStruct.updatedby=getUserAttr("id");
+
+		newCategory = model("categorie").new(localStruct) ;
+		newCategory.save() ;
     }
 
 }
