@@ -32,7 +32,7 @@
     #select(label="Template<br />", objectName="Newpages", property="templateid", options=getTemplates)# <br /><br /><br />
     #selectTag(label="Navigation<br />",options="Show in main navigation,Show page in footer navigation",name="navigation",selected=params.navigation)# <br /><br />
     #selectTag(label="Password protection<br />",id="protected",options="No password required,Password required to view page",valueField="1,2",name="protected",selected=params.protected)# <br /><br />
-    #passwordFieldTag(name="password",id="password", style="visibility:hidden")#<br /><br />
+    #passwordFieldTag(name="password",id="password", style="display:none")#<br /><br />
 <!---    #passwordfield(label="Password<br />", objectName="Newpages", property="password")#--->
     <cfif StructKeyExists(Newpages,"id") >
     <br />
@@ -55,15 +55,15 @@
 <div class="bendl"></div>
 <div class="bendr"><script text="javascript">
 $(document).ready(function() {
-	$("#protected").change(function() {
-		if ($(this).val() == "Password required to view page") {
-			$("#password").css("visibility", "visible");
-			$("#password").before("<label>Password</label>")
-		}
-	});
-
-
-
+    $("#protected").change(function() {
+     if ($(this).val() == "Password required to view page") {
+	 	$("#password").show();
+	 	$("#password").before("<label for=password>Password</label>")
+	 }
+	 else{
+	 	$("label[for=password], input#password").hide();
+	 }
+    });
 });
 
 </script></div>
