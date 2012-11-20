@@ -29,7 +29,7 @@ component extends="Controller" hint="Controller for crum pages section" {
 
     public any function addeditpage() hint="Add/Edit Page to get new page details and show/ update information for existing pages" {
         params.navigation="";
-        params.protected="No password required"
+        params.protected="No password required";
         password = 0;
 
         if(StructKeyExists(params,"key"))
@@ -94,7 +94,7 @@ component extends="Controller" hint="Controller for crum pages section" {
              params.Newpages.isprotected = false;
         }
 
-         if(params.protected EQ "Password protect page"){
+         if(params.protected EQ "Password required to view page"){
              params.Newpages.isprotected = true;
         } else {
             params.Newpages.isprotected = false;
@@ -116,7 +116,10 @@ component extends="Controller" hint="Controller for crum pages section" {
             }
         params.Newpages.title = xmlFormat(params.Newpages.title) ;
         params.Newpages.navigationtitle = xmlFormat(params.Newpages.navigationtitle);
-
+        //hashing password and putting it in object for save
+        if (params.password NEQ "" AND (NOT isValid("regex", params.password, "[A-Z0-9]{64}"))) {
+            params.Newpages.password = Hash(params.password & get("hashingKey"), "SHA-256");
+        }
         Newpages = model("page").new(params.Newpages) ;
 
         if (Newpages.save())
