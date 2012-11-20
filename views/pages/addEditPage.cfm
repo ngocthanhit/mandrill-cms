@@ -7,11 +7,13 @@
 #startFormTag(name="createNewPageForm",method="post",action=formAction,autocomplete="off",id="dataForm")#
 <div class="span8">
     <div class="container-fluid" >
+    #textArea(label="Add Javascript code to top of page just before the end HEAD tag (optional)<br />", objectName="Newpages", property="prefix",rows="5", cols="50",style="width:715px;")# <br />
     #textArea(label="Main content<br />", objectName="Newpages", property="content",class="markItUp",style="width:650px;height:100px")# <br />
+    #textArea(label="Add Javascript code to bottom of page just before the end BODY tag (optional)<br />", objectName="Newpages", property="suffix",rows="5", cols="50",style="width:715px;")# <br />
     #textField(label="Page Title<br />", objectName="Newpages", property="title",size="64",style="width:715px;")# <br />
     #textArea(label="Description<br />", objectName="Newpages", property="description",rows="5", cols="50",style="width:715px;")# <br />
     #textField(label="Navigation title (optional)<br />", objectName="Newpages", property="navigationtitle",size="64",style="width:715px;")# <br />
-    #submitTag(value="Preview",name="preview",class="btn",id="previewBtn")# &nbsp; #submitTag(value="Save as Draft",name="draft",class="btn SubmitButton")# &nbsp; #submitTag(value="Save & Publish",name="publish",class="btn btn-primary SubmitButton")#<br />
+    #submitTag(value="Preview",name="preview",class="btn",id="previewBtn")# &nbsp; #submitTag(value="Save as Draft",name="draft",class="btn SubmitButton")# &nbsp; #submitTag(value="Save & Publish",name="publish",class="btn btn-primary SubmitButton")#<br /><br />
     <cfif NOT StructKeyExists(Newpages,"id") >
         #linkto(text="Or publish at a future date ",class="futureDateCont")#
         <div id="futureDateCont">

@@ -75,6 +75,8 @@ component extends="Controller" hint="Controller for crum pages section" {
     }
 
     public any function SubmitaddNewPage() hint="Add new page - form submission is done here" {
+		param name="params.navigation" default="";
+		param name="params.protected" default="";
 
         params.Newpages.userid = getUserAttr("id") ;
         params.Newpages.updatedby = getUserAttr("id") ;
@@ -114,6 +116,7 @@ component extends="Controller" hint="Controller for crum pages section" {
                 params.Newpages.publisheddate = Now() ;
                 params.Newpages.publishedby = getUserAttr("id") ;
             }
+
         params.Newpages.title = xmlFormat(params.Newpages.title) ;
         params.Newpages.navigationtitle = xmlFormat(params.Newpages.navigationtitle);
         //hashing password and putting it in object for save
